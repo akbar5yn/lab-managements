@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nim');
             $table->string('username');
             $table->string('password');
-            $table->boolean('is_laboran')->default(false);
+            $table->enum('role', ['laboran', 'mahasiswa'])->default('mahasiswa');
             $table->timestamps();
         });
     }
