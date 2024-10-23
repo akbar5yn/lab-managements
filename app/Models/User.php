@@ -3,9 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Import the correct base class
 
-class User extends Model
+class User extends Authenticatable // Extend the Authenticatable class
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'nim',
+        'username',
+        'password',
+        'role',
+    ];
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
 }
