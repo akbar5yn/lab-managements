@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('no_unit')->unique();
             $table->enum('status', ['Tersedia', 'Dipinjam', 'Rusak'])->default('Tersedia');
             $table->enum('kondisi', ['Normal', 'Rusak'])->default('Normal');
-            $table->foreignId('equipment_category_id')->constrained(
-                table: 'equipment_categories',
-                indexName: 'equipment_categories_id'
+            $table->foreignId('id_alat')->constrained(
+                table: 'inventaris_alat',
+                indexName: 'id_alat'
             );
             $table->timestamps();
         });
