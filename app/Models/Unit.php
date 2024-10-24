@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Unit extends Model
 {
     protected $table = 'unit';
-    protected $fillable = ['no_unit', 'status', 'kondisi', 'equipment_category_id'];
+    protected $fillable = ['no_unit', 'status', 'kondisi', 'id_alat'];
 
 
     public function unit(): BelongsTo
     {
-        return $this->belongsTo(InventarisAlat::class, 'unit_id');
+        return $this->belongsTo(InventarisAlat::class, 'id_alat');
     }
 }
