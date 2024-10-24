@@ -11,9 +11,13 @@ class Sidebar extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+
+    public $role;
+    public $name;
+    public function __construct($getRole, $getName)
     {
-        //
+        $this->role = $getRole;
+        $this->name = $getName;
     }
 
     /**
