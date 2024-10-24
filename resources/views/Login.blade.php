@@ -9,7 +9,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Layanan Lab Fisika UAD</title>
 </head>
 
@@ -19,7 +19,7 @@
         <div class="flex w-full justify-center gap-20 p-10 lg:max-w-4xl lg:p-0">
 
             <!-- ANCHOR Left Side: Image Section -->
-            <aside class="font-poppins hidden w-1/2 lg:block">
+            <aside class="hidden w-1/2 font-poppins lg:block">
                 <div class="flex flex-col gap-12 text-center">
                     <div>
                         <h1 class="font-light">Selamat Datang di Website</h1>
@@ -35,7 +35,7 @@
 
             <!-- ANCHOR Right Side: Form Section -->
             <section
-                class="font-poppins flex min-h-full w-full flex-col justify-center rounded-2xl bg-[#265166] p-8 shadow-lg lg:w-1/2 lg:px-8">
+                class="flex min-h-full w-full flex-col justify-center rounded-2xl bg-[#265166] p-8 font-poppins shadow-lg lg:w-1/2 lg:px-8">
                 <header class="flex w-full flex-col items-center gap-2 sm:mx-auto sm:w-full sm:max-w-sm">
                     <img class="h-20 w-20 invert filter" src="img/logo-uad-black-white-hitam-putih.png" alt="Logo UAD">
                     <h2 class="text-center text-lg font-bold leading-9 tracking-tight text-[#f6fafd] lg:text-xl">
@@ -44,12 +44,13 @@
                 </header>
 
                 <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form class="space-y-6" action="#" method="POST">
+                    <form class="space-y-6" action="{{ route('authenticate') }}" method="POST">
+                        @csrf
                         <div>
                             <label for="username"
                                 class="block text-xs font-medium leading-6 text-[#f6fafd]">Username</label>
-                            <div class="mt-2">
-                                <input id="username" name="username"
+                            <div class="relative mt-2">
+                                <input id="username" name="username" type="text"
                                     class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6"
                                     required>
                             </div>
@@ -65,10 +66,10 @@
                                         password?</a>
                                 </div>
                             </div>
-                            <div class="mt-2">
+                            <div class="relative mt-2">
                                 <input id="password" name="password" type="password" autocomplete="current-password"
-                                    required
-                                    class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6">
+                                    class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6"
+                                    required>
                             </div>
                         </div>
 
@@ -82,6 +83,15 @@
             </section>
         </div>
     </main>
+
+    {{-- //!SECTION Alert --}}
+    @if (Session::has('failed'))
+        <script>
+            window.onload = function() {
+                showAlert("Error", "{{ Session::get('failed') }}", "error");
+            };
+        </script>
+    @endif
 
 </body>
 
