@@ -1,5 +1,8 @@
     <x-layout>
         <x-slot:title>{{ $title }}</x-slot:title>
+        <x-slot:name>{{ $name }}</x-slot:name>
+        <x-slot:role>{{ $role }}</x-slot:role>
+
 
         <main class="inventaris flex h-full flex-col gap-4">
             <!-- SECTION Filtering, Searching, And Adding Tools-->
@@ -63,7 +66,7 @@
                 <div>
                     {{-- //TODO - Modal Add Category --}}
                     <x-modal attributeTitle="Tambah Alat & Barang" attributeButton="Tambah Alat">
-                        <form action="{{ route('post.equipment.category') }}" method="POST">
+                        <form action="{{ route('post.alat') }}" method="POST">
                             @csrf
                             <div class="flex flex-col gap-6 rounded-lg border p-4">
 
@@ -130,7 +133,7 @@
                     </div>
 
                     @php
-                        $sortedTools = collect($tools)->sortByDesc('created_at');
+                        $sortedTools = collect($alat)->sortByDesc('created_at');
                     @endphp
                     @if ($sortedTools->isEmpty())
                         <div class="flex h-[50%] flex-col items-center justify-center">
@@ -148,10 +151,10 @@
                                 </p>
                                 <p class="border-r border-gray-400 px-2 py-2">{{ $tool->fungsi }}</p>
                                 <div class="flex items-center justify-center gap-5">
-                                    <a href="{{ route('equipment.unit', ['slug' => $tool->slug]) }}"
+                                    <a href="{{ route('alat.unit', ['slug' => $tool->slug]) }}"
                                         class="rounded bg-blue-400 px-2 text-white">Detail</a>
                                     {{-- <a href="" class="rounded bg-red-400 px-2 text-white">Delete</a> --}}
-                                    <form action="{{ route('delete.equipment.category', $tool->id) }}" method="POST"
+                                    <form action="{{ route('delete.alat', $tool->id) }}" method="POST"
                                         class="delete-form m-0">
                                         @csrf
                                         @method('DELETE')
@@ -161,8 +164,8 @@
 
                                     {{-- //TODO  Modal to update category --}}
                                     <x-modal attributeTitle="Edit Alat & Barang" attributeButton="Edit">
-                                        <form action="{{ route('edit.equipment.category', $tool->id) }}"
-                                            method="POST" class="update-form">
+                                        <form action="{{ route('edit.alat', $tool->id) }}" method="POST"
+                                            class="update-form">
                                             @csrf
                                             @method('PUT')
                                             <div class="flex flex-col gap-6 rounded-lg border p-4">
