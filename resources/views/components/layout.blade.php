@@ -96,12 +96,12 @@
 </head>
 
 <body class="flex gap-10 bg-[#F7F9FC] p-10">
-    <x-sidebar></x-sidebar>
+    <x-sidebar :getRole="$role" :getName="$name"></x-sidebar>
     <main class="main-content flex flex-col gap-4 font-poppins">
         @if (isset($subtitle) && isset($subtitle))
-            <x-header :title="$title" :subtitle="$subtitle"></x-header>
+            <x-header :title="$title" :subtitle="$subtitle" :name="$name"></x-header>
         @else
-            <x-header :title="$title"></x-header>
+            <x-header :title="$title" :name="$name"></x-header>
         @endif
         <div class="main-slot">{{ $slot }}</div>
     </main>
