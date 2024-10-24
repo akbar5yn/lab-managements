@@ -11,4 +11,50 @@ function showAlert(title, text, icon) {
     });
 }
 
+document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah form dari pengiriman otomatis
+
+        const formElement = this; // Menyimpan referensi ke form yang akan dihapus
+
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Ini akan menghapus kategori dan semua unit terkait!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Tidak, batalkan!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.update-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah form dari pengiriman otomatis
+
+        const formElement = this; // Menyimpan referensi ke form yang akan dihapus
+
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Ini akan mengubah beberapa data yang telah anda isi",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Tidak, batalkan!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
+            }
+        });
+    });
+});
+
 window.showAlert = showAlert;
