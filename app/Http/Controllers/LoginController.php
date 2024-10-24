@@ -10,6 +10,20 @@ class LoginController extends Controller
 {
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            // Redirect berdasarkan role
+            if ($user->role === 'laboran') {
+                return redirect()->route('laboran');
+            } elseif ($user->role === 'mahasiswa') {
+                return redirect()->route('mahasiswa');
+            } else {
+                return redirect()->route('unauthorized')->with('failed', 'Role tidak dikenali.');
+            }
+        }
+
+        // Jika belum login, tampilkan halaman login
         return view('Login');
     }
 
@@ -23,8 +37,6 @@ class LoginController extends Controller
 
         $credentials = $request->only('username', 'password');
 
-        // Tambahkan log untuk melihat kredensial yang diterima
-        Log::info('Login attempt', $credentials);
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -38,8 +50,7 @@ class LoginController extends Controller
                 return redirect()->route('unauthorized')->with('failed', 'Role tidak dikenali.');
             }
         } else {
-            Log::warning('Login failed for username: ' . $credentials['username']); // Tambahkan log untuk kesalahan
-            return redirect()->route('unauthorized')->with('failed', 'Username atau password salah');
+            return redirect()->route('login')->with('failed', 'Username atau password salah');
         }
     }
 }
