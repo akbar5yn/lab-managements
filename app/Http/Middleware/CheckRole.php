@@ -29,8 +29,6 @@ class CheckRole
                     return redirect()->route('laboran')->with('not-access', 'Anda tidak memiliki akses untuk masuk kehalaman ini');;
                 case 'mahasiswa':
                     return redirect()->route('mahasiswa')->with('not-access', 'Anda tidak memiliki akses untuk masuk kehalaman ini');;
-                default:
-                    return redirect()->route('unauthorized')->with('failed', 'Role tidak dikenali.');
             }
         }
 

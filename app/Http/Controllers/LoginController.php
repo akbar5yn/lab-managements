@@ -46,8 +46,6 @@ class LoginController extends Controller
                 return redirect()->route('laboran');
             } elseif ($user->role === 'mahasiswa') {
                 return redirect()->route('mahasiswa');
-            } else {
-                return redirect()->route('unauthorized')->with('failed', 'Role tidak dikenali.');
             }
         } else {
             return redirect()->route('login')->with('failed', 'Username atau password salah');
