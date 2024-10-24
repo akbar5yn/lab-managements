@@ -1,3 +1,12 @@
+@php
+    use Illuminate\Support\Str;
+    // Ambil kata pertama dari kalimat ketiga (jika ada)
+    $thirdSentence = isset($matches[0][2]) ? Str::words($matches[0][2], 1, '') : '';
+    // Batasi teks hingga 20 kata
+    $limitedName = Str::words($name, 2, ' S');
+
+    $finalName = $limitedName . ' ' . $thirdSentence;
+@endphp
 <main class="relative hidden flex-col items-center rounded-xl bg-[#2D3648] lg:flex lg:w-[250px]">
     <!-- ANCHOR PROFILE -->
     <section class="flex h-[300px] flex-col items-center justify-center gap-4 px-10 py-4 font-poppins text-white">
@@ -5,8 +14,8 @@
             <img src="/img/avatar.png" alt="avatar" class="w-20 rounded-full bg-white p-1">
         </div>
         <div class="text-center">
-            <h1 class="text-base">Akbar Pratama S</h1>
-            <p class="text-sm font-light">Laboran</p>
+            <h1 class="text-base">{{ $finalName }}</h1>
+            <p class="text-sm font-light">{{ $role }}</p>
         </div>
     </section>
 
