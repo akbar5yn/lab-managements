@@ -8,5 +8,5 @@
             <h1 class="text-xl font-medium">{{ $title }}</h1>
         @endif
     </div>
-    <h4>Hi, Akbar Pratama S</h4>
+    <h4>Hi, {{ $name }}</h4>
 </header>
