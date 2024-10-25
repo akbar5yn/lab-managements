@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventarisAlat;
+use App\Models\Unit;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,14 +43,53 @@ class UnitController extends Controller
                 'countNormal',
                 'countTotal'
             )
-            // [
-            //     'units' => $units,
-            //     'countTersedia' => $countTersedia,
-            //     'countDipinjam' => $countDipinjam,
-            //     'countRusak' => $countRusak,
-            //     'countNormal' => $countNormal,
-            //     'countTotal' => $countTotal,
-            // ]
         );
+    }
+
+    public function handlePost(Request $request, $slug)
+    {
+        $validate = $request->validate([
+            'nama_alat' => 'required|string',
+            'id_alat' => 'required',
+            'jumlah' => 'required|integer|min:1',
+        ]);
+
+        try {
+            $jumlahUnit = Unit::addUnit($validate);
+
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', "$jumlahUnit Unit berhasil ditambahkan.");
+        } catch (\Exception $e) {
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat menambahkan unit: ' . $e->getMessage());
+        }
+    }
+
+
+    public function handleUpdate(Request $request, $slug, $id)
+    {
+        $request->validate([
+            'kondisi' => 'required|string|in:Normal,Rusak', // Pastikan hanya nilai yang diizinkan
+        ]);
+        try {
+            $unit = Unit::findOrFail($id);
+            $unit->updateKondisi($request->all());
+
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Kondisi alat berhasil diperbarui.');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Alat tidak ditemukan.');
+        } catch (\Exception $e) {
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat memperbarui alat: ' . $e->getMessage());
+        }
+    }
+    public function handleDelete($slug, $id)
+    {
+        try {
+            $unit = Unit::findOrFail($id);
+            $unit->deleteUnit($id);
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Unit berhasil dihapus.');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Unit tidak ditemukan.');
+        } catch (\Exception $e) {
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat menghapus unit: ' . $e->getMessage());
+        }
     }
 }
