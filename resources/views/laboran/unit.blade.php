@@ -58,17 +58,35 @@
                                     tabindex="-1" x-ref="dropdown">
                                     <div class="py-1" role="none">
                                         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                                        <a href="#"
-                                            class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
-                                            role="menuitem" tabindex="-1" id="menu-item-0">Normal</a>
-                                        <a href="#"
-                                            class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
-                                            role="menuitem" tabindex="-1" id="menu-item-1">Rusak</a>
+                                        <form action="{{ route('edit.unit', [$alat->slug, $unit->id]) }}"
+                                            class="m-0" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="kondisi" value="Normal">
+                                            <button type="submit"
+                                                class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
+                                                role="menuitem" tabindex="-1">Normal</button>
+
+                                        </form>
+                                        <form action="{{ route('edit.unit', [$alat->slug, $unit->id]) }}"
+                                            class="m-0" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="kondisi" value="Rusak">
+                                            <button type="submit"
+                                                class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
+                                                role="menuitem" tabindex="-1">Rusak</button>
+
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-
-                            <button class="rounded bg-red-400 px-2 text-white">Delete</button>
+                            <form action="{{ route('delete.unit', [$alat->slug, $unit->id]) }}" method="POST"
+                                class="delete-unit m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="rounded bg-red-400 px-2 text-white">Delete</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
@@ -96,9 +114,32 @@
                 <p class="rounded-b-md border border-gray-300 p-2">Total Alat</p>
                 <p class="rounded-b-md border border-gray-300 p-2 text-center">{{ $countTotal }}</p>
             </div>
-            <button
+            {{-- <button
                 class="absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base">Tambah
-                Unit</button>
+                Unit</button> --}}
+            <x-modal attributeTitle="Tambah Unit" attributeButton="Tambah Unit">
+                <form action="{{ route('tambah.unit', [$alat->slug]) }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="flex flex-col gap-6 rounded-lg border p-4">
+
+                        <input type="hidden" min="0" name="nama_alat" id="nama_alat" required
+                            x-bind:value="'{{ $alat['nama_alat'] }}'">
+                        <input type="hidden" min="0" name="id_alat" id="id_alat" required
+                            x-bind:value="'{{ $alat['id'] }}'">
+                        <div
+                            class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                            <label class="font-semibold" for="jumlah">Jumlah Alat</label>
+                            <input type="text" name="jumlah" id="jumlah" required
+                                class="border-none p-0 focus:outline-none focus:ring-0"
+                                oninput="capitalizeFirstLetter(this)">
+                        </div>
+                    </div>
+                    <button type="submit"
+                        class="mt-2 w-full rounded bg-[#84AFA2] px-4 py-2 text-white">Simpan</button>
+                </form>
+            </x-modal>
         </section>
     </main>
+
 </x-layout>
