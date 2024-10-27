@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisAlatController;
+use App\Http\Controllers\InventarisRuanganController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\UnitController;
@@ -26,4 +27,9 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
     Route::post('/laboran/inventaris-alat/{slug}', [UnitController::class, 'handlePost'])->name('tambah.unit');
     Route::put('/laboran/inventaris-alat/{slug}/{id}', [UnitController::class, 'handleUpdate'])->name('edit.unit');
     Route::delete('/laboran/inventaris-alat/{slug}/{id}', [UnitController::class, 'handleDelete'])->name('delete.unit');
+
+    // SECTION - Route Inventaris Ruangan
+    Route::get('/laboran/inventaris-ruangan', [InventarisRuanganController::class, 'index'])->name('inventaris-ruangan');
+    Route::post('/laboran/inventaris-ruangan', [InventarisRuanganController::class, 'handlePost'])->name('post.ruangan');
+    Route::put('/laboran/inventaris-ruangan/{id}', [InventarisRuanganController::class, 'handleEdit'])->name('edit.ruangan');
 });
