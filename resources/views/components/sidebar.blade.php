@@ -46,7 +46,7 @@
                     <x-nav-link href="/laboran/inventaris-alat" :active="request()->is('laboran/inventaris-alat*')">
                         <span class="w-6"></span>
                         Alat & Barang</x-nav-link>
-                    <x-nav-link href="/inventaris-ruangan" :active="request()->is('inventaris-ruangan')">
+                    <x-nav-link href="{{ route('inventaris-ruangan') }}" :active="request()->is('laboran/inventaris-ruangan*')">
                         <span class="w-6"></span>
                         Ruangan</x-nav-link>
                 </div>
