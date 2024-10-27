@@ -32,16 +32,16 @@
                         Aksi</p>
                 </div>
 
-                @foreach ($rooms as $room)
+                @foreach ($dataRuangan as $ruangan)
                     <div class="grid grid-cols-[4%_30%_30%_15%_auto] border-b border-gray-400">
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">{{ $room['nama_ruangan'] }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">{{ $room['lokasi_ruangan'] }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $room['kapasitas'] }}
+                        <p class="border-r border-gray-400 px-2 py-2">{{ $ruangan->nama_ruangan }}</p>
+                        <p class="border-r border-gray-400 px-2 py-2">{{ $ruangan->lokasi_ruangan }}</p>
+                        <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $ruangan->kapasitas }}
                             <span class="text-gray-500">(Orang)</span>
                         </p>
                         <div class="flex items-center justify-center gap-5">
-                            <a href="/inventaris-alat/{{ $room['id_ruangan'] }}"
+                            <a href="/inventaris-alat/{{ $ruangan->id_ruangan }}"
                                 class="rounded bg-blue-400 px-2 text-white">Edit</a>
                             <a href="" class="rounded bg-red-400 px-2 text-white">Delete</a>
                         </div>
