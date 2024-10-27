@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('ruangan', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_ruangan');
+            $table->string('lokasi_ruangan');
+            $table->integer('kapasitas');
             $table->timestamps();
         });
     }
