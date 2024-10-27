@@ -13,4 +13,16 @@ class Ruangan extends Model
 
     protected $table = 'ruangan';
     protected $fillable = ['nama_ruangan', 'lokasi_ruangan', 'kapasitas'];
+
+    public static function tambahRuangan($data)
+    {
+        $createRuangan = Ruangan::create($data);
+
+        return $createRuangan;
+    }
+    public function updateRuangan($data)
+    {
+        // Update the current instance with the new data
+        $this->update($data);
+    }
 }
