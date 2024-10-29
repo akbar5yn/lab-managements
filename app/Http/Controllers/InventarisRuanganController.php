@@ -60,4 +60,19 @@ class InventarisRuanganController extends Controller
             return redirect()->route('inventaris-ruangan')->with('error', 'Terjadi kesalahan saat memperbarui ruangan: ' . $e->getMessage());
         }
     }
+
+    public function handleDelete($id)
+    {
+        try {
+            $category = Ruangan::findOrFail($id);
+            $category->deleteRuangan(); // Memanggil metode di model
+
+            return redirect()->route('inventaris-ruangan')->with('success', 'Ruangan berhasil dihapus.');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('inventaris-ruangan')->with('error', 'Ruangan tidak ditemukan.');
+        } catch (\Exception $e) {
+            Log::error('Error saat menghapus ruangan: ' . $e->getMessage());
+            return redirect()->route('inventaris-ruangan')->with('error', 'Terjadi kesalahan saat menghapus ruangan.');
+        }
+    }
 }
