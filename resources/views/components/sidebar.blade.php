@@ -23,17 +23,17 @@
     <section class="sidebar shadow-menu-inset h-[80%] w-full overflow-y-scroll py-5 pl-5">
         <ul class="relative w-full space-y-4 font-poppins text-white">
             <li class="relative">
-                <x-nav-link href="/laboran/dashboard" :active="request()->is('laboran/dashboard')" :src="'img/dashboard-icon.svg'">
+                <x-nav-link href="{{ route('laboran') }}" :active="request()->is('laboran/dashboard')" :src="'img/dashboard-icon.svg'">
                     <x-heroicon-s-home
                         class="{{ request()->is('dashboard') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                     Beranda
                 </x-nav-link>
             </li>
-            <li x-data="{ isOpen: window.location.pathname.includes('inventaris-alat') || window.location.pathname.includes('inventaris-ruangan') }">
+            <li x-data="{ isOpen: window.location.pathname.includes('laboran/inventaris-alat') || window.location.pathname.includes('inventaris-ruangan') }">
 
                 <button @click="isOpen = !isOpen" type="button" class="flex w-full gap-3 p-2 text-sm">
                     <x-heroicon-s-archive-box
-                        class="{{ request()->is('inventaris') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
+                        class="{{ request()->is('laboran/inventaris') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                     Inventaris
                     <x-heroicon-c-chevron-down
                         class="absolute right-10 h-4 w-4 transform transition-transform duration-300"
@@ -43,10 +43,10 @@
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-75 transform"
                     x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                    <x-nav-link href="/inventaris-alat" :active="request()->is('inventaris-alat*')">
+                    <x-nav-link href="{{ route('inventaris-alat') }}" :active="request()->is('laboran/inventaris-alat*')">
                         <span class="w-6"></span>
                         Alat & Barang</x-nav-link>
-                    <x-nav-link href="/inventaris-ruangan" :active="request()->is('inventaris-ruangan')">
+                    <x-nav-link href="{{ route('inventaris-ruangan') }}" :active="request()->is('laboran/inventaris-ruangan*')">
                         <span class="w-6"></span>
                         Ruangan</x-nav-link>
                 </div>

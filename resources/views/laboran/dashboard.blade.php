@@ -13,7 +13,7 @@
                         <x-heroicon-s-users class="w-6" />
                     </div>
                     <div>
-                        <p class="font-semi-bold text-xl font-semibold">2</p>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalMhs }}</p>
                         <p class="text-sm text-gray-600">Mahasiswa</p>
                     </div>
                 </div>
@@ -23,8 +23,8 @@
                         <x-heroicon-s-cube class="w-6" />
                     </div>
                     <div>
-                        <p class="font-semi-bold text-xl font-semibold">100</p>
-                        <p class="text-sm text-gray-600">Total Barang</p>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalUnit }}</p>
+                        <p class="text-sm text-gray-600">Total Unit Barang</p>
                     </div>
                 </div>
                 <div
@@ -53,7 +53,7 @@
                         <x-heroicon-s-wrench-screwdriver class="w-6" />
                     </div>
                     <div>
-                        <p class="font-semi-bold text-xl font-semibold">2</p>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $unitRusak }}</p>
                         <p class="text-sm text-gray-600">Alat / Barang Rusak</p>
                     </div>
                 </div>
