@@ -23,7 +23,7 @@
     <section class="sidebar shadow-menu-inset h-[80%] w-full overflow-y-scroll py-5 pl-5">
         <ul class="relative w-full space-y-4 font-poppins text-white">
             <li class="relative">
-                <x-nav-link href="/laboran/dashboard" :active="request()->is('laboran/dashboard')" :src="'img/dashboard-icon.svg'">
+                <x-nav-link href="{{ route('laboran') }}" :active="request()->is('laboran/dashboard')" :src="'img/dashboard-icon.svg'">
                     <x-heroicon-s-home
                         class="{{ request()->is('dashboard') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                     Beranda
