@@ -25,4 +25,9 @@ class Ruangan extends Model
         // Update the current instance with the new data
         $this->update($data);
     }
+
+    public function deleteRuangan()
+    {
+        $this->delete();
+    }
 }
