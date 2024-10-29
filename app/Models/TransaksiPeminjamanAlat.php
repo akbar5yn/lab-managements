@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PeminjamanAlat extends Model
+class TransaksiPeminjamanAlat extends Model
 {
     //
 }
