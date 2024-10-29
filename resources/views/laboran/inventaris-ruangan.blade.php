@@ -91,7 +91,8 @@
                         </p>
                         <div class="flex items-center justify-center gap-5">
                             <x-modal attributeTitle="Edit Ruangan" attributeButton="Edit">
-                                <form action="{{ route('edit.ruangan', $ruangan->id) }}" method="POST">
+                                <form action="{{ route('edit.ruangan', $ruangan->id) }}" method="POST",
+                                    class="update-form">
                                     @csrf
                                     @method('PUT')
                                     <div class="flex flex-col gap-6 rounded-lg border p-4">
@@ -123,7 +124,12 @@
                                         class="mt-2 w-full rounded bg-[#84AFA2] px-4 py-2 text-white">Simpan</button>
                                 </form>
                             </x-modal>
-                            <a href="" class="rounded bg-red-400 px-2 text-white">Delete</a>
+                            <form action="{{ route('delete.ruangan', $ruangan->id) }}" method="POST"
+                                class="delete-ruangan m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="rounded bg-red-400 px-2 text-white">Hapus</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
