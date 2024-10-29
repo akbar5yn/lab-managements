@@ -57,6 +57,29 @@ document.querySelectorAll('.delete-unit').forEach(form => {
     });
 });
 
+document.querySelectorAll('.delete-ruangan').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah form dari pengiriman otomatis
+
+        const formElement = this; // Menyimpan referensi ke form yang akan dihapus
+
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Ini akan menghapus ruangan yang anda pilih!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Tidak, batalkan!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
+            }
+        });
+    });
+});
+
 document.querySelectorAll('.update-form').forEach(form => {
     form.addEventListener('submit', function (e) {
         e.preventDefault(); // Mencegah form dari pengiriman otomatis
