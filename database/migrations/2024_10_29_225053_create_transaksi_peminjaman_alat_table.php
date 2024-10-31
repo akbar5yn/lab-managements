@@ -17,8 +17,6 @@ return new class extends Migration
                 table: 'users',
             );
             $table->string('keperluan');
-            $table->date('tanggal_pinjam');
-            $table->date('tanggal_kembali');
             $table->timestamps();
         });
     }
