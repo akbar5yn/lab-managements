@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DetailPeminjamanAlat extends Model
 {
     protected $table = 'detail_peminjaman_alat';
-    protected $fillable = ['id_transaksi_peminjaman', 'id_alat', 'jumlah'];
+    protected $fillable = ['id_transaksi_peminjaman', 'id_alat', 'tanggal_pinjam', 'tanggal_kembali'];
 
     public function relasiTransaksiPeminjamanAlat(): BelongsTo
     {
@@ -17,6 +17,6 @@ class DetailPeminjamanAlat extends Model
 
     public function relasiUnitBarang(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'id_alat');
+        return $this->belongsTo(Unit::class, 'id_unit');
     }
 }
