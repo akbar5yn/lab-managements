@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_user',)->constrained(
                 table: 'users',
+                indexName: 'id_user'
             );
             $table->string('keperluan');
             $table->timestamps();
