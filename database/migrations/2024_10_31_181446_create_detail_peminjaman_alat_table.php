@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_transaksi_peminjaman')->constrained(
                 table: 'transaksi_peminjaman_alat',
-            );
+                indexName: 'id_transaksi_peminjaman'
+            )->onDelete('cascade');
             $table->foreignId('id_alat')->constrained(
                 table: 'unit',
+                indexName: 'id_unit'
             );
             $table->date('tanggal_pinjam');
             $table->date('tanggal_kembali');
@@ -31,5 +33,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('detail_peminjaman_alat');
+        Schema::table('detail_peminjaman_alat', function (Blueprint $table) {
+            $table->dropForeign(['id_transaksi_peminjaman']); // Hapus kunci asing
+            $table->dropColumn('id_transaksi_peminjaman'); // Hapus kolom jika diperlukan
+        });
     }
 };
