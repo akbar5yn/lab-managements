@@ -28,6 +28,20 @@ class UserSeeder extends Seeder
                 'username' => 'mifta',
                 'password' =>  Hash::make('2000016130'),
                 'role' => 'mahasiswa'
+            ],
+            [
+                'name' => 'Alfarizi Dwi Putra Suryamin',
+                'nim' => '2000016001',
+                'username' => 'farid',
+                'password' =>  Hash::make('2000016001'),
+                'role' => 'mahasiswa'
+            ],
+            [
+                'name' => 'Teguh Dwi Cahya Kusuma',
+                'nim' => '2000016003',
+                'username' => 'mifta',
+                'password' =>  Hash::make('2000016003'),
+                'role' => 'mahasiswa'
             ]
         ];
         DB::table('users')->insert($users);
