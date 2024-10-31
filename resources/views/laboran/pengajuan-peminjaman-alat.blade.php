@@ -14,22 +14,40 @@
         <section class="h-full overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="p-4">
                 <div
-                    class="sticky top-0 z-10 grid grid-cols-[4%_20%_25%_25%_15%_auto] items-center border-b border-gray-400 bg-[#e4e4e4] shadow">
+                    class="sticky top-0 z-10 grid grid-cols-[4%_20%_30%_25%_auto] items-center border-b border-gray-400 bg-[#e4e4e4] shadow">
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         No</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Tanggal Kembali</p>
+                        Tanggal Pinjam</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         Nama Peminjam</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Barang Dipinjam</p>
-                    <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Status</p>
+                        Jumlah Pinjam</p>
                     <p class="flex h-full items-center justify-center px-2 py-2 text-center">
                         Aksi</p>
                 </div>
-
-
+                {{-- @php
+                    $counter = 1;
+                @endphp
+                @foreach ($transaksi as $transaction)
+                    @if ($request['status_peminjaman'] == 'Pending')
+                        <div class="grid grid-cols-[4%_20%_30%_25%_auto] border-b border-gray-400">
+                            <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $counter }}</p>
+                            <p class="border-r border-gray-400 px-2 py-2">{{ $transaction['tanggal_pengajuan'] }}</p>
+                            <p class="border-r border-gray-400 px-2 py-2">{{ $transaction['nama_peminjam'] }}</p>
+                            <p class="border-r border-gray-400 px-2 py-2 text-center">
+                                {{ $transaction['jumlah_pinjam'] }}
+                            </p>
+                            <div class="flex items-center justify-center gap-5">
+                                <a href="/peminjaman-alat/pengajuan/{{ $transaction['id_request'] }}"
+                                    class="rounded bg-blue-400 px-2 text-white">Detail</a>
+                            </div>
+                        </div>
+                        @php
+                            $counter++;
+                        @endphp
+                    @endif
+                @endforeach --}}
             </div>
         </section>
     </main>
