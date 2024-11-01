@@ -23,6 +23,7 @@ return new class extends Migration
             );
             $table->date('tanggal_pinjam');
             $table->date('tanggal_kembali');
+            $table->enum('status', ['pending', 'dipinjam', 'dikembalikan', 'terlambat_dikembalikan'])->default('pending');
             $table->timestamps();
         });
     }
