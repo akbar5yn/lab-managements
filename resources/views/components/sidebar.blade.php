@@ -29,6 +29,7 @@
                     Beranda
                 </x-nav-link>
             </li>
+            <!-- SECTION Inventaris -->
             <li x-data="{ isOpen: window.location.pathname.includes('laboran/inventaris-alat') || window.location.pathname.includes('inventaris-ruangan') }">
 
                 <button @click="isOpen = !isOpen" type="button" class="flex w-full gap-3 p-2 text-sm">
@@ -52,6 +53,8 @@
                 </div>
 
             </li>
+
+            <!-- SECTION Peminjaman -->
             <li x-data="{ isOpen: window.location.pathname.includes('peminjaman-alat/') || window.location.pathname.includes('peminjaman-ruangan') }">
                 <button @click="isOpen = !isOpen" type="button" class="flex w-full gap-3 p-2 text-sm">
                     <x-heroicon-c-pencil-square class="h-4 w-4" />
