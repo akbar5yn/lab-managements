@@ -17,6 +17,6 @@ class DetailPeminjamanAlat extends Model
 
     public function relasiUnitBarang(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'id_unit');
+        return $this->belongsTo(Unit::class, 'id_alat');
     }
 }
