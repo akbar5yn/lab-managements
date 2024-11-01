@@ -18,6 +18,7 @@ return new class extends Migration
                 indexName: 'id_user'
             );
             $table->string('keperluan');
+            $table->enum('status', ['pending', 'dibatalkan', 'berlangsung', 'selesai'])->default('pending');
             $table->timestamps();
         });
     }
