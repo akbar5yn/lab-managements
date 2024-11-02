@@ -67,7 +67,7 @@
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-75 transform"
                     x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                    <x-nav-link href="{{ route('peminjaman.alat.pengajuan') }}" :active="request()->is('laboran/peminjaman-alat*')"> <span
+                    <x-nav-link href="{{ route('pengajuan.peminjaman.alat') }}" :active="request()->is('laboran/peminjaman-alat*')"> <span
                             class="w-6"></span>
                         Alat &
                         Barang</x-nav-link>
