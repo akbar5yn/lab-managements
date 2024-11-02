@@ -36,7 +36,8 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
     Route::delete('/laboran/inventaris-ruangan/{id}', [InventarisRuanganController::class, 'handleDelete'])->name('delete.ruangan');
 
     // SECTION - Route Peminjaman Alat
-    Route::get('/laboran/peminjaman-alat/pengajuan', [PeminjamanAlatController::class, 'pengajuanPeminjaman'])->name('peminjaman.alat.pengajuan');
+    Route::get('/laboran/peminjaman-alat/pengajuan', [PeminjamanAlatController::class, 'pengajuanPeminjaman'])->name('pengajuan.peminjaman.alat');
+    Route::get('/laboran/peminjaman-alat/pengajuan/{id}', [PeminjamanAlatController::class, 'detailPengajuanRuangan'])->name('detail.pengajuan.ruangan');
     Route::get('/laboran/peminjaman-alat/berlangsung', [PeminjamanAlatController::class, 'peminjamanBerlangsung'])->name('peminjaman.alat.berlangsung');
     Route::get('/laboran/peminjaman-alat/berlangsung/{id}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
 });
