@@ -17,39 +17,31 @@ class DetailPeminjamanAlat extends Seeder
         $detail_alat = [
             [
                 'id_transaksi_peminjaman' => 1,
-                'id_alat' => 1,
+                'id_unit' => 1,
                 'tanggal_pinjam' => Carbon::create(2024, 11, 1),
                 'tanggal_kembali' => Carbon::create(2024, 11, 10),
+                'status' => 'dipinjam',
             ],
             [
                 'id_transaksi_peminjaman' => 1, // Masih transaksi yang sama
-                'id_alat' => 2,
+                'id_unit' => 4,
                 'tanggal_pinjam' => Carbon::create(2024, 11, 1),
                 'tanggal_kembali' => Carbon::create(2024, 11, 7),
-            ],
-            [
-                'id_transaksi_peminjaman' => 1, // Masih transaksi yang sama
-                'id_alat' => 3,
-                'tanggal_pinjam' => Carbon::create(2024, 11, 1),
-                'tanggal_kembali' => Carbon::create(2024, 11, 10),
+                'status' => 'dikembalikan',
             ],
             [
                 'id_transaksi_peminjaman' => 2,
-                'id_alat' => 2,
+                'id_unit' => 2,
                 'tanggal_pinjam' => Carbon::create(2024, 11, 1),
                 'tanggal_kembali' => Carbon::create(2024, 11, 10),
-            ],
-            [
-                'id_transaksi_peminjaman' => 2,
-                'id_alat' => 10,
-                'tanggal_pinjam' => Carbon::create(2024, 11, 1),
-                'tanggal_kembali' => Carbon::create(2024, 11, 10),
+                'status' => 'pending',
             ],
             [
                 'id_transaksi_peminjaman' => 3,
-                'id_alat' => 3,
+                'id_unit' => 3,
                 'tanggal_pinjam' => Carbon::create(2024, 11, 1),
                 'tanggal_kembali' => Carbon::create(2024, 11, 10),
+                'status' => 'pending',
             ]
         ];
         DB::table('detail_peminjaman_alat')->insert($detail_alat);
