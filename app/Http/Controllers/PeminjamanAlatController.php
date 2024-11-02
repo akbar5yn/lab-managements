@@ -17,7 +17,27 @@ class PeminjamanAlatController extends Controller
         $name = $user->name;
         $role = $user->role;
 
-        return view('laboran.pengajuan-peminjaman-alat', compact('title', 'name', 'role',));
+        $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
+            ->withCount('relasiDetailPeminjaman')
+            ->where('status', 'pending')
+            ->get();
+
+        return view('laboran.pengajuan-peminjaman-alat', compact('title', 'name', 'role', 'transaksiPengajuanPeminjaman'));
+    }
+
+    public function detailPengajuanRuangan($id)
+    {
+        $user = Auth::user();
+        $title = 'Peminjaman Alat & Barang';
+        $subtitle = 'Pengajuan';
+        $name = $user->name;
+        $role = $user->role;
+
+        $transaksi = TransaksiPeminjamanAlat::where('id', $id)
+            ->with(['relasiUser', 'relasiDetailPeminjaman'])
+            ->firstOrFail();
+
+        return view('laboran.detail-pengajuan-ruangan', compact('title', 'subtitle', 'role', 'name', 'transaksi'));
     }
 
     // SECTION peminjaman berlangsung
@@ -28,7 +48,10 @@ class PeminjamanAlatController extends Controller
         $title = 'Peminjaman Alat & Barang Berlansung';
         $name = $user->name;
         $role = $user->role;
-        $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])->withCount('relasiDetailPeminjaman')->get();
+        $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
+            ->withCount('relasiDetailPeminjaman')
+            ->where('status', 'berlangsung')
+            ->get();
 
         return view('laboran.peminjaman-alat', compact('title', 'name', 'role', 'transaksiPeminjaman'));
     }
