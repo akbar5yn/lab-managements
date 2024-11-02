@@ -17,7 +17,7 @@ return new class extends Migration
                 table: 'transaksi_peminjaman_alat',
                 indexName: 'id_transaksi_peminjaman'
             )->onDelete('cascade');
-            $table->foreignId('id_alat')->constrained(
+            $table->foreignId('id_unit')->constrained(
                 table: 'unit',
                 indexName: 'id_unit'
             );
