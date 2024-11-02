@@ -28,8 +28,8 @@
         <div class="grid grid-cols-[25%_25%_25%_auto] border-b border-gray-400">
             <p class="border-x border-gray-400 px-2 py-2">{{ $transaksi->relasiUser->name }}</p>
             <p class="border-r border-gray-400 px-2 py-2">{{ $transaksi->keperluan }}</p>
-            <p class="border-r border-gray-400 px-2 py-2">Belum ada no hp</p>
-            <p class="border-r border-gray-400 px-2 py-2">Belum ada email</p>
+            <p class="border-r border-gray-400 px-2 py-2">{{ $transaksi->relasiUser->phone_number }}</p>
+            <p class="border-r border-gray-400 px-2 py-2">{{ $transaksi->relasiUser->email }}</p>
         </div>
 
         <h1 class="mb-5 mt-10 text-lg font-medium">Informasi Alat</h1>
@@ -53,7 +53,20 @@
                     {{ $detail->relasiUnitBarang->unit->nama_alat }}</p>
                 <p class="border-r border-gray-400 px-2 py-2">{{ $detail->tanggal_pinjam }}</p>
                 <p class="border-r border-gray-400 px-2 py-2">{{ $detail->tanggal_kembali }}</p>
-                <p class="border-r border-gray-400 px-2 py-2">Belum ada status</p>
+                <p class="border-r border-gray-400 px-2 py-2 text-center">
+                    <span
+                        class="{{ $detail->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($detail->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($detail->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
+                        @php
+                            $statusLabels = [
+                                'belum_dikembalikan' => 'Belum Dikembalikan',
+                                'dipinjam' => 'Dipinjam',
+                                'dikembalikan' => 'Dikembalikan',
+                                'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
+                            ];
+                        @endphp
+                        {{ $statusLabels[$detail->status] ?? ucfirst($detail->status) }}
+                    </span>
+                </p>
             </div>
         @endforeach
     </main>
