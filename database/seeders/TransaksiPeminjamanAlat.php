@@ -18,14 +18,17 @@ class TransaksiPeminjamanAlat extends Seeder
             [
                 'id_user' => 2,
                 'keperluan' => 'Melakukan peneletian',
+                'status' => 'berlangsung'
             ],
             [
                 'id_user' => 3,
                 'keperluan' => 'Melakukan riset',
+                'status' => 'pending'
             ],
             [
                 'id_user' => 4,
                 'keperluan' => 'Melakukan Studi Banding',
+                'status' => 'pending'
             ]
         ];
         DB::table('transaksi_peminjaman_alat')->insert($transaksi);
