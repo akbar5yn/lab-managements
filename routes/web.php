@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/', [LoginController::class, 'authenticate'])->name('authenticate');
 
-Route::get('/laboran/dashboard', [DashboardController::class, 'indexLaboran'])->middleware(CheckRole::class . ':laboran')->name('laboran');
-Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->middleware(CheckRole::class . ':mahasiswa')->name('mahasiswa');
-
+// ANCHOR Laboran
 Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
+
+    Route::get('/laboran/dashboard', [DashboardController::class, 'indexLaboran'])->name('laboran');
+
     //SECTION - Route Inventory Alat
     Route::get('/laboran/inventaris-alat', [InventarisAlatController::class, 'index'])->name('inventaris-alat');
     Route::post('/laboran/inventaris-alat', [InventarisAlatController::class, 'handleRequest'])->name('post.alat');
@@ -40,4 +41,9 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
     Route::get('/laboran/peminjaman-alat/pengajuan/{id}', [PeminjamanAlatController::class, 'detailPengajuanRuangan'])->name('detail.pengajuan.ruangan');
     Route::get('/laboran/peminjaman-alat/berlangsung', [PeminjamanAlatController::class, 'peminjamanBerlangsung'])->name('peminjaman.alat.berlangsung');
     Route::get('/laboran/peminjaman-alat/berlangsung/{id}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
+});
+
+// ANCHOR Mahasiswa
+Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
+    Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
 });
