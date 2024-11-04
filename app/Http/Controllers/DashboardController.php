@@ -69,6 +69,10 @@ class DashboardController extends Controller
     }
     public function indexMahasiswa()
     {
-        return view('mahasiswa.dashboard');
+        $user = Auth::user();
+        $title = 'Dasboard';
+        $name = $user->name;
+        $role = $user->role;
+        return view('mahasiswa.dashboard', compact('title', 'name', 'role'));
     }
 }
