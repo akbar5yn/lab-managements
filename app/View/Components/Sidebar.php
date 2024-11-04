@@ -14,8 +14,10 @@ class Sidebar extends Component
 
     public $role;
     public $name;
+    public $userRole;
     public function __construct($getRole, $getName)
     {
+        $this->userRole = auth()->check() ? auth()->user()->role : null;
         $this->role = $getRole;
         $this->name = $getName;
     }
