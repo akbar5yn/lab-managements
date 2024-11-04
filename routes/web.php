@@ -46,4 +46,6 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 // ANCHOR Mahasiswa
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
+    Route::get('/mahasiswa/peminjaman-alat', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.alat');
+    Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });
