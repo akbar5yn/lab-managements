@@ -1,24 +1,5 @@
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Document</title>
-</head>
-
-<body>
-    mahasiswa
-
-
-    @if (Session::has('not-access'))
-        <script>
-            window.onload = function() {
-                showAlert("Upss Maaf!", "{{ Session::get('not-access') }}", "info");
-            };
-        </script>
-    @endif
-</body>
-
-</html>
+<x-layout>
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <x-slot:role>{{ $role }}</x-slot:role>
+    <x-slot:name>{{ $name }}</x-slot:name>
+</x-layout>
