@@ -18,9 +18,9 @@
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         No</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Tanggal Pinjam</p>
+                        Nama Peminjaman</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Nama Peminjam</p>
+                        No Handphone</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         Total Barang Pinjam</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
@@ -34,7 +34,7 @@
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->name ?? 'User tidak ditemukan' }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">Tambahkan No Hp</p>
+                        <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUser->phone_number }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasi_detail_peminjaman_count }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
