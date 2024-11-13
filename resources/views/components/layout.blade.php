@@ -95,7 +95,7 @@
     </style>
 </head>
 
-<body class="flex gap-10 bg-[#F7F9FC] p-10">
+<body class="flex gap-10 bg-[#F7F9FC] p-10 h-full">
     <x-sidebar :getRole="$role" :getName="$name"></x-sidebar>
     <main class="main-content flex flex-col gap-4 font-poppins">
         @if (isset($subtitle) && isset($subtitle))
