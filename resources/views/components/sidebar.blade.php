@@ -124,8 +124,11 @@
         @endif
     </section>
     <section class="flex h-[20%] w-full items-center justify-center">
-        <button class="flex items-center gap-3 font-poppins text-sm text-white">
-            <x-heroicon-m-arrow-left-start-on-rectangle class="h-4 w-4 text-white" />
-            Logout</button>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="flex items-center gap-3 font-poppins text-sm text-white">
+                <x-heroicon-m-arrow-left-start-on-rectangle class="h-4 w-4 text-white" />
+                Logout</button>
+        </form>
     </section>
 </main>
