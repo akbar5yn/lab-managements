@@ -34,7 +34,7 @@
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->name ?? 'User tidak ditemukan' }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">Tambahkan No Hp</p>
+                        <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUser->phone_number }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasi_detail_peminjaman_count }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
