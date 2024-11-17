@@ -74,7 +74,9 @@ class DashboardController extends Controller
         $title = 'Dasboard';
         $name = $user->name;
         $role = $user->role;
-        $alatTersedia = InventarisAlat::with('alat')->get();
-        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'alatTersedia'));
+        $prodi = $user->prodi;
+
+        $alatTersedia = InventarisAlat::with('alat')->withCount('alat')->get();
+        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'prodi', 'alatTersedia'));
     }
 }
