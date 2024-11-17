@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InventarisAlat;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -73,6 +74,7 @@ class DashboardController extends Controller
         $title = 'Dasboard';
         $name = $user->name;
         $role = $user->role;
-        return view('mahasiswa.dashboard', compact('title', 'name', 'role'));
+        $alatTersedia = InventarisAlat::with('alat')->get();
+        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'alatTersedia'));
     }
 }
