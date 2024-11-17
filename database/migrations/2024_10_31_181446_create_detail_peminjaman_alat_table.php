@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -33,10 +34,16 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (Schema::hasTable('detail_peminjaman_alat')) {
+            Schema::table('detail_peminjaman_alat', function (Blueprint $table) {
+                try {
+                    // Hanya hapus foreign key jika ada
+                    DB::statement("ALTER TABLE detail_peminjaman_alat DROP FOREIGN KEY IF EXISTS detail_peminjaman_alat_id_transaksi_peminjaman_foreign");
+                } catch (\Exception $e) {
+                    // Abaikan error jika foreign key tidak ditemukan
+                }
+            });
+        }
         Schema::dropIfExists('detail_peminjaman_alat');
-        Schema::table('detail_peminjaman_alat', function (Blueprint $table) {
-            $table->dropForeign(['id_transaksi_peminjaman']); // Hapus kunci asing
-            $table->dropColumn('id_transaksi_peminjaman'); // Hapus kolom jika diperlukan
-        });
     }
 };
