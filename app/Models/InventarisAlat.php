@@ -28,7 +28,6 @@ class InventarisAlat extends Model
             'lokasi' => $data['lokasi'],
             'tahun_pengadaan' => $data['tahun_pengadaan'],
             'fungsi' => $data['fungsi'],
-            'jumlah' => $data['jumlah']
         ]);
 
         $namaAlat = $data['nama_alat'];
