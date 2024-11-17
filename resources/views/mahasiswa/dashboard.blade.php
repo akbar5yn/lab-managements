@@ -4,13 +4,13 @@
     <x-slot:name>{{ $name }}</x-slot:name>
     <div class="flex h-full flex-col gap-4">
         <!-- SECTION Ketersediaan Alat-->
-        <section class="flex max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4  shadow-md h-[25%]">
+        <section class="flex h-[25%] max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-medium">Overview</h2>
             </div>
-            <div class="ml-4 flex pb-2 justify-between gap-5 h-full">
+            <div class="ml-4 flex h-full justify-between gap-5 pb-2">
                 <div
-                    class="border-1 flex snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200 w-full">
+                    class="border-1 flex w-full snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200">
                     <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
                             <path
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div
-                    class="border-1 flex snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200 w-full">
+                    class="border-1 flex w-full snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200">
                     <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
                         <x-heroicon-s-inbox-arrow-down class="size-8" />
                     </div>
@@ -41,8 +41,8 @@
         </section>
 
         <!-- SECTION Ketersediaan Alat-->
-        <section class="flex w-full h-[75%] gap-4">
-            <section class="flex max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md h-full w-[50%]">
+        <section class="flex h-[75%] w-full gap-4">
+            <section class="flex h-full w-[50%] max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-medium">Ketersediaan Alat & Barang</h2>
                 </div>
@@ -59,13 +59,13 @@
                 </div>
                 @foreach ($alatTersedia as $alat)
                     <div class="grid grid-cols-[33.3%_33.3%_33.3%] border-b border-gray-400">
-                        <p class="px-2 py-2 ">{{ $alat->nama_alat }}</p>
-                        <p class="px-2 py-2 ">{{ $alat->lokasi }}</p>
-                        <p class="px-2 py-2 ">{{ $alat->jumlah }}</p>
+                        <p class="px-2 py-2">{{ $alat->nama_alat }}</p>
+                        <p class="px-2 py-2">{{ $alat->lokasi }}</p>
+                        <p class="px-2 py-2">{{ $alat->alat_count }}</p>
                     </div>
                 @endforeach
             </section>
-            <section class="flex max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md h-full w-[50%]">
+            <section class="flex h-full w-[50%] max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-medium">Ketersediaan Ruangan</h2>
                 </div>
