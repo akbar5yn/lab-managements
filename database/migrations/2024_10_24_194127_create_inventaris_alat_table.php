@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('lokasi');
             $table->integer('tahun_pengadaan')->nullable();
             $table->string('fungsi')->nullable();
-            $table->integer('jumlah');
             $table->timestamps();
         });
     }
