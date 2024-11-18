@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventarisAlat;
+use App\Models\Ruangan;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -76,7 +77,12 @@ class DashboardController extends Controller
         $role = $user->role;
         $prodi = $user->prodi;
 
-        $alatTersedia = InventarisAlat::with('alat')->withCount('alat')->get();
-        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'prodi', 'alatTersedia'));
+        $getUnit = InventarisAlat::with('alat')
+            ->withCount(['alat' => function ($query) {
+                $query->where('kondisi', 'normal')->where('status',     'tersedia');
+            }])->get();
+
+        $ruanganTersedia = Ruangan::all();
+        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'prodi', 'getUnit', 'ruanganTersedia'));
     }
 }
