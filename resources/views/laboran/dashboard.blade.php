@@ -72,7 +72,7 @@
                         <div x-data="{ isOpen: false }" class="relative inline-block text-left">
                             <div>
                                 <button type="button" @click="isOpen = !isOpen"
-                                    class="inline-flex w-full justify-center gap-x-1.5 rounded-lg border bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    class="inline-flex w-full justify-center gap-x-1.5 rounded-lg border bg-white px-3 py-1 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                     id="menu-button" aria-expanded="true" aria-haspopup="true">
                                     Lab A
                                     <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
@@ -107,8 +107,8 @@
                         </div>
                     </div>
                     <div>
-                        <input type="date"
-                            class="rounded-lg border shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <input type="date" value="{{ date('Y-m-d') }}"
+                            class="rounded-lg border py-1 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     </div>
                 </section>
 
