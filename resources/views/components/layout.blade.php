@@ -95,7 +95,7 @@
     </style>
 </head>
 
-<body class="flex gap-10 bg-[#F7F9FC] p-10 h-full">
+<body class="flex h-full gap-10 bg-[#F7F9FC] p-10">
     <x-sidebar :getRole="$role" :getName="$name"></x-sidebar>
     <main class="main-content flex flex-col gap-4 font-poppins">
         @if (isset($subtitle) && isset($subtitle))
@@ -106,5 +106,8 @@
         <div class="main-slot">{{ $slot }}</div>
     </main>
 </body>
+
+<script type="module" src="node_modules/@material-tailwind/html@latest/scripts/tooltip.js"></script>
+<script type="module" src="https://unpkg.com/@material-tailwind/html@latest/scripts/tooltip.js"></script>
 
 </html>
