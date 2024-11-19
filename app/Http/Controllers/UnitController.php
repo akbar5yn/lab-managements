@@ -66,24 +66,46 @@ class UnitController extends Controller
 
     public function handleUpdate(Request $request, $slug, $id)
     {
+        // Validasi input
         $request->validate([
             'kondisi' => 'required|string|in:Normal,Rusak', // Pastikan hanya nilai yang diizinkan
         ]);
+
         try {
+            // Temukan unit berdasarkan ID
             $unit = Unit::findOrFail($id);
+
+            // Cek jika status unit sedang Dipinjam
+            if ($unit->status === 'Dipinjam') {
+                return redirect()->route('alat.unit', ['slug' => $slug])
+                    ->with('error', 'Unit sedang dipinjam dan tidak dapat diubah.');
+            }
+
+            // Gunakan metode updateKondisi di model
             $unit->updateKondisi($request->all());
 
-            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Kondisi alat berhasil diperbarui.');
+            return redirect()->route('alat.unit', ['slug' => $slug])
+                ->with('success', 'Kondisi alat berhasil diperbarui.');
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Alat tidak ditemukan.');
+            // Tangani jika unit tidak ditemukan
+            return redirect()->route('alat.unit', ['slug' => $slug])
+                ->with('error', 'Unit tidak ditemukan.');
         } catch (\Exception $e) {
-            return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat memperbarui alat: ' . $e->getMessage());
+            // Tangani kesalahan lain
+            return redirect()->route('alat.unit', ['slug' => $slug])
+                ->with('error', 'Terjadi kesalahan saat memperbarui alat: ' . $e->getMessage());
         }
     }
+
     public function handleDelete($slug, $id)
     {
         try {
             $unit = Unit::findOrFail($id);
+
+            if ($unit->status === 'Dipinjam') {
+                return redirect()->route('alat.unit', ['slug' => $slug])
+                    ->with('error', 'Unit sedang dipinjam dan tidak dapat dihapus.');
+            }
             $unit->deleteUnit($id);
             return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Unit berhasil dihapus.');
         } catch (ModelNotFoundException $e) {

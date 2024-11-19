@@ -4,6 +4,21 @@
     <x-slot:name>{{ $name }}</x-slot:name>
     <x-slot:role>{{ $role }}</x-slot:role>
     <main class="flex h-full w-full gap-4">
+        @if (Session::has('success'))
+            <script>
+                window.onload = function() {
+                    showAlert("Berhasil", "{{ Session::get('success') }}", "success");
+                };
+            </script>
+        @endif
+
+        @if (Session::has('error'))
+            <script>
+                window.onload = function() {
+                    showAlert("Error", "{{ Session::get('error') }}", "error");
+                };
+            </script>
+        @endif
         <section class="content-of-inventaris h-full w-[75%] overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="p-4">
                 <div
@@ -16,6 +31,7 @@
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Kondisi
                     </p>
                     <p class="flex items-center justify-center px-2 py-2 text-center">Aksi</p>
+
                 </div>
 
                 @foreach ($units as $unit)
@@ -74,8 +90,19 @@
                                             @method('PUT')
                                             <input type="hidden" name="kondisi" value="Rusak">
                                             <button type="submit"
-                                                class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
-                                                role="menuitem" tabindex="-1">Rusak</button>
+                                                class="{{ $unit->status === 'Dipinjam' ? 'bg-gray-300 cursor-not-allowed' : '' }} block w-full px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
+                                                role="menuitem" tabindex="-1"
+                                                @if ($unit->status == 'Dipinjam') disabled
+                                                data-ripple-light="true"
+                                                data-tooltip-target="tooltip-right" @endif>
+                                                Rusak
+                                            </button>
+                                            @if ($unit->status === 'Dipinjam')
+                                                <div data-tooltip="tooltip-right" data-tooltip-placement="right"
+                                                    class="absolute z-50 w-40 whitespace-normal break-words rounded-lg bg-black px-3 py-1.5 font-sans text-sm font-normal text-white focus:outline-none">
+                                                    Unit sedang dipinjam, tidak dapat diubah
+                                                </div>
+                                            @endif
 
                                         </form>
                                     </div>

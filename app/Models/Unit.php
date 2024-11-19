@@ -58,6 +58,12 @@ class Unit extends Model
 
     public function updateKondisi($data)
     {
+        if (isset($data['kondisi']) && $data['kondisi'] === 'Rusak') {
+            $data['status'] = 'Rusak';
+        }
+        if (isset($data['kondisi']) && $data['kondisi'] === 'Normal') {
+            $data['status'] = 'Tersedia';
+        }
         // Update the current instance with the new data
         $this->update($data);
     }
