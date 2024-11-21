@@ -23,32 +23,35 @@ class PeminjamanAlatController extends Controller
     // SECTION pengajuan peminjaman
     public function pengajuanPeminjaman()
     {
-        $user = Auth::user();
-        $title = 'Peminjaman Alat & Barang';
-        $name = $user->name;
-        $role = $user->role;
 
         $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
             ->withCount('relasiDetailPeminjaman')
             ->where('status', 'pending')
             ->get();
 
-        return view('laboran.pengajuan-peminjaman-alat', compact('title', 'name', 'role', 'transaksiPengajuanPeminjaman'));
+        return view('laboran.pengajuan-peminjaman-alat', [
+            'title' => $this->title,
+            'name' => $this->name,
+            'role' => $this->role,
+            'transaksiPengajuanPeminjaman' => $transaksiPengajuanPeminjaman
+        ]);
     }
 
-    public function detailPengajuanRuangan($id)
+    public function detailPengajuanAlat($id)
     {
-        $user = Auth::user();
-        $title = 'Peminjaman Alat & Barang';
         $subtitle = 'Pengajuan';
-        $name = $user->name;
-        $role = $user->role;
 
         $transaksi = TransaksiPeminjamanAlat::where('id', $id)
             ->with(['relasiUser', 'relasiDetailPeminjaman'])
             ->firstOrFail();
 
-        return view('laboran.detail-pengajuan-ruangan', compact('title', 'subtitle', 'role', 'name', 'transaksi'));
+        return view('laboran.detail-pengajuan-ruangan', [
+            'title' => $this->title,
+            'subtitle' => $subtitle,
+            'role' => $this->role,
+            'name' => $this->name,
+            'transaksi' => $transaksi
+        ]);
     }
 
     // SECTION peminjaman berlangsung
@@ -56,30 +59,34 @@ class PeminjamanAlatController extends Controller
     public function peminjamanBerlangsung()
     {
         $user = Auth::user();
-        $title = 'Peminjaman Alat & Barang Berlansung';
-        $name = $user->name;
-        $role = $user->role;
         $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
             ->withCount('relasiDetailPeminjaman')
             ->where('status', 'berlangsung')
             ->get();
 
-        return view('laboran.peminjaman-alat', compact('title', 'name', 'role', 'transaksiPeminjaman'));
+        return view('laboran.peminjaman-alat', [
+            'title' => $this->title,
+            'name' => $this->name,
+            'role' => $this->role,
+            'transaksiPeminjaman' => $transaksiPeminjaman
+        ]);
     }
 
     public function detailPeminjamanBerlangsung($id)
     {
-        $user = Auth::user();
-        $title = 'Peminjaman Alat & Barang';
         $subtitle = "Berlangsung";
-        $name = $user->name;
-        $role = $user->role;
 
         $transaksi = TransaksiPeminjamanAlat::where('id', $id)
             ->with(['relasiUser', 'relasiDetailPeminjaman'])
             ->firstOrFail();
 
-        return view('laboran.detail-peminjaman-alat', compact('title', 'subtitle', 'role', 'name', 'transaksi'));
+        return view('laboran.detail-peminjaman-alat', [
+            'title' => $this->title,
+            'subtitle' => $subtitle,
+            'role' => $this->role,
+            'name' => $this->name,
+            'transaksi' => $transaksi
+        ]);
     }
 
     // ANCHOR Index page peminjaman alat [Mahasiswa]
