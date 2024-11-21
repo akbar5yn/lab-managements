@@ -20,7 +20,6 @@ class AlatSeeder extends Seeder
                 'lokasi' => 'Lab Fisika Dasar',
                 'tahun_pengadaan' => '2016',
                 'fungsi' => 'Menimbang sampel ',
-                'jumlah' => '4'
             ],
             [
                 'slug' => 'KIT',
@@ -28,7 +27,6 @@ class AlatSeeder extends Seeder
                 'lokasi' => 'Lab Elektronika dan Instrumentasi',
                 'tahun_pengadaan' => '2016',
                 'fungsi' => 'Praktikum elektronika dasar ',
-                'jumlah' => '3'
             ],
 
             [
@@ -37,7 +35,6 @@ class AlatSeeder extends Seeder
                 'lokasi' => 'Lab Fisika Modern',
                 'tahun_pengadaan' => '2016',
                 'fungsi' => ' Mengukur Arus dan Tegangan',
-                'jumlah' => '2'
             ],
 
             [
@@ -46,7 +43,6 @@ class AlatSeeder extends Seeder
                 'lokasi' => 'Lab Fisika Modern',
                 'tahun_pengadaan' => '2016',
                 'fungsi' => 'Mengalirkan tegangan dengan mengubah tegangan AC ke DC ',
-                'jumlah' => '1'
             ],
             [
                 'slug' => 'AUO',
@@ -54,7 +50,6 @@ class AlatSeeder extends Seeder
                 'lokasi' => 'Lab Elektronika dan Instrumentasi ',
                 'tahun_pengadaan' => '2016',
                 'fungsi' => 'Untuk menghasilkan sinyal pada frekuensi tertentu ',
-                'jumlah' => '1'
             ],
         ];
         DB::table('inventaris_alat')->insert($alat);
