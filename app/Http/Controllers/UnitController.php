@@ -143,7 +143,7 @@ class UnitController extends Controller
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat dihapus.');
             }
-            $unit->deleteUnit($id);
+            $unit->deleteUnit();
             return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Unit berhasil dihapus.');
         } catch (ModelNotFoundException $e) {
             return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Unit tidak ditemukan.');
