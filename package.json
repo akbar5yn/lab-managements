@@ -15,7 +15,6 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "@material-tailwind/html": "^2.3.2",
         "@tailwindcss/forms": "^0.5.9",
         "sweetalert2": "^11.14.4"
     }

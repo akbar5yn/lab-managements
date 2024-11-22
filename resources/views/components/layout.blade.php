@@ -107,7 +107,5 @@
     </main>
 </body>
 
-<script type="module" src="node_modules/@material-tailwind/html@latest/scripts/tooltip.js"></script>
-<script type="module" src="https://unpkg.com/@material-tailwind/html@latest/scripts/tooltip.js"></script>
 
 </html>

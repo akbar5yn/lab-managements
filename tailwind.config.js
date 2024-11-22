@@ -1,8 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
-import withMT from "@material-tailwind/html/utils/withMT";
 
 /** @type {import('tailwindcss').Config} */
-export default withMT({
+export default ({
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
