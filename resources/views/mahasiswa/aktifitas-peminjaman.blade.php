@@ -17,27 +17,27 @@
                 </a>
             </div>
         </section>
-        <section class="flex max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
+        <section class="flex max-w-full flex-col rounded-xl bg-[#FFFFFF] p-4 shadow-md">
             <div
-                class="sticky top-0 z-10 mt-4 grid grid-cols-[15%_15%_30.3%_20.3%_auto] items-center gap-2 border-b border-gray-400 bg-[#F6F8FB] text-center shadow">
-                <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                class="sticky top-0 z-10 mt-4 grid grid-cols-[15%_15%_30.3%_20.3%_auto] items-center border-b border-gray-400 bg-[#F6F8FB] text-center shadow">
+                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     ID Transaksi</p>
-                <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     Jumlah Alat</p>
-                <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     Keperluan</p>
-                <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     Status Peminjaman</p>
                 <p class="h-full border-gray-400 px-2 py-2 font-medium">
                     Detail</p>
             </div>
-            <div
-                class="grid grid-cols-[15%_15%_30.3%_20.3%_auto_auto] gap-2 rounded-md border border-gray-400 text-center">
-                <p class="px-2 py-2">NE-20244901</p>
-                <p class="px-2 py-2">5 Unit</p>
-                <p class="px-2 py-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus quisquam
+            <div class="grid grid-cols-[15%_15%_30.3%_20.3%_auto_auto] rounded-md border-b border-gray-400">
+                <p class="border-r border-gray-400 px-2 py-2">NE-20244901</p>
+                <p class="border-r border-gray-400 px-2 py-2">5 Unit</p>
+                <p class="border-r border-gray-400 px-2 py-2">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Possimus quisquam
                     perspiciatis distinctio repellat unde exercitationem nisi sed dolorem nostrum voluptatibus?</p>
-                <p class="px-2 py-2">Pending</p>
+                <p class="border-r border-gray-400 px-2 py-2 text-center">Pending</p>
 
             </div>
         </section>
