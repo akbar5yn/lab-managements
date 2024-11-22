@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 
 class Unit extends Model
@@ -11,6 +12,10 @@ class Unit extends Model
     protected $table = 'unit';
     protected $fillable = ['no_unit', 'status', 'kondisi', 'id_alat'];
 
+    public function detailPeminjaman(): HasMany
+    {
+        return $this->hasMany(DetailPeminjamanAlat::class, 'id_unit');
+    }
 
     public function unit(): BelongsTo
     {
@@ -58,12 +63,6 @@ class Unit extends Model
 
     public function updateKondisi($data)
     {
-        if (isset($data['kondisi']) && $data['kondisi'] === 'Rusak') {
-            $data['status'] = 'Rusak';
-        }
-        if (isset($data['kondisi']) && $data['kondisi'] === 'Normal') {
-            $data['status'] = 'Tersedia';
-        }
         // Update the current instance with the new data
         $this->update($data);
     }

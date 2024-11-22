@@ -7,9 +7,20 @@ use App\Models\Unit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class UnitController extends Controller
 {
+
+    protected $alat;
+
+    public function __construct()
+    {
+        $slug = FacadesRequest::route('slug');
+
+        $this->alat = InventarisAlat::with('alat')->where('slug', $slug)->firstOrFail();
+    }
+
     public function getUnitAlat($slug)
     {
         $user = Auth::user();
@@ -17,32 +28,48 @@ class UnitController extends Controller
         $subtitle = 'Detail Alat';
         $name = $user->name;
         $role = $user->role;
-        $alat = InventarisAlat::with('alat')->where('slug', $slug)->firstOrFail();
 
-        $units = $alat->alat;
+        $allUnits = Unit::where('id_alat', $this->alat->id)
+            ->with(['detailPeminjaman' => function ($query) {
+                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+            }])->get();
+
+        $unitTersedia = Unit::where('id_alat', $this->alat->id)
+            ->where('kondisi', '!=', 'Rusak')
+            ->whereDoesntHave('detailPeminjaman', function ($query) {
+
+                $query->whereIn('status', ['pending', 'dipinjam']);
+            })
+            ->count();
+
+        $unitDipinjam = Unit::where('id_alat', $this->alat->id)
+            ->withCount(['detailPeminjaman' => function ($query) {
+                $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
+            }])->get();
+
+        $totalUnitsDipinjam = $unitDipinjam->where('detail_peminjaman_count', '>', 0)->count();
+
 
         //ANCHOR - Informasi Unit
-        $countTersedia = $alat->alat()->where('status', 'Tersedia')->count();
-        $countDipinjam = $alat->alat()->where('status', 'Dipinjam')->count();
-        $countRusak = $alat->alat()->where('kondisi', 'Rusak')->count();
-        $countNormal = $alat->alat()->where('kondisi', 'Normal')->count();
-        $countTotal = $alat->alat()->count();
+        $countRusak = $this->alat->alat()->where('kondisi', 'Rusak')->count();
+        $countNormal = $this->alat->alat()->where('kondisi', 'Normal')->count();
+        $countTotal = $this->alat->alat()->count();
 
         return view(
             'laboran.unit',
-            compact(
-                'title',
-                'subtitle',
-                'name',
-                'role',
-                'alat',
-                'units',
-                'countTersedia',
-                'countDipinjam',
-                'countRusak',
-                'countNormal',
-                'countTotal'
-            )
+            [
+                'title' => $title,
+                'subtitle' => $subtitle,
+                'name' => $name,
+                'role' => $role,
+                'alat' => $this->alat,
+                'allUnits' => $allUnits,
+                'unitTersedia' => $unitTersedia,
+                'totalUnitsDipinjam' => $totalUnitsDipinjam,
+                'countRusak' => $countRusak,
+                'countNormal' => $countNormal,
+                'countTotal' => $countTotal
+            ]
         );
     }
 
@@ -57,7 +84,7 @@ class UnitController extends Controller
         try {
             $jumlahUnit = Unit::addUnit($validate);
 
-            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', "$jumlahUnit Unit berhasil ditambahkan.");
+            return redirect()->route('alat.unit', ['slug' => $slug])->with('success', "Unit berhasil ditambahkan.");
         } catch (\Exception $e) {
             return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat menambahkan unit: ' . $e->getMessage());
         }
@@ -71,12 +98,17 @@ class UnitController extends Controller
             'kondisi' => 'required|string|in:Normal,Rusak', // Pastikan hanya nilai yang diizinkan
         ]);
 
+
         try {
-            // Temukan unit berdasarkan ID
-            $unit = Unit::findOrFail($id);
+            $unit = Unit::where('id', $id)
+                ->where('id_alat', $this->alat->id)
+                ->with(['detailPeminjaman' => function ($query) {
+                    $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                }])
+                ->firstOrFail();
 
             // Cek jika status unit sedang Dipinjam
-            if ($unit->status === 'Dipinjam') {
+            if ($unit->detailPeminjaman->isNotEmpty()) {
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat diubah.');
             }
@@ -100,9 +132,14 @@ class UnitController extends Controller
     public function handleDelete($slug, $id)
     {
         try {
-            $unit = Unit::findOrFail($id);
+            $unit = Unit::where('id', $id)
+                ->where('id_alat', $this->alat->id)
+                ->with(['detailPeminjaman' => function ($query) {
+                    $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                }])
+                ->firstOrFail();
 
-            if ($unit->status === 'Dipinjam') {
+            if ($unit->detailPeminjaman->isNotEmpty()) {
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat dihapus.');
             }

@@ -107,7 +107,7 @@
                     </x-nav-link>
                 </li>
                 <li class="relative">
-                    <x-nav-link href="{{ route('peminjaman.alat') }}" :active="request()->is('mahasiswa/peminjaman-alat')" :src="'img/dashboard-icon.svg'">
+                    <x-nav-link href="{{ route('informasi.alat') }}" :active="request()->is('mahasiswa/peminjaman-alat*')" :src="'img/dashboard-icon.svg'">
                         <x-heroicon-s-inbox-stack
                             class="{{ request()->is('mahasiswa/peminjaman-alat') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Peminjaman Alat

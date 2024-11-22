@@ -77,10 +77,15 @@ class DashboardController extends Controller
         $role = $user->role;
         $prodi = $user->prodi;
 
-        $getUnit = InventarisAlat::with('alat')
-            ->withCount(['alat' => function ($query) {
-                $query->where('kondisi', 'normal')->where('status',     'tersedia');
-            }])->get();
+        $getUnit = InventarisAlat::withCount([
+            'alat' => function ($query) {
+                $query->where('kondisi', 'Normal')
+                    ->whereDoesntHave('detailPeminjaman', function ($query) {
+                        $query->whereIn('status', ['pending', 'dipinjam']);
+                    });
+            }
+        ])->get();
+
 
         $ruanganTersedia = Ruangan::all();
         return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'prodi', 'getUnit', 'ruanganTersedia'));
