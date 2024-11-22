@@ -39,7 +39,7 @@
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $unit['no_unit'] }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
-                            <span
+                            {{-- <span
                                 class="{{ $unit->kondisi == 'Rusak'
                                     ? 'bg-red-100 text-red-600'
                                     : ($unit->detailPeminjaman->isNotEmpty()
@@ -54,7 +54,35 @@
                                 @else
                                     Tersedia
                                 @endif
-                            </span>
+                            </span> --}}
+
+                            @if ($unit->kondisi == 'Rusak')
+                                <span
+                                    class="flex items-center justify-center rounded bg-red-100 px-2 py-1 text-red-600">Rusak
+                                </span>
+                            @elseif ($unit->detailPeminjaman->isNotEmpty())
+                                @foreach ($unit->detailPeminjaman as $peminjaman)
+                                    @if ($peminjaman->status == 'dipinjam')
+                                        <span
+                                            class="flex items-center justify-center rounded bg-yellow-100 px-2 py-1 text-yellow-600">Dipinjam
+                                        </span>
+                                    @elseif ($peminjaman->status == 'terlambat_dikembalikan')
+                                        <span
+                                            class="flex items-center justify-center rounded bg-yellow-100 px-2 py-1 text-yellow-600">Dipinjam
+                                        </span>
+                                    @else
+                                        <span
+                                            class="flex items-center justify-center rounded bg-green-100 px-2 py-1 text-green-600">
+                                            Tersedia
+                                        </span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span
+                                    class="flex items-center justify-center rounded bg-green-100 px-2 py-1 text-green-600">
+                                    Tersedia
+                                </span>
+                            @endif
                         </p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             <span
