@@ -81,7 +81,7 @@ class DashboardController extends Controller
             'alat' => function ($query) {
                 $query->where('kondisi', 'Normal')
                     ->whereDoesntHave('detailPeminjaman', function ($query) {
-                        $query->whereIn('status', ['dipinjam']);
+                        $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
                     });
             }
         ])->get();
