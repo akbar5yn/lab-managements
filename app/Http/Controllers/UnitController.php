@@ -38,7 +38,7 @@ class UnitController extends Controller
             ->where('kondisi', '!=', 'Rusak')
             ->whereDoesntHave('detailPeminjaman', function ($query) {
 
-                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             })
             ->count();
 
