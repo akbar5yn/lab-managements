@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 
 class Unit extends Model
@@ -11,6 +12,10 @@ class Unit extends Model
     protected $table = 'unit';
     protected $fillable = ['no_unit', 'status', 'kondisi', 'id_alat'];
 
+    public function detailPeminjaman(): HasMany
+    {
+        return $this->hasMany(DetailPeminjamanAlat::class, 'id_unit');
+    }
 
     public function unit(): BelongsTo
     {
