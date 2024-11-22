@@ -34,14 +34,26 @@
 
                 </div>
 
-                @foreach ($units as $unit)
+                @foreach ($allUnits as $unit)
                     <div class="grid grid-cols-[4%_25%_20%_20%_auto] border-b border-gray-400">
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $unit['no_unit'] }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
                             <span
-                                class="{{ $unit['status'] == 'Tersedia' ? 'bg-green-100 text-green-600' : ($unit['status'] == 'Dipinjam' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }} flex items-center justify-center rounded px-2 py-1">
-                                {{ $unit['status'] }}
+                                class="{{ $unit->kondisi == 'Rusak'
+                                    ? 'bg-red-100 text-red-600'
+                                    : ($unit->detailPeminjaman->isNotEmpty()
+                                        ? 'bg-yellow-100 text-yellow-600'
+                                        : 'bg-green-100 text-green-600') }} flex items-center justify-center rounded px-2 py-1">
+                                @if ($unit->kondisi == 'Rusak')
+                                    Rusak
+                                @elseif ($unit->detailPeminjaman->isNotEmpty())
+                                    @foreach ($unit->detailPeminjaman as $peminjaman)
+                                        {{ $peminjaman->status == 'pending' ? 'Pending' : 'Dipinjam' }}
+                                    @endforeach
+                                @else
+                                    Tersedia
+                                @endif
                             </span>
                         </p>
                         <p class="border-r border-gray-400 px-2 py-2">
@@ -127,9 +139,10 @@
             <div class="grid grid-cols-2 p-2">
                 <p class="rounded-t-md border border-gray-300 bg-green-100 p-2 text-green-600">Tersedia</p>
                 <p class="rounded-t-md border border-gray-300 bg-green-100 p-2 text-center text-green-600">
-                    {{ $countTersedia }}</p>
+                    {{ $unitTersedia }}</p>
                 <p class="border border-gray-300 bg-yellow-100 p-2 text-yellow-600">Dipinjam</p>
-                <p class="border border-gray-300 bg-yellow-100 p-2 text-center text-yellow-600">{{ $countDipinjam }}
+                <p class="border border-gray-300 bg-yellow-100 p-2 text-center text-yellow-600">
+                    {{ $totalUnitsDipinjam }}
                 </p>
 
                 <p class="border border-gray-300 bg-blue-100 p-2 text-blue-600">Normal</p>

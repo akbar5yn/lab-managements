@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('unit', function (Blueprint $table) {
             $table->id();
             $table->string('no_unit')->unique();
-            $table->enum('status', ['Tersedia', 'Dipinjam', 'Rusak'])->default('Tersedia');
             $table->enum('kondisi', ['Normal', 'Rusak'])->default('Normal');
             $table->foreignId('id_alat')->constrained(
                 table: 'inventaris_alat',
