@@ -42,26 +42,26 @@
 
         <!-- SECTION Ketersediaan Alat-->
         <section class="flex h-[75%] w-full gap-4">
-            <section class="flex h-full w-[50%] max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
+            <section class="flex h-full w-[50%] max-w-full flex-col rounded-xl bg-[#FFFFFF] p-4 shadow-md">
                 <div class="flex items-center justify-between py-[2px]">
                     <h2 class="text-lg font-medium">Ketersediaan Alat & Barang</h2>
                 </div>
                 <div
-                    class="sticky top-0 z-10 grid grid-cols-[40.3%_35.3%_33.3%] items-center gap-2 border-b border-gray-400 bg-[#F6F8FB] shadow">
-                    <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                    class="sticky top-0 z-10 mt-4 grid grid-cols-[40.3%_35.3%_auto] items-center gap-2 border-b border-gray-400 bg-[#F6F8FB] shadow">
+                    <p class="h-full border-gray-400 px-2 py-2 text-center font-medium">
                         Nama Alat</p>
 
-                    <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                    <p class="h-full border-x border-gray-400 px-2 py-2 text-center font-medium">
                         Lokasi</p>
 
-                    <p class="h-full border-gray-400 px-2 py-2 font-medium">
-                        Jumlah</p>
+                    <p class="h-full border-gray-400 px-2 py-2 text-center font-medium">
+                        Ketersediaan</p>
                 </div>
                 @foreach ($getUnit as $alat)
-                    <div class="grid grid-cols-[40.3%_35.3%_33.3%] gap-2 rounded-md border border-gray-400">
+                    <div class="grid grid-cols-[40.3%_35.3%_auto] gap-2 rounded-md border-b border-gray-400">
                         <p class="px-2 py-2">{{ $alat->nama_alat }}</p>
-                        <p class="px-2 py-2">{{ $alat->lokasi }}</p>
-                        <p class="px-2 py-2">{{ $alat->alat_count }}</p>
+                        <p class="border-x border-gray-400 px-2 py-2">{{ $alat->lokasi }}</p>
+                        <p class="px-2 py-2 text-center">{{ $alat->alat_count }} Unit</p>
                     </div>
                 @endforeach
             </section>
