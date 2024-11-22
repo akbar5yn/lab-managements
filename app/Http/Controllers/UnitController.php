@@ -31,14 +31,14 @@ class UnitController extends Controller
 
         $allUnits = Unit::where('id_alat', $this->alat->id)
             ->with(['detailPeminjaman' => function ($query) {
-                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             }])->get();
 
         $unitTersedia = Unit::where('id_alat', $this->alat->id)
             ->where('kondisi', '!=', 'Rusak')
             ->whereDoesntHave('detailPeminjaman', function ($query) {
 
-                $query->whereIn('status', ['pending', 'dipinjam']);
+                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
             })
             ->count();
 
