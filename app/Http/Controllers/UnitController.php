@@ -31,14 +31,14 @@ class UnitController extends Controller
 
         $allUnits = Unit::where('id_alat', $this->alat->id)
             ->with(['detailPeminjaman' => function ($query) {
-                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             }])->get();
 
         $unitTersedia = Unit::where('id_alat', $this->alat->id)
             ->where('kondisi', '!=', 'Rusak')
             ->whereDoesntHave('detailPeminjaman', function ($query) {
 
-                $query->whereIn('status', ['pending', 'dipinjam']);
+                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
             })
             ->count();
 
@@ -143,7 +143,7 @@ class UnitController extends Controller
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat dihapus.');
             }
-            $unit->deleteUnit($id);
+            $unit->deleteUnit();
             return redirect()->route('alat.unit', ['slug' => $slug])->with('success', 'Unit berhasil dihapus.');
         } catch (ModelNotFoundException $e) {
             return redirect()->route('alat.unit', ['slug' => $slug])->with('error', 'Unit tidak ditemukan.');
