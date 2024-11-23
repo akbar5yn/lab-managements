@@ -38,7 +38,6 @@ class InventarisAlat extends Model
             $no_unit = $prefix . $lastChar . $i;
             Unit::create([
                 'no_unit' => $no_unit,
-                'status' => 'Tersedia',
                 'kondisi' => 'Normal',
                 'id_alat' => $alat->id,
             ]);
