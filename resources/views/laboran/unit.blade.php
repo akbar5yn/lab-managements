@@ -39,23 +39,6 @@
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $unit['no_unit'] }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
-                            {{-- <span
-                                class="{{ $unit->kondisi == 'Rusak'
-                                    ? 'bg-red-100 text-red-600'
-                                    : ($unit->detailPeminjaman->isNotEmpty()
-                                        ? 'bg-yellow-100 text-yellow-600'
-                                        : 'bg-green-100 text-green-600') }} flex items-center justify-center rounded px-2 py-1">
-                                @if ($unit->kondisi == 'Rusak')
-                                    Rusak
-                                @elseif ($unit->detailPeminjaman->isNotEmpty())
-                                    @foreach ($unit->detailPeminjaman as $peminjaman)
-                                        {{ $peminjaman->status == 'pending' ? 'Pending' : 'Dipinjam' }}
-                                    @endforeach
-                                @else
-                                    Tersedia
-                                @endif
-                            </span> --}}
-
                             @if ($unit->kondisi == 'Rusak')
                                 <span
                                     class="flex items-center justify-center rounded bg-red-100 px-2 py-1 text-red-600">Rusak
@@ -130,20 +113,9 @@
                                             @method('PUT')
                                             <input type="hidden" name="kondisi" value="Rusak">
                                             <button type="submit"
-                                                class="{{ $unit->status === 'Dipinjam' ? 'bg-gray-300 cursor-not-allowed' : '' }} block w-full px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
-                                                role="menuitem" tabindex="-1"
-                                                @if ($unit->status == 'Dipinjam') disabled
-                                                data-ripple-light="true"
-                                                data-tooltip-target="tooltip-right" @endif>
+                                                class="block w-full px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
                                                 Rusak
                                             </button>
-                                            @if ($unit->status === 'Dipinjam')
-                                                <div data-tooltip="tooltip-right" data-tooltip-placement="right"
-                                                    class="absolute z-50 w-40 whitespace-normal break-words rounded-lg bg-black px-3 py-1.5 font-sans text-sm font-normal text-white focus:outline-none">
-                                                    Unit sedang dipinjam, tidak dapat diubah
-                                                </div>
-                                            @endif
-
                                         </form>
                                     </div>
                                 </div>
@@ -182,9 +154,7 @@
                 <p class="rounded-b-md border border-gray-300 p-2">Total Alat</p>
                 <p class="rounded-b-md border border-gray-300 p-2 text-center">{{ $countTotal }}</p>
             </div>
-            {{-- <button
-                class="absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base">Tambah
-                Unit</button> --}}
+
             <x-modal attributeTitle="Tambah Unit" attributeButton="Tambah Unit">
                 <form action="{{ route('tambah.unit', [$alat->slug]) }}" method="POST">
                     @csrf
