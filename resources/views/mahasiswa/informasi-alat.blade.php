@@ -18,297 +18,37 @@
             </div>
 
             <div class="mt-4 grid grid-cols-3 gap-3 pb-2">
+                @foreach ($getUnit as $unit)
+                    <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
+                        <div class="flex flex-col gap-4 p-4">
+                            <h5 class="text-lg font-medium">
+                                {{ $unit->nama_alat }}
+                            </h5>
+                            <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
+                                <span class="rounded-md bg-yellow-200 px-2">Fungsi :</span>
+                                {{ $unit->fungsi }}
+                            </p>
+                            <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
+                                <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
+                                    <p class="text-xs font-semibold text-gray-500">Tersedia</p>
+                                    <p class="text-xs text-gray-500">{{ $unit->alat_count }}</p>
+                                </div>
+                                <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
+                                    <p class="text-xs font-semibold text-gray-500">Lokasi</p>
+                                    <p class="text-xs text-gray-500">{{ $unit->lokasi }}</p>
+                                </div>
 
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
                             </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam
+                                    Alat</button>
                             </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
                         </div>
                     </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
+                @endforeach
 
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
 
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
 
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <div class="flex flex-col gap-4 p-4">
-                        <h5 class="text-lg font-medium">
-                            Nama Alat
-                        </h5>
-                        <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
-                            <span class="rounded-md bg-yellow-200 px-2">Fungsi</span> ipsum dolor sit amet
-                            consectetur
-                            adipisicing
-                            elit. Similique eius,
-                            expedita
-                            reiciendis facere sint repudiandae qui vel voluptatum labore officia!
-                        </p>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Jumlah</p>
-                                <p class="text-xs text-gray-500">10</p>
-                            </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">Lab Fisika Dasar</p>
-                            </div>
-
-                        </div>
-                        <div class="mt-2 flex items-center justify-between">
-                            <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam Alat</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     </main>
