@@ -1,15 +1,16 @@
-<div x-data="{ open: false, isMounted: false }" class="">
+<div x-data="{ open: false, isMounted: false }" class="" x-init="open = false">
     <!-- Trigger Button -->
-    <button @click="open = true; setTimeout(() => { document.getElementById('nama_alat').focus(); }, 100)"
+    <button @click="open = true;"
         x-bind:class="{
-            ' border': true,
-            'border-[#559f86] bg-[#d0f1e6] px-5 py-2 rounded-lg': '{{ $button }}'
+            'border-[#559f86] border bg-[#d0f1e6] px-5 py-2 rounded-lg': '{{ $button }}'
             === 'Tambah Alat' || '{{ $button }}'
             === 'Tambahkan Ruangan',
             'bg-green-600 text-white px-2 rounded ': '{{ $button }}'
             === 'Edit',
-            'absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base': '{{ $button }}'
+            'absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base border': '{{ $button }}'
             === 'Tambah Unit',
+            'rounded-md bg-[#08835a] px-3 py-2 text-sm text-white': '{{ $button }}'
+            === 'Pinjam Alat'
         }">
         {{ $button }}
     </button>
@@ -35,11 +36,14 @@
     </div>
     <script>
         function clearInputs() {
-            document.getElementById('nama_alat').value = '';
-            document.getElementById('lokasi').value = '';
-            document.getElementById('tahun_pengadaan').value = '';
-            document.getElementById('fungsi').value = '';
-            document.getElementById('jumlah').value = '';
+            const elements = ['nama_alat', 'lokasi', 'tahun_pengadaan', 'fungsi', 'jumlah'];
+
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.value = '';
+                }
+            });
         }
 
         function capitalizeFirstLetter(input) {

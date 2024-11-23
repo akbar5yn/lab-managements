@@ -48,6 +48,7 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
     Route::get('/mahasiswa/peminjaman-alat/informasi', [PeminjamanAlatController::class, 'informasiAlat'])->name('informasi.alat');
+    Route::get('/mahasiswa/peminjaman-alat', [PeminjamanAlatController::class, 'pinjamAlat'])->name('pinjam.alat');
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });

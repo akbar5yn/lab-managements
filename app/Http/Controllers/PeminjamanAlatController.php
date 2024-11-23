@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PeminjamanAlatController extends Controller
 {
+    protected $user_id;
     protected $name;
     protected $title;
     protected $role;
@@ -15,6 +17,7 @@ class PeminjamanAlatController extends Controller
     public function __construct()
     {
         $user = Auth::user();
+        $this->user_id = $user->id;
         $this->name = $user->name;
         $this->title = 'Peminjaman Alat & Barang';
         $this->role = $user->role;
@@ -92,11 +95,27 @@ class PeminjamanAlatController extends Controller
     // ANCHOR Index page peminjaman alat [Mahasiswa]
     public function informasiAlat()
     {
+        $getUnit = InventarisAlat::withCount([
+            'alat' => function ($query) {
+                $query->where('kondisi', 'Normal')
+                    ->whereDoesntHave('detailPeminjaman', function ($query) {
+                        $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
+                    })->orderBy('id', 'asc');;
+            }
+        ])->get();
+
+
         return view('mahasiswa.informasi-alat', [
             'name' => $this->name,
             'title' => $this->title,
             'role' => $this->role,
+            'user_id' => $this->user_id,
+            'getUnit' => $getUnit
         ]);
+    }
+
+    public function pinjamAlat()
+    {
     }
 
     public function aktifitasPeminjaman()
