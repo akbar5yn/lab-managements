@@ -17,7 +17,7 @@
                         Aktivitas Peminjaman
                     </a>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex items-center gap-2">
                     <div id="kategori" x-data="{ isOpen: false }" class="relative inline-block text-left">
                         <div>
                             <button type="button" @click="isOpen = !isOpen"
@@ -57,13 +57,100 @@
                         <input type="search" id="search" x-model="search" placeholder="Cari Alat"
                             class="auto w-full border-none bg-transparent p-1 focus:ring-0">
                     </div>
-                </div>
+                    <div class="flex items-center justify-between">
+                        <x-modal attributeTitle="Peminjaman Alat" attributeButton="Pinjam Alat">
+                            <form action="{{ route('pinjam.alat') }}" method="POST">
+                                @csrf
+                                @method('POST')
 
+                                <div class="flex flex-col gap-6 rounded-lg border p-4">
+                                    <input type="text" x-bind:value="'{{ $user_id }}'" disabled class="hidden">
+                                    <div
+                                        class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                                        <label class="font-semibold" for="keperluan">Keperluan</label>
+                                        <input type="text" name="keperluan" id="keperluan" required
+                                            class="border-none p-0 capitalize focus:outline-none focus:ring-0">
+                                    </div>
+                                    <div x-data="{ open: false, selected: '', selectedId: '' }" class="relative">
+                                        <!-- Label dengan animasi fade-in -->
+                                        <label for="alat_id"
+                                            class="text-lg font-semibold opacity-0 transition-all duration-700 ease-out"
+                                            x-init="setTimeout(() => $el.classList.remove('opacity-0'), 100)">
+                                            Pilih Alat
+                                        </label>
+
+                                        <!-- Custom Dropdown yang dikelola dengan AlpineJS -->
+                                        <div class="mt-2">
+                                            <div @click="open = !open"
+                                                class="w-full cursor-pointer border-b-2 border-gray-300 text-left focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                                                <span x-text="selected || 'Pilih Alat'"></span>
+                                                <!-- Menampilkan pilihan yang dipilih -->
+                                            </div>
+
+                                            <!-- Dropdown List yang hanya muncul jika open === true -->
+                                            <div x-show="open"
+                                                x-transition:enter="transition ease-in duration-300 transform"
+                                                x-transition:enter-start="scale-95 opacity-0"
+                                                x-transition:enter-end="scale-100 opacity-100"
+                                                x-transition:leave="transition ease-out duration-200 transform"
+                                                x-transition:leave-start="scale-100 opacity-100"
+                                                x-transition:leave-end="scale-95 opacity-0"
+                                                class="absolute left-0 z-10 mt-2 w-full rounded-md border border-gray-300 bg-white shadow-md">
+                                                <ul class="max-h-60 overflow-auto">
+                                                    @foreach ($getUnit as $unit)
+                                                        @php
+                                                            $availableUnits = $unit->alat->filter(function ($alat) {
+                                                                return $alat->kondisi === 'Normal' &&
+                                                                    !$alat->detailPeminjaman
+                                                                        ->whereIn('status', [
+                                                                            'dipinjam',
+                                                                            'terlambat_dikembalikan',
+                                                                        ])
+                                                                        ->count();
+                                                            });
+
+                                                            $firstAvailableUnit = $availableUnits
+                                                                ->sortBy('id')
+                                                                ->first();
+                                                        @endphp
+
+                                                        @if ($firstAvailableUnit)
+                                                            <!-- Setiap item dalam list -->
+                                                            <li @click="selected = '{{ $unit->nama_alat }}'; selectedId = '{{ $firstAvailableUnit->id }}'; open = false; console.log(selectedId)"
+                                                                class="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                                                                {{ $unit->nama_alat }}
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="alat_id" x-bind:value="selectedId">
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                                        <label class="font-semibold" for="tgl_pinjam">Tanggal Pinjam</label>
+                                        <input type="date" name="tgl_pinjam" id="tgl_pinjam" required
+                                            class="border-none p-0 focus:outline-none focus:ring-0">
+                                    </div>
+                                    <div
+                                        class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                                        <label class="font-semibold" for="tgl_kembali">Tanggal Kembali</label>
+                                        <input type="date" name="tgl_kembali" id="tgl_kembali" required
+                                            class="border-none p-0 focus:outline-none focus:ring-0">
+                                    </div>
+                                </div>
+                            </form>
+                        </x-modal>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-4 grid grid-cols-3 gap-3 pb-2">
                 @foreach ($getUnit as $unit)
-                    <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
+                    <div
+                        class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
                         <div class="flex flex-col gap-4 p-4">
                             <h5 class="text-lg font-medium">
                                 {{ $unit->nama_alat }}
@@ -81,19 +168,12 @@
                                     <p class="text-xs font-semibold text-gray-500">Lokasi</p>
                                     <p class="text-xs text-gray-500">{{ $unit->lokasi }}</p>
                                 </div>
-
-                            </div>
-                            <div class="mt-2 flex items-center justify-between">
-                                <button class="rounded-md bg-[#08835a] px-3 py-1 text-sm text-white">Pinjam
-                                    Alat</button>
                             </div>
                         </div>
                     </div>
                 @endforeach
-
-
-
             </div>
         </section>
+
     </main>
 </x-layout>
