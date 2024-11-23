@@ -103,7 +103,7 @@ class UnitController extends Controller
             $unit = Unit::where('id', $id)
                 ->where('id_alat', $this->alat->id)
                 ->with(['detailPeminjaman' => function ($query) {
-                    $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+                    $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
                 }])
                 ->firstOrFail();
 
