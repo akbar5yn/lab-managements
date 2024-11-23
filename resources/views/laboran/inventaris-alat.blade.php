@@ -153,7 +153,6 @@
                                 <div class="flex items-center justify-center gap-5">
                                     <a href="{{ route('alat.unit', ['slug' => $tool->slug]) }}"
                                         class="rounded bg-blue-400 px-2 text-white">Detail</a>
-                                    {{-- <a href="" class="rounded bg-red-400 px-2 text-white">Delete</a> --}}
                                     <form action="{{ route('delete.alat', $tool->id) }}" method="POST"
                                         class="delete-form m-0">
                                         @csrf
@@ -200,14 +199,6 @@
                                                         x-bind:value="'{{ $tool['fungsi'] }}'"
                                                         oninput="capitalizeFirstLetter(this)">
                                                 </div>
-                                                {{-- <div
-                                                class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                                                <label class="font-semibold" for="jumlah">Jumlah Unit</label>
-                                                <input type="number" min="0" name="jumlah" id="jumlah"
-                                                    required
-                                                    class="appearance-none border-none p-0 focus:outline-none focus:ring-0"
-                                                    x-bind:value="'{{ $tool['jumlah'] }}'">
-                                            </div> --}}
                                             </div>
                                             <button type="submit"
                                                 class="mt-2 w-full rounded bg-[#84AFA2] px-4 py-2 text-white">Simpan</button>
