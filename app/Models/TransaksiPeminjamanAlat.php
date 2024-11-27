@@ -21,4 +21,13 @@ class TransaksiPeminjamanAlat extends Model
     {
         return $this->hasMany(DetailPeminjamanAlat::class, 'id_transaksi_peminjaman');
     }
+
+    public static function createNewTransaksi(array $data)
+    {
+        return self::create([
+            'id_user' => $data['id_user'],
+            'keperluan' => $data['keperluan'],
+            'status' => 'pending',
+        ]);
+    }
 }
