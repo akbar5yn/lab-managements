@@ -19,4 +19,16 @@ class DetailPeminjamanAlat extends Model
     {
         return $this->belongsTo(Unit::class, 'id_unit');
     }
+
+    public static function createNewDetailTransaksi(array $data, $transaksiId)
+    {
+        // Buat detail transaksi dengan ID transaksi terkait
+        return self::create([
+            'id_transaksi_peminjaman' => $transaksiId,
+            'id_unit' => $data['id_unit'],
+            'tanggal_pinjam' => $data['tanggal_pinjam'],
+            'tanggal_kembali' => $data['tanggal_kembali'],
+            'status' => 'pending', // default status
+        ]);
+    }
 }
