@@ -1,6 +1,8 @@
 import './bootstrap';
 import './bootstrap';
 import Swal from 'sweetalert2';
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 
 function showAlert(title, text, icon) {
     Swal.fire({
