@@ -1,6 +1,7 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
     <x-slot:name>{{ $name }}</x-slot:name>
+    <x-slot:subtitle>{{ $subtitle }}</x-slot:subtitle>
     <x-slot:role>{{ $role }}</x-slot:role>
     <main class="flex h-full flex-col gap-4">
         @if (Session::has('success'))
@@ -50,7 +51,7 @@
         <section class="flex justify-between gap-2">
             <div class="flex gap-2">
                 <a href="{{ route('informasi.alat') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/informasi') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
+                    class="{{ request()->is('mahasiswa/informasi-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
                     Informasi Alat
                 </a>
                 <a href="{{ route('aktivitas.peminjaman') }}"
@@ -97,96 +98,6 @@
                     <input type="search" id="search" x-model="search" placeholder="Cari Alat"
                         class="auto w-full border-none bg-transparent p-1 focus:ring-0">
                 </div>
-                <div class="flex items-center justify-between">
-                    <x-modal attributeTitle="Peminjaman Alat" attributeButton="Pinjam Alat">
-                        <form action="{{ route('pinjam.alat') }}" method="POST">
-                            @csrf
-                            @method('POST')
-
-                            <div class="flex flex-col gap-6 rounded-lg border p-4">
-                                <input type="text" name="id_user" id="id_user"
-                                    x-bind:value="'{{ $user_id }}'" class="hidden">
-                                <div
-                                    class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                                    <label class="font-semibold" for="keperluan">Keperluan</label>
-                                    <input type="text" name="keperluan" id="keperluan" required
-                                        class="border-none p-0 normal-case focus:outline-none focus:ring-0">
-                                </div>
-                                <div x-data="{ open: false, selected: '', selectedId: '' }" class="relative">
-                                    <!-- Label dengan animasi fade-in -->
-                                    <label for="id_unit"
-                                        class="text-lg font-semibold opacity-0 transition-all duration-700 ease-out"
-                                        x-init="setTimeout(() => $el.classList.remove('opacity-0'), 100)">
-                                        Pilih Alat
-                                    </label>
-
-                                    <!-- Custom Dropdown yang dikelola dengan AlpineJS -->
-                                    <div class="mt-2">
-                                        <div @click="open = !open"
-                                            class="w-full cursor-pointer border-b-2 border-gray-300 text-left focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                                            <span x-text="selected || 'Pilih Alat'"></span>
-                                            <!-- Menampilkan pilihan yang dipilih -->
-                                        </div>
-
-                                        <!-- Dropdown List yang hanya muncul jika open === true -->
-                                        <div x-show="open"
-                                            x-transition:enter="transition ease-in duration-300 transform"
-                                            x-transition:enter-start="scale-95 opacity-0"
-                                            x-transition:enter-end="scale-100 opacity-100"
-                                            x-transition:leave="transition ease-out duration-200 transform"
-                                            x-transition:leave-start="scale-100 opacity-100"
-                                            x-transition:leave-end="scale-95 opacity-0"
-                                            class="absolute left-0 z-10 mt-2 w-full rounded-md border border-gray-300 bg-white shadow-md">
-                                            <ul class="max-h-60 overflow-auto">
-                                                @foreach ($getUnit as $unit)
-                                                    @php
-                                                        $availableUnits = $unit->alat->filter(function ($alat) {
-                                                            return $alat->kondisi === 'Normal' &&
-                                                                !$alat->detailPeminjaman
-                                                                    ->whereIn('status', [
-                                                                        'dipinjam',
-                                                                        'terlambat_dikembalikan',
-                                                                    ])
-                                                                    ->count();
-                                                        });
-
-                                                        $firstAvailableUnit = $availableUnits->sortBy('id')->first();
-                                                    @endphp
-
-                                                    @if ($firstAvailableUnit)
-                                                        <!-- Setiap item dalam list -->
-                                                        <li @click="selected = '{{ $unit->nama_alat }}'; selectedId = '{{ $firstAvailableUnit->id }}'; open = false; console.log(selectedId)"
-                                                            class="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                                                            {{ $unit->nama_alat }}
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="id_unit" id="id_unit" x-bind:value="selectedId">
-                                </div>
-
-                                <div
-                                    class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                                    <label class="font-semibold" for="tanggal_pinjam">Tanggal Pinjam</label>
-                                    <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" required
-                                        min="{{ $minDate }}" max="{{ $maxDate }}"
-                                        class="border-none p-0 focus:outline-none focus:ring-0">
-                                </div>
-                                <div
-                                    class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                                    <label class="font-semibold" for="tanggal_kembali">Tanggal Kembali</label>
-                                    <input type="date" name="tanggal_kembali" id="tanggal_kembali" required
-                                        min="{{ $minReturnDate }}"
-                                        class="border-none p-0 focus:outline-none focus:ring-0">
-                                </div>
-                            </div>
-                            <button type="submit"
-                                class="mt-2 w-full rounded bg-[#84AFA2] px-4 py-2 text-white">Submit</button>
-                        </form>
-                    </x-modal>
-                </div>
             </div>
         </section>
 
@@ -203,14 +114,21 @@
                                 {{ $unit->fungsi }}
                             </p>
                         </div>
-                        <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Tersedia</p>
-                                <p class="text-xs text-gray-500">{{ $unit->alat_count }}</p>
+                        <div class="flex w-full flex-col gap-2">
+                            <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
+                                <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
+                                    <p class="text-xs font-semibold text-gray-500">Jumlah Unit</p>
+                                    <p class="text-xs text-gray-500">{{ $unit->alat_count }}</p>
+                                </div>
+                                <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
+                                    <p class="text-xs font-semibold text-gray-500">Lokasi</p>
+                                    <p class="text-xs text-gray-500">{{ $unit->lokasi }}</p>
+                                </div>
                             </div>
-                            <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                <p class="text-xs text-gray-500">{{ $unit->lokasi }}</p>
+                            <div class="flex justify-start">
+                                <a href="{{ route('detail.alat', $unit->slug) }}"
+                                    class="rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">Pinjam
+                                    Alat</a>
                             </div>
                         </div>
                     </div>
@@ -221,12 +139,3 @@
 
     </main>
 </x-layout>
-
-<script>
-    document.getElementById('tanggal_pinjam').addEventListener('change', function() {
-        var tanggalPinjam = new Date(this.value);
-        tanggalPinjam.setDate(tanggalPinjam.getDate() + 1);
-        var tanggalKembaliInput = document.getElementById('tanggal_kembali');
-        tanggalKembaliInput.min = tanggalPinjam.toISOString().split('T')[0];
-    });
-</script>
