@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetailPeminjamanAlat;
 use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
+use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -106,6 +107,8 @@ class PeminjamanAlatController extends Controller
     // ANCHOR Index page peminjaman alat [Mahasiswa]
     public function informasiAlat()
     {
+        $subtitle = 'Informasi Alat';
+
         if ($this->currentTime->lessThan($this->startOfDay)) {
             $minDate = $this->startOfDay->toDateString();
         } elseif ($this->currentTime->greaterThanOrEqualTo($this->endOfDay)) {
@@ -119,10 +122,7 @@ class PeminjamanAlatController extends Controller
 
         $getUnit = InventarisAlat::withCount([
             'alat' => function ($query) {
-                $query->where('kondisi', 'Normal')
-                    ->whereDoesntHave('detailPeminjaman', function ($query) {
-                        $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
-                    })->orderBy('id', 'asc');;
+                $query->where('kondisi', 'Normal');
             }
         ])->get();
 
@@ -130,6 +130,7 @@ class PeminjamanAlatController extends Controller
         return view('mahasiswa.informasi-alat', [
             'name' => $this->name,
             'title' => $this->title,
+            'subtitle' => $subtitle,
             'role' => $this->role,
             'user_id' => $this->user_id,
             'getUnit' => $getUnit,
@@ -139,7 +140,45 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    public function pinjamAlat(Request $request)
+    public function detailAlat($slug)
+    {
+        $subtitle = 'Pinjam Alat';
+
+        $alat = InventarisAlat::with('alat')->where('slug', $slug)->firstOrFail();
+        $namaAlat = $alat->nama_alat;
+
+        $allUnits = Unit::where('id_alat', $alat->id)
+            ->with(['detailPeminjaman' => function ($query) {
+                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+            }])->get();
+
+        if ($this->currentTime->lessThan($this->startOfDay)) {
+            $minDate = $this->startOfDay->toDateString();
+        } elseif ($this->currentTime->greaterThanOrEqualTo($this->endOfDay)) {
+            $minDate = $this->currentTime->addDay()->setTime(9, 0, 0)->toDateString();
+        } else {
+            $minDate = $this->currentTime->toDateString();
+        }
+
+        $maxDate = $this->currentTime->addDays(5)->toDateString();
+        $minReturnDate = $this->currentTime->copy()->addDay()->toDateString();
+
+        return view('mahasiswa.detail-alat', [
+            'name' => $this->name,
+            'title' => $this->title,
+            'subtitle' => $subtitle,
+            'role' => $this->role,
+            'user_id' => $this->user_id,
+            'allUnits' => $allUnits,
+            'namaAlat' => $namaAlat,
+            'maxDate' => $maxDate,
+            'minDate' => $minDate,
+            'minReturnDate' => $minReturnDate,
+            'alat' => $alat,
+        ]);
+    }
+
+    public function pinjamAlat(Request $request, $slug, $unit)
     {
         // Validasi data transaksi
         $validatedTransaksi = $request->validate([
@@ -158,7 +197,7 @@ class PeminjamanAlatController extends Controller
 
         try {
             // Cek apakah ada pengajuan lain untuk alat yang sama pada rentang tanggal yang diajukan
-            $overlappingRequests = DetailPeminjamanAlat::where('id_unit', $validatedDetail['id_unit'])
+            $overlappingRequests = DetailPeminjamanAlat::where('id_unit', $unit)
                 ->where(function ($query) use ($validatedDetail) {
                     $query->where('tanggal_kembali', '>=', $validatedDetail['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedDetail['tanggal_kembali']); // Tidak di luar di kanan
@@ -172,7 +211,7 @@ class PeminjamanAlatController extends Controller
                     return $item->tanggal_pinjam . ' s/d ' . $item->tanggal_kembali;
                 })->implode(', ');
 
-                return redirect()->route('informasi.alat')
+                return redirect()->route('detail.alat', ['slug' => $slug])
                     ->with('warning', 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates);
             }
 
@@ -180,10 +219,10 @@ class PeminjamanAlatController extends Controller
             $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi);
             $detail_transaksi = DetailPeminjamanAlat::createNewDetailTransaksi($validatedDetail, $transaksi->id);
 
-            return redirect()->route('informasi.alat')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
+            return redirect()->route('detail.alat', ['slug' => $slug])->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
             Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
-            return redirect()->route('informasi.alat')->with('error', 'Terjadi kesalahan saat melakukan peminjaman.');
+            return redirect()->route('detail.alat', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat melakukan peminjaman.');
         }
     }
 
