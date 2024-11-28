@@ -164,14 +164,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         @foreach ($allUnits as $index => $unit)
             flatpickr('#tanggal_pinjam_{{ $index }}', {
-                minDate: "{{ $minDate }}", // Set minimum date dynamically
-                maxDate: "{{ $maxDate }}", // Set maximum date dynamically
-                dateFormat: "Y-m-d", // Format date
+                minDate: "{{ $minDate }}",
+                maxDate: "{{ $maxDate }}",
+                dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
-                    // Set the minDate for "tanggal_kembali" to the next day after the selected "tanggal_pinjam"
-                    var nextDay = new Date(selectedDates[0]);
+                    const nextDay = new Date(selectedDates[0]);
                     nextDay.setDate(nextDay.getDate() + 1);
-                    var tanggalKembaliInput = document.getElementById(
+
+                    const tanggalKembaliInput = document.getElementById(
                         'tanggal_kembali_{{ $index }}');
                     flatpickr(tanggalKembaliInput, {
                         minDate: nextDay,
@@ -181,7 +181,7 @@
             });
 
             flatpickr('#tanggal_kembali_{{ $index }}', {
-                minDate: "{{ $minDate }}",
+                minDate: "{{ $minReturnDate }}", // Ensure minimum return date is the next day
                 maxDate: "{{ $maxDate }}",
                 dateFormat: "Y-m-d"
             });
