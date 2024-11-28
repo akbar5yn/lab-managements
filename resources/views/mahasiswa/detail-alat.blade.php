@@ -149,14 +149,16 @@
         }
     }
 
-    /* Animasi muncul */
     .animate-fade-in {
         animation: fadeIn 0.5s ease-out forwards;
     }
 
-    /* Animasi hilang */
     .animate-fade-out {
         animation: fadeOut 0.3s ease-in forwards;
+    }
+
+    #modal {
+        transition: opacity 0.3s ease-in-out;
     }
 </style>
 
@@ -181,7 +183,7 @@
             });
 
             flatpickr('#tanggal_kembali_{{ $index }}', {
-                minDate: "{{ $minReturnDate }}", // Ensure minimum return date is the next day
+                minDate: "{{ $minReturnDate }}",
                 maxDate: "{{ $maxDate }}",
                 dateFormat: "Y-m-d"
             });
@@ -189,14 +191,20 @@
     });
 
 
+    function showModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('animate-fade-in');
+    }
+
     document.getElementById('closeButton').addEventListener('click', function() {
         const modal = document.getElementById('modal');
-        modal.classList.remove('animate-fade-in'); // Hapus kelas animasi masuk
-        modal.classList.add('animate-fade-out'); // Tambahkan kelas animasi keluar
+        modal.classList.remove('animate-fade-in');
+        modal.classList.add('animate-fade-out');
 
-        // Sembunyikan modal setelah animasi selesai
         setTimeout(() => {
             modal.style.display = 'none';
-        }, 300); // Durasi sama dengan durasi animasi fade-out
+        }, 300);
     });
+    showModal();
 </script>
