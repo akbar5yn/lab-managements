@@ -47,8 +47,9 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 // ANCHOR Mahasiswa
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
-    Route::get('/mahasiswa/peminjaman-alat/informasi', [PeminjamanAlatController::class, 'informasiAlat'])->name('informasi.alat');
-    Route::post('/mahasiswa/peminjaman-alat', [PeminjamanAlatController::class, 'pinjamAlat'])->name('pinjam.alat');
+    Route::get('/mahasiswa/informasi-alat', [PeminjamanAlatController::class, 'informasiAlat'])->name('informasi.alat');
+    Route::get('/mahasiswa/informasi-alat/pinjam-alat/{slug}', [PeminjamanAlatController::class, 'detailAlat'])->name('detail.alat');
+    Route::post('/mahasiswa/peminjaman-alat/{slug}/{id}', [PeminjamanAlatController::class, 'pinjamAlat'])->name('pinjam.alat');
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });
