@@ -34,6 +34,10 @@
                 background: #b30000;
             }
 
+            body {
+                height: 100vh !important;
+            }
+
             input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
@@ -78,7 +82,6 @@
             .main-content {
                 position: relative;
                 width: calc(100% - 250px);
-                height: 100%;
                 /* left: 250px; */
             }
 
