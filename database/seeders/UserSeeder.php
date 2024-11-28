@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Akbar Pratama Suryamin',
-                'nim' => null,
+                'username' => '2000016129',
                 'prodi' => '',
                 'password' =>  Hash::make('2000016129'),
                 'email' => 'akbar@gmail.com',
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Miftahul Rizqha',
-                'nim' => '2000016130',
+                'username' => '2000016130',
                 'prodi' => 'sistem informasi',
                 'password' =>  Hash::make('2000016130'),
                 'email' => 'mifta@gmail.com',
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Alfarizi Dwi Putra Suryamin',
-                'nim' => '2000016001',
+                'username' => '2000016001',
                 'prodi' => 'teknologi informasi',
                 'password' =>  Hash::make('2000016001'),
                 'email' => 'farid@gmail.com',
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Teguh Dwi Cahya Kusuma',
-                'nim' => '2000016003',
+                'username' => '2000016003',
                 'prodi' => 'matematika',
                 'password' =>  Hash::make('2000016003'),
                 'email' => 'teguh@gmail.com',
