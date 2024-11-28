@@ -31,21 +31,16 @@ class LoginController extends Controller
     {
         // Validasi input berdasarkan tabel users
         $request->validate([
-            'role' => 'required|in:laboran,mahasiswa',
-            'nim' => $request->role == 'mahasiswa' ? 'required|string' : 'nullable',
-            'email' => $request->role == 'laboran' ? 'required|email' : 'nullable',
-            'password' => 'required',
+            'username' => ['required'],
+            'password' => ['required'],
         ]);
 
         // Tentukan kredensial berdasarkan role
-        $credentials = $request->role == 'laboran'
-            ? ['email' => $request->email, 'password' => $request->password]
-            : ['nim' => $request->nim, 'password' => $request->password];
+        $credentials =  $request->only('username', 'password');
 
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             // Redirect berdasarkan role
             if ($user->role === 'laboran') {
                 return redirect()->route('laboran');

@@ -83,18 +83,6 @@
                             class="{{ request()->is('jadwal-ruangan') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Jadwal Ruangan</x-nav-link>
                 </li>
-                <li>
-                    <x-nav-link href="/laporan" :active="request()->is('laporan')">
-                        <x-heroicon-m-clipboard-document-list
-                            class="{{ request()->is('laporan') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
-                        Laporan</x-nav-link>
-                </li>
-                <li>
-                    <x-nav-link href="/pendaftaran-pratikum" :active="request()->is('pendaftaran-pratikum')">
-                        <x-heroicon-s-document-arrow-up
-                            class="{{ request()->is('pendaftaran-pratikum') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
-                        Pendaftaran Praktikum</x-nav-link>
-                </li>
             </ul>
         @elseif($userRole === 'mahasiswa')
             <!-- ANCHOR Menu Mahasiswa-->

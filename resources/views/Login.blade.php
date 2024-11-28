@@ -47,28 +47,14 @@
                     <form class="space-y-6" action="{{ route('authenticate') }}" method="POST">
                         @csrf
                         <div>
-                            <label class="block text-xs font-medium leading-6 text-[#f6fafd]">
-                                Login Sebagai
-                            </label>
-                            <select name="role" id="role-select" required onchange="updateInputField()"
-                                class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6">
-                                <option value="laboran" {{ old('role') == 'laboran' ? 'selected' : '' }}>Laboran
-                                </option>
-                                <option value="mahasiswa" {{ old('role') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa
-                                </option>
-                            </select>
-                        </div>
-
-                        <div id="input-field">
-                            <label id="input-label" for="identifier"
+                            <label id="username" for="username"
                                 class="block text-xs font-medium leading-6 text-[#f6fafd]">
-                                {{ old('role') == 'laboran' ? 'Email' : 'NIM' }}
+                                Username
                             </label>
                             <div class="relative mt-2">
-                                <input id="identifier-input" name="identifier" value="{{ old('identifier') }}"
-                                    type="text"
+                                <input id="username" name="username" type="text"
                                     class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6"
-                                    required placeholder="">
+                                    required>
                             </div>
                         </div>
 
@@ -108,29 +94,6 @@
             };
         </script>
     @endif
-    <script>
-        function updateInputField() {
-            const roleSelect = document.getElementById('role-select');
-            const inputLabel = document.getElementById('input-label');
-            const inputField = document.getElementById('identifier-input');
-
-            if (roleSelect.value === 'laboran') {
-                inputLabel.textContent = 'Email';
-                inputField.name = 'email';
-                inputField.placeholder = 'Masukkan email';
-            } else if (roleSelect.value === 'mahasiswa') {
-                inputLabel.textContent = 'NIM';
-                inputField.name = 'nim';
-                inputField.placeholder = 'Masukkan NIM';
-            }
-        }
-
-        // Panggil fungsi ini saat halaman dimuat untuk menjaga input sesuai pilihan sebelumnya
-        window.onload = function() {
-            updateInputField();
-        }
-    </script>
-
 </body>
 
 </html>
