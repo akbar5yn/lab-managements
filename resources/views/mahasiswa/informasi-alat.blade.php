@@ -9,8 +9,9 @@
                     showAlert("Berhasil", "{{ Session::get('success') }}", "success");
                     const swalBody = document.querySelector('body.swal2-height-auto');
                     if (swalBody) {
-                        swalBody.style.minHeight = '100vh'; // Set max height
-                        swalBody.style.overflowY = 'auto'; // Enable scrolling if content exceeds max height
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
                     }
                 };
             </script>
@@ -22,8 +23,9 @@
                     showAlert("Error", "{{ Session::get('error') }}", "error");
                     const swalBody = document.querySelector('body.swal2-height-auto');
                     if (swalBody) {
-                        swalBody.style.minHeight = '100vh'; // Set max height
-                        swalBody.style.overflowY = 'auto'; // Enable scrolling if content exceeds max height
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
                     }
                 };
             </script>
@@ -35,8 +37,9 @@
                     showAlert("Ups Maaf", "{{ Session::get('warning') }}", "warning");
                     const swalBody = document.querySelector('body.swal2-height-auto');
                     if (swalBody) {
-                        swalBody.style.minHeight = '100vh'; // Set max height
-                        swalBody.style.overflowY = 'auto'; // Enable scrolling if content exceeds max height
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
                     }
                 };
             </script>
@@ -171,11 +174,6 @@
                                         min="{{ $minDate }}" max="{{ $maxDate }}"
                                         class="border-none p-0 focus:outline-none focus:ring-0">
                                 </div>
-                                <!-- Pesan peringatan -->
-                                <div id="warning-message" style="color: red; display: none;">
-                                    Tanggal yang dipilih sudah melewati jam kerja (jam 15:00). Pilih tanggal besok
-                                    atau setelahnya.
-                                </div>
                                 <div
                                     class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                                     <label class="font-semibold" for="tanggal_kembali">Tanggal Kembali</label>
@@ -192,7 +190,7 @@
             </div>
         </section>
 
-        <section class="grid h-full grid-cols-3 gap-3 overflow-y-scroll">
+        <section class="grid grid-cols-3 gap-3 overflow-y-scroll">
             @foreach ($getUnit as $unit)
                 <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
                     <div class="flex h-full flex-col justify-between gap-4 p-4">
