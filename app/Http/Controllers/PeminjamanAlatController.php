@@ -212,7 +212,7 @@ class PeminjamanAlatController extends Controller
                 })->implode(', ');
 
                 return redirect()->route('detail.alat', ['slug' => $slug])
-                    ->with('warning', 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates);
+                    ->with('error', 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates);
             }
 
             // Buat transaksi baru
@@ -225,6 +225,35 @@ class PeminjamanAlatController extends Controller
             return redirect()->route('detail.alat', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat melakukan peminjaman.');
         }
     }
+
+    // SECTION Check Overlap
+    public function checkOverlap(Request $request)
+    {
+        $validated = $request->validate([
+            'id_unit' => 'required|integer',
+            'tanggal_pinjam' => 'required|date',
+            'tanggal_kembali' => 'required|date',
+        ]);
+
+        $overlappingRequests = DetailPeminjamanAlat::where('id_unit', $validated['id_unit'])
+            ->where(function ($query) use ($validated) {
+                $query->where('tanggal_kembali', '>=', $validated['tanggal_pinjam']) // Tidak di luar di kiri
+                    ->where('tanggal_pinjam', '<=', $validated['tanggal_kembali']); // Tidak di luar di kanan
+            })
+            ->where('status', '!=', 'dikembalikan') // Abaikan pengajuan yang ditolak
+            ->get(['tanggal_pinjam', 'tanggal_kembali']);
+
+        // Jika ada pengajuan lain pada tanggal tersebut
+        if ($overlappingRequests->isNotEmpty()) {
+            $dates = $overlappingRequests->map(function ($item) {
+                return $item->tanggal_pinjam . ' s/d ' . $item->tanggal_kembali;
+            })->implode(', ');
+
+            return response()->json(['error' => 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates . ' Silahkan pilih unit lain jika ingin meminjam pada tanggal tersebut!'], 400);
+        }
+        return response()->json(['message' => 'Unit berhasil ditambahkan  kedalam keranjang.']);
+    }
+
 
     public function aktifitasPeminjaman()
     {
