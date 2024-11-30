@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckOverlapingDateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisAlatController;
 use App\Http\Controllers\InventarisRuanganController;
@@ -50,6 +51,7 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/informasi-alat', [PeminjamanAlatController::class, 'informasiAlat'])->name('informasi.alat');
     Route::get('/mahasiswa/informasi-alat/pinjam-alat/{slug}', [PeminjamanAlatController::class, 'detailAlat'])->name('detail.alat');
     Route::post('/mahasiswa/peminjaman-alat/{slug}/{id}', [PeminjamanAlatController::class, 'pinjamAlat'])->name('pinjam.alat');
+    Route::post('/mahasiswa/peminjaman-alat/check-overlap', [PeminjamanAlatController::class, 'checkOverlap'])->name('pinjam.checkOverlap');
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });
