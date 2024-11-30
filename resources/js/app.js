@@ -10,6 +10,14 @@ function showAlert(title, text, icon) {
         text: text,
         icon: icon,
         confirmButtonText: 'OK',
+        didOpen: () => {
+            const swalBody = document.querySelector('body.swal2-height-auto');
+            if (swalBody) {
+                swalBody.style.minHeight = '100vh';
+                swalBody.style.maxHeight = '100vh';
+                swalBody.style.overflowY = 'auto';
+            }
+        }
     });
 }
 
