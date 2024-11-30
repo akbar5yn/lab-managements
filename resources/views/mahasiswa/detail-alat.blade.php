@@ -8,13 +8,7 @@
         @if (Session::has('success'))
             <script>
                 window.onload = function() {
-                    showAlert("Berhasil", "{{ Session::get('success') }}", "success");
-                    const swalBody = document.querySelector('body.swal2-height-auto');
-                    if (swalBody) {
-                        swalBody.style.minHeight = '100vh';
-                        swalBody.style.maxHeight = '100vh';
-                        swalBody.style.overflowY = 'auto';
-                    }
+                    showAlert("Peminjaman berhasil di buat", "{{ Session::get('success') }}", "success");
                 };
             </script>
         @endif
@@ -23,12 +17,6 @@
             <script>
                 window.onload = function() {
                     showAlert("Error", "{{ Session::get('error') }}", "error");
-                    const swalBody = document.querySelector('body.swal2-height-auto');
-                    if (swalBody) {
-                        swalBody.style.minHeight = '100vh';
-                        swalBody.style.maxHeight = '100vh';
-                        swalBody.style.overflowY = 'auto';
-                    }
                 };
             </script>
         @endif
@@ -37,19 +25,13 @@
             <script>
                 window.onload = function() {
                     showAlert("Ups Maaf", "{{ Session::get('warning') }}", "warning");
-                    const swalBody = document.querySelector('body.swal2-height-auto');
-                    if (swalBody) {
-                        swalBody.style.minHeight = '100vh';
-                        swalBody.style.maxHeight = '100vh';
-                        swalBody.style.overflowY = 'auto';
-                    }
                 };
             </script>
         @endif
         <section class="content-of-inventaris h-full w-full overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="p-4">
                 <div
-                    class="sticky top-0 z-50 grid grid-cols-[20%_20%_20%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow">
+                    class="sticky top-0 z-50 grid grid-cols-[15%_20%_20%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow">
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Nomor
                         Unit</p>
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Tanggal
@@ -67,7 +49,7 @@
 
                 @foreach ($allUnits as $index => $unit)
                     <form action="{{ route('pinjam.alat', [$alat->slug, $unit->id]) }}"
-                        class="pinjam-form grid grid-cols-[20%_20%_20%_25%_auto] rounded-md" method="POST">
+                        class="pinjam-form grid grid-cols-[15%_20%_20%_25%_auto] rounded-md" method="POST">
                         @csrf
                         @method('POST')
                         <input type="text" name="id_user" id="id_user" value="{{ $user_id }}" class="hidden">
@@ -98,6 +80,12 @@
                         </div>
                         <div
                             class="flex w-full items-center justify-center gap-2 border-b-2 border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                            <button type="button"
+                                onclick="addToCart({{ $unit->id }}, '{{ $user_id }}', '{{ csrf_token() }}', {{ $index }})"
+                                class="pinjam-alat rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">
+                                <x-heroicon-c-shopping-cart class="w-5" />
+                            </button>
+                            </button>
                             <button type="submit"
                                 class="pinjam-alat rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">Pinjam
                                 Alat</button>
@@ -163,6 +151,52 @@
 </style>
 
 <script>
+    // ANCHOR Cart
+    function addToCart(unitId, userId, csrfToken, index) {
+        const tanggalPinjam = document.getElementById(`tanggal_pinjam_${index}`).value;
+        const tanggalKembali = document.getElementById(`tanggal_kembali_${index}`).value;
+        const keperluan = document.getElementById('keperluan').value;
+
+        console.log('Log input:', tanggalPinjam, tanggalKembali, keperluan);
+
+        if (!tanggalPinjam || !tanggalKembali || !keperluan) {
+            showAlert("Ups", "Silakan isi semua kolom yang diperlukan.", "warning");
+            return;
+        }
+
+        axios.post('{{ route('pinjam.checkOverlap') }}', {
+                id_unit: unitId,
+                tanggal_pinjam: tanggalPinjam,
+                tanggal_kembali: tanggalKembali,
+                _token: csrfToken // CSRF token
+            })
+            .then(response => {
+                // Cek jika tidak ada overlap, lanjutkan menambah ke cart
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart.push({
+                    id_unit: unitId,
+                    tanggal_pinjam: tanggalPinjam,
+                    tanggal_kembali: tanggalKembali,
+                    keperluan: keperluan,
+                    user_id: userId,
+                    csrf_token: csrfToken
+                });
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                showAlert("Sukses", response.data.message, "success");
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 400) {
+                    showAlert("Upss", error.response.data.error, "error"); // Menampilkan pesan error dari server
+                } else {
+                    console.error('Error checking overlap:', error);
+                    showAlert("Error", "Terjadi kesalahan. Silakan coba lagi.", "error");
+                }
+            });
+    }
+
+
+
     document.addEventListener('DOMContentLoaded', function() {
         @foreach ($allUnits as $index => $unit)
             flatpickr('#tanggal_pinjam_{{ $index }}', {
