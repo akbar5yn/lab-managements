@@ -9,7 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class TransaksiPeminjamanAlat extends Model
 {
     protected $table = 'transaksi_peminjaman_alat';
-    protected $fillable = ['id_user', 'keperluan'];
+    protected $fillable = [
+        'id_user',
+        'id_unit',
+        'keperluan',
+        'status',
+        'tanggal_pinjam',
+        'tanggal_kembali',
+    ];
     //
 
     public function relasiUser(): BelongsTo
