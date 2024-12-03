@@ -80,12 +80,6 @@
                         </div>
                         <div
                             class="flex w-full items-center justify-center gap-2 border-b-2 border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <button type="button"
-                                onclick="addToCart({{ $unit->id }}, '{{ $user_id }}', '{{ csrf_token() }}', {{ $index }})"
-                                class="pinjam-alat rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">
-                                <x-heroicon-c-shopping-cart class="w-5" />
-                            </button>
-                            </button>
                             <button type="submit"
                                 class="pinjam-alat rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">Pinjam
                                 Alat</button>
@@ -151,65 +145,6 @@
 </style>
 
 <script>
-    // ANCHOR Cart
-    function addToCart(unitId, userId, csrfToken, index) {
-        const tanggalPinjam = document.getElementById(`tanggal_pinjam_${index}`).value;
-        const tanggalKembali = document.getElementById(`tanggal_kembali_${index}`).value;
-        const keperluan = document.getElementById('keperluan').value;
-
-        if (!tanggalPinjam || !tanggalKembali || !keperluan) {
-            showAlert("Ups", "Silakan isi semua kolom yang diperlukan.", "warning");
-            return;
-        }
-
-        // Cek overlap dengan data di local storage
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const isOverlap = cart.some(item =>
-            item.id_unit === unitId && (
-                (tanggalPinjam <= item.tanggal_kembali && tanggalPinjam >= item.tanggal_pinjam) ||
-                (tanggalKembali >= item.tanggal_pinjam && tanggalKembali <= item.tanggal_kembali) ||
-                (tanggalPinjam <= item.tanggal_pinjam && tanggalKembali >= item.tanggal_kembali)
-            )
-        );
-
-        if (isOverlap) {
-            showAlert("Ups", "Unit ini telah diajukan untuk tanggal tersebut di keranjang lokal Anda!", "error");
-            return;
-        }
-
-        // Jika tidak ada overlap di local storage, lanjutkan ke pengecekan backend
-        axios.post('{{ route('pinjam.checkOverlap') }}', {
-                id_unit: unitId,
-                tanggal_pinjam: tanggalPinjam,
-                tanggal_kembali: tanggalKembali,
-                _token: csrfToken // CSRF token
-            })
-            .then(response => {
-                // Jika tidak ada overlap di backend, tambahkan ke cart
-                cart.push({
-                    id_unit: unitId,
-                    tanggal_pinjam: tanggalPinjam,
-                    tanggal_kembali: tanggalKembali,
-                    keperluan: keperluan,
-                    user_id: userId,
-                    csrf_token: csrfToken
-                });
-
-                localStorage.setItem('cart', JSON.stringify(cart));
-                showAlert("Sukses", response.data.message, "success");
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 400) {
-                    showAlert("Ups", error.response.data.error, "error"); // Menampilkan pesan error dari server
-                } else {
-                    console.error('Error checking overlap:', error);
-                    showAlert("Error", "Terjadi kesalahan. Silakan coba lagi.", "error");
-                }
-            });
-    }
-
-
-
     document.addEventListener('DOMContentLoaded', function() {
         @foreach ($allUnits as $index => $unit)
             flatpickr('#tanggal_pinjam_{{ $index }}', {
