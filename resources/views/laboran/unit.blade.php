@@ -43,8 +43,8 @@
                                 <span
                                     class="flex items-center justify-center rounded bg-red-100 px-2 py-1 text-red-600">Rusak
                                 </span>
-                            @elseif ($unit->detailPeminjaman->isNotEmpty())
-                                @foreach ($unit->detailPeminjaman as $peminjaman)
+                            @elseif ($unit->relasiTransaksi->isNotEmpty())
+                                @foreach ($unit->relasiTransaksi as $peminjaman)
                                     @if ($peminjaman->status == 'dipinjam')
                                         <span
                                             class="flex items-center justify-center rounded bg-yellow-100 px-2 py-1 text-yellow-600">Dipinjam

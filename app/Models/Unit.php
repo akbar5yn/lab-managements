@@ -12,9 +12,9 @@ class Unit extends Model
     protected $table = 'unit';
     protected $fillable = ['no_unit', 'status', 'kondisi', 'id_alat'];
 
-    public function detailPeminjaman(): HasMany
+    public function relasiTransaksi(): HasMany
     {
-        return $this->hasMany(DetailPeminjamanAlat::class, 'id_unit');
+        return $this->hasMany(TransaksiPeminjamanAlat::class, 'id_unit');
     }
 
     public function unit(): BelongsTo

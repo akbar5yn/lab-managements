@@ -30,24 +30,24 @@ class UnitController extends Controller
         $role = $user->role;
 
         $allUnits = Unit::where('id_alat', $this->alat->id)
-            ->with(['detailPeminjaman' => function ($query) {
+            ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             }])->get();
 
         $unitTersedia = Unit::where('id_alat', $this->alat->id)
             ->where('kondisi', '!=', 'Rusak')
-            ->whereDoesntHave('detailPeminjaman', function ($query) {
+            ->whereDoesntHave('relasiTransaksi', function ($query) {
 
                 $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             })
             ->count();
 
         $unitDipinjam = Unit::where('id_alat', $this->alat->id)
-            ->withCount(['detailPeminjaman' => function ($query) {
+            ->withCount(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
             }])->get();
 
-        $totalUnitsDipinjam = $unitDipinjam->where('detail_peminjaman_count', '>', 0)->count();
+        $totalUnitsDipinjam = $unitDipinjam->where('relasi_transaksi_count', '>', 0)->count();
 
 
         //ANCHOR - Informasi Unit
@@ -102,13 +102,13 @@ class UnitController extends Controller
         try {
             $unit = Unit::where('id', $id)
                 ->where('id_alat', $this->alat->id)
-                ->with(['detailPeminjaman' => function ($query) {
+                ->with(['relasiTransaksi' => function ($query) {
                     $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
                 }])
                 ->firstOrFail();
 
             // Cek jika status unit sedang Dipinjam
-            if ($unit->detailPeminjaman->isNotEmpty()) {
+            if ($unit->relasiTransaksi->isNotEmpty()) {
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat diubah.');
             }

@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             RoomSeeder::class,
             TransaksiPeminjamanAlat::class,
-            DetailPeminjamanAlat::class,
             // Tambahkan seeder lainnya jika ada
         ]);
     }
