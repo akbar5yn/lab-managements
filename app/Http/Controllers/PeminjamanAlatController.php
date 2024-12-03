@@ -39,8 +39,8 @@ class PeminjamanAlatController extends Controller
     public function pengajuanPeminjaman()
     {
 
-        $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
-            ->withCount('relasiDetailPeminjaman')
+        $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
+            ->withCount('relasiUnit')
             ->where('status', 'pending')
             ->get();
 
@@ -56,11 +56,11 @@ class PeminjamanAlatController extends Controller
     {
         $subtitle = 'Pengajuan';
 
-        $transaksi = TransaksiPeminjamanAlat::where('id', $id)
-            ->with(['relasiUser', 'relasiDetailPeminjaman'])
+        $transaksi = TransaksiPeminjamanAlat::where('id_unit', $id)
+            ->with(['relasiUser', 'relasiUnit'])
             ->firstOrFail();
 
-        return view('laboran.detail-pengajuan-ruangan', [
+        return view('laboran.detail-pengajuan-alat', [
             'title' => $this->title,
             'subtitle' => $subtitle,
             'role' => $this->role,
