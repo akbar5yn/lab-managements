@@ -52,7 +52,7 @@
                             </span>
                         </p>
                         <div class="flex items-center justify-center gap-5">
-                            <a href="{{ route('detail.pengajuan.ruangan', ['id' => $transaction->id]) }}"
+                            <a href="{{ route('detail.pengajuan.alat', ['id' => $transaction->id]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
                         </div>
                     </div>
