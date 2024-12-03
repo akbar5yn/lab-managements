@@ -47,28 +47,26 @@
             <p class="flex h-full items-center justify-center px-2 py-2 text-center">
                 Status</p>
         </div>
-        @foreach ($transaksi->relasiDetailPeminjaman as $detail)
-            <div class="grid grid-cols-[25%_25%_25%_auto] border-b border-gray-400">
-                <p class="border-x border-gray-400 px-2 py-2">
-                    {{ $detail->relasiUnitBarang->unit->nama_alat }}</p>
-                <p class="border-r border-gray-400 px-2 py-2">{{ $detail->tanggal_pinjam }}</p>
-                <p class="border-r border-gray-400 px-2 py-2">{{ $detail->tanggal_kembali }}</p>
-                <p class="border-r border-gray-400 px-2 py-2 text-center">
-                    <span
-                        class="{{ $detail->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($detail->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($detail->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
-                        @php
-                            $statusLabels = [
-                                'belum_dikembalikan' => 'Belum Dikembalikan',
-                                'dipinjam' => 'Dipinjam',
-                                'dikembalikan' => 'Dikembalikan',
-                                'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
-                            ];
-                        @endphp
-                        {{ $statusLabels[$detail->status] ?? ucfirst($detail->status) }}
-                    </span>
-                </p>
-            </div>
-        @endforeach
+        <div class="grid grid-cols-[25%_25%_25%_auto] border-b border-gray-400">
+            <p class="border-x border-gray-400 px-2 py-2">
+                {{ $transaksi->relasiUnit->unit->nama_alat }}</p>
+            <p class="border-r border-gray-400 px-2 py-2">{{ $transaksi->tanggal_pinjam }}</p>
+            <p class="border-r border-gray-400 px-2 py-2">{{ $transaksi->tanggal_kembali }}</p>
+            <p class="border-r border-gray-400 px-2 py-2 text-center">
+                <span
+                    class="{{ $transaksi->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaksi->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaksi->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
+                    @php
+                        $statusLabels = [
+                            'belum_dikembalikan' => 'Belum Dikembalikan',
+                            'dipinjam' => 'Dipinjam',
+                            'dikembalikan' => 'Dikembalikan',
+                            'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
+                        ];
+                    @endphp
+                    {{ $statusLabels[$transaksi->status] ?? ucfirst($transaksi->status) }}
+                </span>
+            </p>
+        </div>
         <div class="absolute bottom-10 right-10 flex gap-2" x-data="{ showTolak: false, showSetujui: false, isDisabled: true }">
             <!-- Tombol Tolak dengan Tooltip -->
             <div class="group relative" @mouseenter="isDisabled && (showTolak = true)" @mouseleave="showTolak = false">
