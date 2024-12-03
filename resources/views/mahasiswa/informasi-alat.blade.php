@@ -94,7 +94,7 @@
                             </div>
                             <div class="flex justify-start">
                                 <a href="{{ route('detail.alat', $unit->slug) }}"
-                                    class="rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">Pinjam
+                                    class="rounded-md bg-[#2D3648] px-3 py-2 text-sm text-white">Detail
                                     Alat</a>
                             </div>
                         </div>
