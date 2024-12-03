@@ -157,13 +157,27 @@
         const tanggalKembali = document.getElementById(`tanggal_kembali_${index}`).value;
         const keperluan = document.getElementById('keperluan').value;
 
-        console.log('Log input:', tanggalPinjam, tanggalKembali, keperluan);
-
         if (!tanggalPinjam || !tanggalKembali || !keperluan) {
             showAlert("Ups", "Silakan isi semua kolom yang diperlukan.", "warning");
             return;
         }
 
+        // Cek overlap dengan data di local storage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const isOverlap = cart.some(item =>
+            item.id_unit === unitId && (
+                (tanggalPinjam <= item.tanggal_kembali && tanggalPinjam >= item.tanggal_pinjam) ||
+                (tanggalKembali >= item.tanggal_pinjam && tanggalKembali <= item.tanggal_kembali) ||
+                (tanggalPinjam <= item.tanggal_pinjam && tanggalKembali >= item.tanggal_kembali)
+            )
+        );
+
+        if (isOverlap) {
+            showAlert("Ups", "Unit ini telah diajukan untuk tanggal tersebut di keranjang lokal Anda!", "error");
+            return;
+        }
+
+        // Jika tidak ada overlap di local storage, lanjutkan ke pengecekan backend
         axios.post('{{ route('pinjam.checkOverlap') }}', {
                 id_unit: unitId,
                 tanggal_pinjam: tanggalPinjam,
@@ -171,8 +185,7 @@
                 _token: csrfToken // CSRF token
             })
             .then(response => {
-                // Cek jika tidak ada overlap, lanjutkan menambah ke cart
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                // Jika tidak ada overlap di backend, tambahkan ke cart
                 cart.push({
                     id_unit: unitId,
                     tanggal_pinjam: tanggalPinjam,
@@ -187,7 +200,7 @@
             })
             .catch(error => {
                 if (error.response && error.response.status === 400) {
-                    showAlert("Upss", error.response.data.error, "error"); // Menampilkan pesan error dari server
+                    showAlert("Ups", error.response.data.error, "error"); // Menampilkan pesan error dari server
                 } else {
                     console.error('Error checking overlap:', error);
                     showAlert("Error", "Terjadi kesalahan. Silakan coba lagi.", "error");
