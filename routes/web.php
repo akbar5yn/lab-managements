@@ -47,11 +47,19 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
 // ANCHOR Mahasiswa
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
+    // SECTION Route Dashboard
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
+
+    // SECTION Route Halaman informasi alat
     Route::get('/mahasiswa/informasi-alat', [PeminjamanAlatController::class, 'informasiAlat'])->name('informasi.alat');
     Route::get('/mahasiswa/informasi-alat/pinjam-alat/{slug}', [PeminjamanAlatController::class, 'detailAlat'])->name('detail.alat');
+
+
+    // SECTION Route Peminjaman alat
     Route::post('/mahasiswa/peminjaman-alat/{slug}/{id}', [PeminjamanAlatController::class, 'pinjamAlat'])->name('pinjam.alat');
-    Route::post('/mahasiswa/peminjaman-alat/check-overlap', [PeminjamanAlatController::class, 'checkOverlap'])->name('pinjam.checkOverlap');
+
+
+    // SECTION Route Aktifitas Peminjaman
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });
