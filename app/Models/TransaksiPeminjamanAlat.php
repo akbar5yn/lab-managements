@@ -17,9 +17,9 @@ class TransaksiPeminjamanAlat extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function relasiDetailPeminjaman(): HasMany
+    public function relasiUnit(): BelongsTo
     {
-        return $this->hasMany(DetailPeminjamanAlat::class, 'id_transaksi_peminjaman');
+        return $this->belongsTo(Unit::class, 'id_unit');
     }
 
     public static function createNewTransaksi(array $data)
