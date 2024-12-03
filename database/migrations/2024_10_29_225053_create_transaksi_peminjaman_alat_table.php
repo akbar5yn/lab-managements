@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('transaksi_peminjaman_alat', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_unit')->constrained(
+                table: 'unit',
+                indexName: 'id_unit'
+            );
             $table->foreignId('id_user',)->constrained(
                 table: 'users',
                 indexName: 'id_user'
             );
             $table->string('keperluan');
-            $table->enum('status', ['pending', 'dibatalkan', 'berlangsung', 'selesai'])->default('pending');
+            $table->date('tanggal_pinjam');
+            $table->date('tanggal_kembali');
+            // $table->enum('status', ['pending', 'dibatalkan', 'berlangsung', 'selesai'])->default('pending');
+            $table->enum('status', ['pending', 'dipinjam', 'dikembalikan', 'terlambat_dikemablikan'])->default('pending');
             $table->timestamps();
         });
     }
