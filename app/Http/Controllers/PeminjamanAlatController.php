@@ -74,9 +74,9 @@ class PeminjamanAlatController extends Controller
     public function peminjamanBerlangsung()
     {
         $user = Auth::user();
-        $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiDetailPeminjaman'])
-            ->withCount('relasiDetailPeminjaman')
-            ->where('status', 'berlangsung')
+        $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
+            ->withCount('relasiUnit')
+            ->where('status', 'dipinjam')
             ->get();
 
         return view('laboran.peminjaman-alat', [
@@ -92,7 +92,7 @@ class PeminjamanAlatController extends Controller
         $subtitle = "Berlangsung";
 
         $transaksi = TransaksiPeminjamanAlat::where('id', $id)
-            ->with(['relasiUser', 'relasiDetailPeminjaman'])
+            ->with(['relasiUser', 'relasiUnit'])
             ->firstOrFail();
 
         return view('laboran.detail-peminjaman-alat', [
