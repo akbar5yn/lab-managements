@@ -17,8 +17,11 @@ class TransaksiPeminjamanAlat extends Seeder
         $transaksi = [
             [
                 'id_user' => 2,
+                'id_unit' => 1,
                 'keperluan' => 'Melakukan peneletian',
-                'status' => 'berlangsung'
+                'tanggal_pinjam' => Carbon::create(2024, 11, 1),
+                'tanggal_kembali' => Carbon::create(2024, 11, 10),
+                'status' => 'dipinjam',
             ],
             [
                 'id_user' => 3,
