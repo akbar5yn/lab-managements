@@ -134,12 +134,12 @@ class UnitController extends Controller
         try {
             $unit = Unit::where('id', $id)
                 ->where('id_alat', $this->alat->id)
-                ->with(['detailPeminjaman' => function ($query) {
+                ->with(['relasiTransaksi' => function ($query) {
                     $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
                 }])
                 ->firstOrFail();
 
-            if ($unit->detailPeminjaman->isNotEmpty()) {
+            if ($unit->relasiTransaksi->isNotEmpty()) {
                 return redirect()->route('alat.unit', ['slug' => $slug])
                     ->with('error', 'Unit sedang dipinjam dan tidak dapat dihapus.');
             }
