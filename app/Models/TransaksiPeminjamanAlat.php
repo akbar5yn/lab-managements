@@ -33,7 +33,10 @@ class TransaksiPeminjamanAlat extends Model
     {
         return self::create([
             'id_user' => $data['id_user'],
+            'id_unit' => $data['id_unit'],
             'keperluan' => $data['keperluan'],
+            'tanggal_pinjam' => $data['tanggal_pinjam'],
+            'tanggal_kembali' => $data['tanggal_kembali'],
             'status' => 'pending',
         ]);
     }
