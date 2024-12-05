@@ -183,12 +183,8 @@ class PeminjamanAlatController extends Controller
         // Validasi data transaksi
         $validatedTransaksi = $request->validate([
             'id_user' => 'required',
-            'keperluan' => 'required|string|max:255',
-        ]);
-
-        // Validasi data detail transaksi
-        $validatedDetail = $request->validate([
             'id_unit' => 'required',
+            'keperluan' => 'required|string|max:255',
             'tanggal_pinjam' => 'required|date',
             'tanggal_kembali' => 'required|date',
         ]);
@@ -197,10 +193,10 @@ class PeminjamanAlatController extends Controller
 
         try {
             // Cek apakah ada pengajuan lain untuk alat yang sama pada rentang tanggal yang diajukan
-            $overlappingRequests = DetailPeminjamanAlat::where('id_unit', $unit)
-                ->where(function ($query) use ($validatedDetail) {
-                    $query->where('tanggal_kembali', '>=', $validatedDetail['tanggal_pinjam']) // Tidak di luar di kiri
-                        ->where('tanggal_pinjam', '<=', $validatedDetail['tanggal_kembali']); // Tidak di luar di kanan
+            $overlappingRequests = TransaksiPeminjamanAlat::where('id_unit', $unit)
+                ->where(function ($query) use ($validatedTransaksi) {
+                    $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
+                        ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
                 ->where('status', '!=', 'dikembalikan') // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
@@ -217,7 +213,6 @@ class PeminjamanAlatController extends Controller
 
             // Buat transaksi baru
             $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi);
-            $detail_transaksi = DetailPeminjamanAlat::createNewDetailTransaksi($validatedDetail, $transaksi->id);
 
             return redirect()->route('detail.alat', ['slug' => $slug])->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
