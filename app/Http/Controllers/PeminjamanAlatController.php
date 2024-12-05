@@ -234,4 +234,15 @@ class PeminjamanAlatController extends Controller
             'getTransactions' => $aktifitasPeminjaman
         ]);
     }
+
+    public function detailAktifitasPeminjaman($id)
+    {
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id', $id)->get();
+        return view('mahasiswa.detail-aktifitas-peminjaman', [
+            'name' => $this->name,
+            'title' => $this->title,
+            'role' => $this->role,
+            'transactionDetails' => $aktifitasPeminjaman
+        ]);
+    }
 }
