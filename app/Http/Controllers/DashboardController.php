@@ -79,10 +79,7 @@ class DashboardController extends Controller
 
         $getUnit = InventarisAlat::withCount([
             'alat' => function ($query) {
-                $query->where('kondisi', 'Normal')
-                    ->whereDoesntHave('detailPeminjaman', function ($query) {
-                        $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
-                    });
+                $query->where('kondisi', 'Normal');
             }
         ])->get();
 
