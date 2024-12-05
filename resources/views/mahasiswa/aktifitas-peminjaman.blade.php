@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <x-slot:name>{{ $name }}</x-slot:name>
     <x-slot:role>{{ $role }}</x-slot:role>
-    <main class="h-full flex-col gap-4 overflow-y-scroll">
+    <main class="flex h-full flex-col gap-4 overflow-y-scroll">
         <!-- SECTION Show Alat-->
         <section>
             <!-- ANCHOR Button Navigation-->
@@ -52,9 +52,9 @@
                         </span>
                     </p>
                     <div class="flex w-full items-center justify-center">
-                        <button class="rounded-md bg-[#2D3648] px-4 py-1 text-sm text-white">
-                            Detail
-                        </button>
+
+                        <a href="{{ route('detail.aktivitas.peminjaman', ['id' => $transaction->id]) }}"
+                            class="rounded-md bg-[#2D3648] px-4 py-1 text-sm text-white">Detail</a>
                     </div>
                 </div>
             @endforeach
