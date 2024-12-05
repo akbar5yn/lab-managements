@@ -225,10 +225,13 @@ class PeminjamanAlatController extends Controller
 
     public function aktifitasPeminjaman()
     {
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)->get();
+
         return view('mahasiswa.aktifitas-peminjaman', [
             'name' => $this->name,
             'title' => $this->title,
             'role' => $this->role,
+            'getTransactions' => $aktifitasPeminjaman
         ]);
     }
 }
