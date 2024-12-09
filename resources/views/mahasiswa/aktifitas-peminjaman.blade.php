@@ -3,6 +3,19 @@
     <x-slot:name>{{ $name }}</x-slot:name>
     <x-slot:role>{{ $role }}</x-slot:role>
     <main class="flex h-full flex-col gap-4 overflow-y-scroll">
+        @if (Session::has('success'))
+            <script>
+                window.onload = function() {
+                    showAlert("Berhasil", "{{ Session::get('success') }}", "success");
+                    const swalBody = document.querySelector('body.swal2-height-auto');
+                    if (swalBody) {
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
+                    }
+                };
+            </script>
+        @endif
         <!-- SECTION Show Alat-->
         <section>
             <!-- ANCHOR Button Navigation-->
@@ -21,7 +34,7 @@
             <div
                 class="sticky top-0 z-10 mt-4 grid grid-cols-[15%_20%_30.3%_20.3%_auto] items-center border-b border-gray-400 bg-[#F6F8FB] text-center shadow">
                 <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
-                    ID Transaksi</p>
+                    No Transaksi</p>
                 <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     Nama Alat</p>
                 <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
@@ -31,9 +44,13 @@
                 <p class="h-full border-gray-400 px-2 py-2 font-medium">
                     Detail</p>
             </div>
-            @foreach ($getTransactions as $transaction)
+
+            @php
+                $sortedTransaction = collect($getTransactions)->sortByDesc('created_at');
+            @endphp
+            @foreach ($sortedTransaction as $transaction)
                 <div class="grid grid-cols-[15%_20%_30.3%_20.3%_auto] rounded-md border-b border-gray-400">
-                    <p class="border-r border-gray-400 px-2 py-2">NE-20244901</p>
+                    <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}</p>
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUnit->unit->nama_alat }}</p>
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->keperluan }}</p>
 
@@ -53,7 +70,7 @@
                     </p>
                     <div class="flex w-full items-center justify-center">
 
-                        <a href="{{ route('detail.aktivitas.peminjaman', ['id' => $transaction->id]) }}"
+                        <a href="{{ route('detail.aktivitas.peminjaman', ['slug' => $transaction->no_transaksi]) }}"
                             class="rounded-md bg-[#2D3648] px-4 py-1 text-sm text-white">Detail</a>
                     </div>
                 </div>
