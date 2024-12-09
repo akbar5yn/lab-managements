@@ -40,9 +40,9 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
     // SECTION - Route Peminjaman Alat
     Route::get('/laboran/peminjaman-alat/pengajuan', [PeminjamanAlatController::class, 'pengajuanPeminjaman'])->name('pengajuan.peminjaman.alat');
-    Route::get('/laboran/peminjaman-alat/pengajuan/{id}', [PeminjamanAlatController::class, 'detailPengajuanAlat'])->name('detail.pengajuan.alat');
+    Route::get('/laboran/peminjaman-alat/pengajuan/{slug}', [PeminjamanAlatController::class, 'detailPengajuanAlat'])->name('detail.pengajuan.alat');
     Route::get('/laboran/peminjaman-alat/berlangsung', [PeminjamanAlatController::class, 'peminjamanBerlangsung'])->name('peminjaman.alat.berlangsung');
-    Route::get('/laboran/peminjaman-alat/berlangsung/{id}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
+    Route::get('/laboran/peminjaman-alat/berlangsung/{slug}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
 });
 
 // ANCHOR Mahasiswa
