@@ -211,8 +211,15 @@ class PeminjamanAlatController extends Controller
                     ->with('error', 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates);
             }
 
+            $unitData = Unit::find($request->input('id_unit'));
+            $namaUnit = strtoupper(substr($unitData->unit->nama_alat ?? 'XX', 0, 2));
+            $idUnit = $request->input('id_unit');
+            $idUser = $request->input('id_user');
+            $randomNumber = rand(10000, 99999);
+            $noTransaksi = $namaUnit . $idUser . $idUnit . $randomNumber;
+
             // Buat transaksi baru
-            $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi);
+            $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi);
 
             return redirect()->route('detail.alat', ['slug' => $slug])->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
