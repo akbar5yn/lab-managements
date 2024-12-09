@@ -4,20 +4,6 @@
     <x-slot:subtitle>{{ $subtitle }}</x-slot:subtitle>
     <x-slot:role>{{ $role }}</x-slot:role>
     <main class="flex h-full flex-col gap-4">
-        @if (Session::has('success'))
-            <script>
-                window.onload = function() {
-                    showAlert("Berhasil", "{{ Session::get('success') }}", "success");
-                    const swalBody = document.querySelector('body.swal2-height-auto');
-                    if (swalBody) {
-                        swalBody.style.minHeight = '100vh';
-                        swalBody.style.maxHeight = '100vh';
-                        swalBody.style.overflowY = 'auto';
-                    }
-                };
-            </script>
-        @endif
-
         @if (Session::has('error'))
             <script>
                 window.onload = function() {
