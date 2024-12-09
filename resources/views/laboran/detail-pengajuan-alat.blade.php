@@ -67,42 +67,5 @@
                 </span>
             </p>
         </div>
-        <div class="absolute bottom-10 right-10 flex gap-2" x-data="{ showTolak: false, showSetujui: false, isDisabled: true }">
-            <!-- Tombol Tolak dengan Tooltip -->
-            <div class="group relative" @mouseenter="isDisabled && (showTolak = true)" @mouseleave="showTolak = false">
-                <button type="button" :disabled="isDisabled"
-                    class="rounded-md border border-[#9f5555] bg-[#f1d0d0] px-5 py-1 disabled:border-none disabled:bg-gray-200 disabled:text-gray-500">
-                    Tolak
-                </button>
-                <!-- Tooltip -->
-                <div x-show="showTolak" x-transition:enter="transition-opacity duration-300"
-                    x-transition:leave="transition-opacity duration-300"
-                    class="absolute bottom-full right-0 mb-2 w-[200px] rounded bg-black px-2 py-1 text-center text-sm text-white opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
-                    Tombol akan aktif setelah mahasiswa melakukan scan barcode
-                    <div
-                        class="absolute right-8 top-full h-0 w-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-black">
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Tombol Setujui dengan Tooltip -->
-            <div class="group relative" @mouseenter="isDisabled && (showSetujui = true)"
-                @mouseleave="showSetujui = false">
-                <button type="button" :disabled="isDisabled"
-                    class="rounded-md border border-[#559f86] bg-[#d0f1e6] px-5 py-1 disabled:border-none disabled:bg-gray-200 disabled:text-gray-500">
-                    Setujui
-                </button>
-                <!-- Tooltip -->
-                <div x-show="showSetujui" x-transition:enter="transition-opacity duration-300"
-                    x-transition:leave="transition-opacity duration-300"
-                    class="absolute bottom-full right-0 mb-2 w-[200px] rounded bg-black px-2 py-1 text-center text-sm text-white opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
-                    Tombol akan aktif setelah mahasiswa melakukan scan barcode
-                    <div
-                        class="absolute right-10 top-full h-0 w-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-black">
-                    </div>
-                </div>
-            </div>
-        </div>
     </main>
 </x-layout>
