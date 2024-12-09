@@ -215,13 +215,15 @@ class PeminjamanAlatController extends Controller
             $namaUnit = strtoupper(substr($unitData->unit->nama_alat ?? 'XX', 0, 2));
             $idUnit = $request->input('id_unit');
             $idUser = $request->input('id_user');
+            $salt = config('app.key');
+            $hashing = strtoupper(hash('sha256', $idUser . $salt));
             $randomNumber = rand(10000, 99999);
-            $noTransaksi = $namaUnit . $idUser . $idUnit . $randomNumber;
+            $noTransaksi = $namaUnit . substr($hashing, 0, 8) . $idUnit . $randomNumber;
 
             // Buat transaksi baru
             $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi);
 
-            return redirect()->route('detail.alat', ['slug' => $slug])->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
+            return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
             Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
             return redirect()->route('detail.alat', ['slug' => $slug])->with('error', 'Terjadi kesalahan saat melakukan peminjaman.');
@@ -242,9 +244,9 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    public function detailAktifitasPeminjaman($id)
+    public function detailAktifitasPeminjaman($no_transaksi)
     {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id', $id)->get();
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->get();
         return view('mahasiswa.detail-aktifitas-peminjaman', [
             'name' => $this->name,
             'title' => $this->title,
