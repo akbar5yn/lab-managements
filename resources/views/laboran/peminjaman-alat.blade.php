@@ -35,7 +35,7 @@
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->email }}</p>
                         <div class="flex items-center justify-center gap-5">
-                            <a href="{{ route('peminjaman.alat.berlangsung.detail', ['id' => $transaction->id]) }}"
+                            <a href="{{ route('peminjaman.alat.berlangsung.detail', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
                         </div>
                     </div>

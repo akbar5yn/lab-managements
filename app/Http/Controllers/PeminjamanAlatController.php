@@ -87,11 +87,11 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    public function detailPeminjamanBerlangsung($id)
+    public function detailPeminjamanBerlangsung($no_transaksi)
     {
         $subtitle = "Berlangsung";
 
-        $transaksi = TransaksiPeminjamanAlat::where('id', $id)
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
             ->with(['relasiUser', 'relasiUnit'])
             ->firstOrFail();
 
