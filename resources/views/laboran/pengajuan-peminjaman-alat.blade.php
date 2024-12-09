@@ -36,7 +36,7 @@
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->email }}</p>
                         <div class="flex items-center justify-center gap-5">
-                            <a href="{{ route('detail.pengajuan.alat', ['id' => $transaction->id]) }}"
+                            <a href="{{ route('detail.pengajuan.alat', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
                         </div>
                     </div>
