@@ -12,7 +12,7 @@
                     Informasi Alat
                 </a>
                 <a href="{{ route('aktivitas.peminjaman') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
+                    class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas*') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
                     Aktivitas Peminjaman
                 </a>
             </div>
@@ -29,8 +29,8 @@
                 <tbody>
                     @foreach ($transactionDetails as $transaction)
                         <tr>
-                            <td class="border-b border-slate-300 py-2">ID Transaksi</td>
-                            <td class="border-b border-slate-300 py-2">NE-20244901</td>
+                            <td class="border-b border-slate-300 py-2">No Transaksi</td>
+                            <td class="border-b border-slate-300 py-2">{{ $transaction->no_transaksi }}</td>
                         </tr>
                         <tr>
                             <td class="border-b border-slate-300 py-2">Nama Alat</td>
@@ -39,8 +39,7 @@
                         </tr>
                         <tr>
                             <td class="border-b border-slate-300 py-2">Keperluan</td>
-                            <td class="border-b border-slate-300 py-2">{{ $transaction->keperluan }} Lorem ipsum dolor
-                                sit amet consectetur adipisicing elit. Cupiditate, reprehenderit?</td>
+                            <td class="border-b border-slate-300 py-2">{{ $transaction->keperluan }} </td>
                         </tr>
                         <tr>
                             <td class="border-b border-slate-300 py-2">Tanggal Pinjam</td>
