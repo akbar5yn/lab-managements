@@ -10,6 +10,7 @@ class TransaksiPeminjamanAlat extends Model
 {
     protected $table = 'transaksi_peminjaman_alat';
     protected $fillable = [
+        'no_transaksi',
         'id_user',
         'id_unit',
         'keperluan',
@@ -29,7 +30,7 @@ class TransaksiPeminjamanAlat extends Model
         return $this->belongsTo(Unit::class, 'id_unit');
     }
 
-    public static function createNewTransaksi(array $data)
+    public static function createNewTransaksi(array $data, $noTransaksi)
     {
         return self::create([
             'id_user' => $data['id_user'],
@@ -38,6 +39,7 @@ class TransaksiPeminjamanAlat extends Model
             'tanggal_pinjam' => $data['tanggal_pinjam'],
             'tanggal_kembali' => $data['tanggal_kembali'],
             'status' => 'pending',
+            'no_transaksi' => $noTransaksi
         ]);
     }
 }
