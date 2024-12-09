@@ -61,7 +61,7 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
 
     // SECTION Route Aktifitas Peminjaman
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
-    Route::get('/mahasiswa/peminjaman-alat/aktifitas/{id}', [PeminjamanAlatController::class, 'detailAktifitasPeminjaman'])->name('detail.aktivitas.peminjaman');
+    Route::get('/mahasiswa/peminjaman-alat/aktifitas/{slug}', [PeminjamanAlatController::class, 'detailAktifitasPeminjaman'])->name('detail.aktivitas.peminjaman');
 
     // SECTION Route Aktifitas Peminjaman
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
