@@ -3,6 +3,7 @@ import './bootstrap';
 import Swal from 'sweetalert2';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { Html5Qrcode } from "html5-qrcode";
 
 function showAlert(title, text, icon) {
     Swal.fire({
@@ -113,4 +114,6 @@ document.querySelectorAll('.update-form').forEach(form => {
     });
 });
 
+
+window.Html5Qrcode = Html5Qrcode;
 window.showAlert = showAlert;
