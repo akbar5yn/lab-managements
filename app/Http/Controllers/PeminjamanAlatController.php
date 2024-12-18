@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailPeminjamanAlat;
 use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
@@ -10,6 +9,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 
 class PeminjamanAlatController extends Controller
 {
@@ -20,6 +22,7 @@ class PeminjamanAlatController extends Controller
     protected $currentTime;
     protected $startOfDay;
     protected $endOfDay;
+    protected $today;
 
     public function __construct()
     {
@@ -32,13 +35,14 @@ class PeminjamanAlatController extends Controller
         // ANCHOR set rule hours
         $this->currentTime = Carbon::now('Asia/Jakarta');
         $this->startOfDay = $this->currentTime->copy()->setTime(9, 0, 0);
-        $this->endOfDay = $this->currentTime->copy()->setTime(15, 0, 0);
+        $this->endOfDay = $this->currentTime->copy()->setTime(23, 0, 0); //NOTE - sementara di ubah bts waktu dari jam 3 ke jam lain 
+        $this->today = Carbon::now('Asia/Jakarta')->toDateString();
     }
 
-    // SECTION pengajuan peminjaman
+    // SECTION Laboran
+    // ANCHOR pengajuan peminjaman
     public function pengajuanPeminjaman()
     {
-
         $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
             ->withCount('relasiUnit')
             ->where('status', 'pending')
@@ -52,6 +56,7 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+    // ANCHOR Detail Pengajuan Peminjaman
     public function detailPengajuanAlat($no_transaksi)
     {
         $subtitle = 'Pengajuan';
@@ -69,8 +74,7 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // SECTION peminjaman berlangsung
-
+    // ANCHOR peminjaman berlangsung
     public function peminjamanBerlangsung()
     {
         $user = Auth::user();
@@ -87,6 +91,7 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+    // ANCHOR detail peminjaman berlangsung
     public function detailPeminjamanBerlangsung($no_transaksi)
     {
         $subtitle = "Berlangsung";
@@ -104,7 +109,46 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR Index page peminjaman alat [Mahasiswa]
+    // NOTE
+    // ANCHOR Halaman qrCode
+    public function showQrCodePage(Request $request)
+    {
+        // Buat nilai acak untuk QR key
+        $randomValue = Str::random(32);
+
+        // Tentukan waktu kadaluarsa (misalnya 10 menit)
+        $expirationTime = now()->addMinutes(10);
+
+        // Simpan ke Redis dengan TTL (time-to-live) 10 menit
+        Redis::setex("qr:$randomValue", 600, json_encode([
+            'qr_access_key' => $randomValue,
+            'qr_access_time' => $expirationTime,
+            'is_scanned' => false,
+        ]));
+
+        Log::info('Redis key set', ['key' => "qr:$randomValue", 'value' => Redis::get("qr:$randomValue")]);
+
+        Log::info('QR Key disimpan di Redis', [
+            'qr_access_key' => $randomValue,
+            'qr_access_time' => $expirationTime,
+        ]);
+
+        $url = route('detail.transaksi', ['key' => $randomValue]);
+
+        // Generate QR Code untuk URL ini
+        $qrCode = QrCode::size(250)->generate($url);
+
+        return view('laboran.qrcode-transaksi', [
+            'name' => $this->name,
+            'title' => $this->title,
+            'role' => $this->role,
+            'qrCode' => $qrCode,
+        ]);
+    }
+
+
+    // SECTION [Mahasiswa]
+    // ANCHOR informasi alat
     public function informasiAlat()
     {
         $subtitle = 'Informasi Alat';
@@ -140,6 +184,7 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+    // ANCHOR detail alat
     public function detailAlat($slug)
     {
         $subtitle = 'Pinjam Alat';
@@ -178,6 +223,7 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+    // ANCHOR fungsi pinjam alat
     public function pinjamAlat(Request $request, $slug, $unit)
     {
         // Validasi data transaksi
@@ -219,9 +265,11 @@ class PeminjamanAlatController extends Controller
             $hashing = strtoupper(hash('sha256', $idUser . $salt));
             $randomNumber = rand(10000, 99999);
             $noTransaksi = $namaUnit . substr($hashing, 0, 8) . $idUnit . $randomNumber;
+            $waktuSekarang = now();
+            $waktuKedaluwarsa = $waktuSekarang->addMinutes(1); // NOTE meperpendek dulu masa kadaluwarsa dari 45 menit ke 1 menit
 
             // Buat transaksi baru
-            $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi);
+            $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi, $waktuKedaluwarsa);
 
             return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
@@ -230,8 +278,7 @@ class PeminjamanAlatController extends Controller
         }
     }
 
-
-
+    // ANCHOR aktifitas peminjaman
     public function aktifitasPeminjaman()
     {
         $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)->get();
@@ -244,14 +291,156 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+    // ANCHOR detail aktifitas peminjaman
     public function detailAktifitasPeminjaman($no_transaksi)
     {
         $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->get();
+
         return view('mahasiswa.detail-aktifitas-peminjaman', [
             'name' => $this->name,
             'title' => $this->title,
             'role' => $this->role,
             'transactionDetails' => $aktifitasPeminjaman
         ]);
+    }
+
+    // ANCHOR Scan View
+    public function scanView()
+    {
+        return view('mahasiswa.scan-view', [
+            'title' => $this->title,
+            'role' => $this->role,
+            'name' => $this->name,
+        ]);
+    }
+
+    // ANCHOR Update scan status
+    public function updateScanStatus($key)
+    {
+        $redisKey = "qr:$key";
+
+        // Ambil data QR dari Redis
+        $qrData = Redis::get($redisKey);
+
+        if (!$qrData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'QR Code tidak valid.',
+            ]);
+        }
+
+        $qrData = json_decode($qrData, true);
+
+        // Perbarui status pemindaian menjadi 'true'
+        $qrData['is_scanned'] = true;
+
+        // Simpan kembali ke Redis dengan status yang sudah diperbarui
+        Redis::setex($redisKey, 600, json_encode($qrData));
+
+        return response()->json(['success' => true]);
+    }
+
+
+    // ANCHOR Transaksi User
+    public function showUserTransactions(Request $request)
+    {
+        // Ambil key dari URL parameter
+        $randomValue = $request->route('key');
+
+        // Ambil data dari Redis menggunakan key
+        $qrData = Redis::get("qr:$randomValue");
+
+        // Debugging: Periksa data yang diterima dari Redis
+        Log::info('QR Data dari Redis: ' . $qrData);
+
+
+        $qrData = json_decode($qrData, true); // Decode JSON menjadi array
+
+        if (!$qrData) {
+            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code tidak valid atau sudah kedaluwarsa. Mohon untuk hubungi laboran');
+        }
+
+        if (!$qrData['is_scanned']) {
+            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code belum dipindai.');
+        }
+
+        // Tentukan waktu kadaluarsa
+        $expirationTime = \Carbon\Carbon::parse($qrData['qr_access_time']);
+
+        // Cek kadaluarsa
+        if (now()->greaterThan($expirationTime)) {
+            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code sudah kedaluwarsa.');
+        }
+
+        // Jika key valid, lanjutkan untuk mengambil data transaksi
+        $mahasiswaId = $this->user_id; // ID mahasiswa yang sedang login
+
+        $transactions = TransaksiPeminjamanAlat::where('id_user', $mahasiswaId)
+            ->where('tanggal_pinjam', $this->today)
+            ->where('status', 'pending')
+            ->get();
+
+        if ($transactions->isEmpty()) {
+            return redirect()->route('aktivitas.peminjaman')->with('warning', 'Tidak ada transaksi yang diajukan pada hari ini');
+        }
+
+        return view('mahasiswa.validasi-transaksi', [
+            'title' => $this->title,
+            'role' => $this->role,
+            'name' => $this->name,
+            'mahasiswa' => $mahasiswaId,
+            'transactions' => $transactions,
+        ]);
+    }
+
+    // ANCHOR Update status peminjaman
+    public function updateStatus($no_transaksi, Request $request)
+    {
+        // Validasi status yang diterima
+        $request->validate([
+            'status' => 'required|in:dibatalkan',
+        ]);
+
+
+        // / Cek apakah status ada di request
+        if (!$request->has('status') || !$request->status) {
+            return response()->json(['message' => 'Status tidak valid'], 400);
+        }
+
+        // Cari transaksi berdasarkan no_transaksi
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->first();
+
+        if (!$transaksi) {
+            return response()->json(['message' => 'Transaksi tidak ditemukan'], 404);
+        }
+
+        // Update status transaksi menjadi dibatalkan
+        $transaksi->updateTransaksiStatus($request->status);
+
+        return response()->json(['message' => 'Status transaksi berhasil diperbarui'], 200);
+    }
+
+    // ANCHOR Submit pengajuan peminjaman alat
+    public function submitTransaction(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'transactions' => 'required|array',
+            'transactions.*' => 'exists:transaksi_peminjaman_alat,id', // Validasi ID transaksi ada di database
+        ]);
+
+        // Ambil transaksi berdasarkan ID yang dikirimkan
+        $transactionIds = $request->input('transactions');
+        $transactions = TransaksiPeminjamanAlat::whereIn('id', $transactionIds)->get();
+
+        // Proses setiap transaksi
+        foreach ($transactions as $transaction) {
+            // Pastikan status saat ini adalah "pending"
+            if ($transaction->status === 'pending') {
+                $updated = $transaction->submitTransaction('dipinjam');
+            }
+        }
+
+        return redirect()->route('aktivitas.peminjaman')->with('success', 'Semua status transaksi berhasil diubah menjadi dipinjam.');
     }
 }
