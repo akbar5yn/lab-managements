@@ -16,6 +16,32 @@
                 };
             </script>
         @endif
+        @if (Session::has('warning'))
+            <script>
+                window.onload = function() {
+                    showAlert("Upps", "{{ Session::get('warning') }}", "warning");
+                    const swalBody = document.querySelector('body.swal2-height-auto');
+                    if (swalBody) {
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
+                    }
+                };
+            </script>
+        @endif
+        @if (Session::has('error'))
+            <script>
+                window.onload = function() {
+                    showAlert("Gagal", "{{ Session::get('error') }}", "error");
+                    const swalBody = document.querySelector('body.swal2-height-auto');
+                    if (swalBody) {
+                        swalBody.style.minHeight = '100vh';
+                        swalBody.style.maxHeight = '100vh';
+                        swalBody.style.overflowY = 'auto';
+                    }
+                };
+            </script>
+        @endif
         <!-- SECTION Show Alat-->
         <section>
             <!-- ANCHOR Button Navigation-->
@@ -50,7 +76,7 @@
             @endphp
             @foreach ($sortedTransaction as $transaction)
                 <div class="grid grid-cols-[15%_20%_30.3%_20.3%_auto] rounded-md border-b border-gray-400">
-                    <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}</p>
+                    <p class="break-words border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}</p>
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUnit->unit->nama_alat }}</p>
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->keperluan }}</p>
 
@@ -77,4 +103,10 @@
             @endforeach
 
         </section>
+
+        <!-- SECTION button scan -->
+        <div class="absolute bottom-4 right-4">
+            <a href="{{ route('scan.aktivitas.peminjaman') }}"
+                class="rounded-md bg-green-500 px-2 py-1 text-white">Scan Peminjaman</a>
+        </div>
 </x-layout>
