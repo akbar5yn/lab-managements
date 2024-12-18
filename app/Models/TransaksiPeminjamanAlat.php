@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class TransaksiPeminjamanAlat extends Model
 {
@@ -17,6 +18,7 @@ class TransaksiPeminjamanAlat extends Model
         'status',
         'tanggal_pinjam',
         'tanggal_kembali',
+        'waktu_kedaluwarsa'
     ];
     //
 
@@ -30,7 +32,7 @@ class TransaksiPeminjamanAlat extends Model
         return $this->belongsTo(Unit::class, 'id_unit');
     }
 
-    public static function createNewTransaksi(array $data, $noTransaksi)
+    public static function createNewTransaksi(array $data, $noTransaksi, $kedaluwarsa)
     {
         return self::create([
             'id_user' => $data['id_user'],
@@ -39,7 +41,24 @@ class TransaksiPeminjamanAlat extends Model
             'tanggal_pinjam' => $data['tanggal_pinjam'],
             'tanggal_kembali' => $data['tanggal_kembali'],
             'status' => 'pending',
-            'no_transaksi' => $noTransaksi
+            'no_transaksi' => $noTransaksi,
+            'waktu_kedaluwarsa' => $kedaluwarsa
         ]);
+    }
+
+    public function updateTransaksiStatus($status)
+    {
+        $this->update(['status' => $status]);
+    }
+
+    public function submitTransaction($status)
+    {
+        if (!is_string($status)) {
+            // Jika status bukan string, bisa log error atau throw exception
+            Log::error('Status yang diberikan tidak valid: ' . json_encode($status));
+            return false;
+        }
+
+        $this->update(['status' => $status]);
     }
 }
