@@ -30,7 +30,8 @@
                     @foreach ($transactionDetails as $transaction)
                         <tr>
                             <td class="border-b border-slate-300 py-2">No Transaksi</td>
-                            <td class="border-b border-slate-300 py-2">{{ $transaction->no_transaksi }}</td>
+                            <td class="w-full break-words border-b border-slate-300 py-2">
+                                {{ $transaction->no_transaksi }}</td>
                         </tr>
                         <tr>
                             <td class="border-b border-slate-300 py-2">Nama Alat</td>
@@ -49,10 +50,52 @@
                             <td class="border-b border-slate-300 py-2">Tanggal Kembali</td>
                             <td class="border-b border-slate-300 py-2">{{ $transaction->tanggal_kembali }}</td>
                         </tr>
+                        <tr>
+                            <td class="border-b border-slate-300 py-2">Waktu Kaluwarsa</td>
+                            <td class="border-b border-slate-300 py-2">
+                                <span id="countdown">{{ $transaction->waktu_mundur }}</span>
+                            </td>
+                        </tr>
                     @endforeach
 
 
                 </tbody>
             </table>
         </section>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Mendapatkan waktu kedaluwarsa dari elemen (misal data dari blade)
+                const waktuKedaluwarsa = @json($transaction->waktu_kedaluwarsa);
+                const noTransaksi = @json($transaction->no_transaksi);
+                const statusTransaksi = @json($transaction->status);
+
+
+                function updateCountdown() {
+
+                    if (statusTransaksi === 'dipinjam') {
+                        clearInterval(countdownInterval);
+                        document.getElementById('countdown').innerText = 'Transaksi sudah di-scan';
+                        return;
+                    }
+
+                    const currentTime = new Date().getTime();
+                    const endTime = new Date(waktuKedaluwarsa).getTime();
+                    const timeLeft = endTime - currentTime;
+
+                    if (timeLeft <= 0) {
+                        document.getElementById('countdown').innerText = 'Transaksi dibatalkan karena kedaluwarsa';
+                        clearInterval(countdownInterval);
+                    } else {
+                        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        document.getElementById('countdown').innerText = `${hours}:${minutes}:${seconds}`;
+                    }
+                }
+
+                // Update setiap detik
+                const countdownInterval = setInterval(updateCountdown, 1000);
+            });
+        </script>
 </x-layout>
