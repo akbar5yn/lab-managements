@@ -43,6 +43,9 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
     Route::get('/laboran/peminjaman-alat/pengajuan/{slug}', [PeminjamanAlatController::class, 'detailPengajuanAlat'])->name('detail.pengajuan.alat');
     Route::get('/laboran/peminjaman-alat/berlangsung', [PeminjamanAlatController::class, 'peminjamanBerlangsung'])->name('peminjaman.alat.berlangsung');
     Route::get('/laboran/peminjaman-alat/berlangsung/{slug}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
+
+    // SECTION - Route Qr Code
+    Route::get('/laboran/qrcode', [PeminjamanAlatController::class, 'showQrCodePage'])->name('qrcode.page');
 });
 
 // ANCHOR Mahasiswa
@@ -62,7 +65,11 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     // SECTION Route Aktifitas Peminjaman
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
     Route::get('/mahasiswa/peminjaman-alat/aktifitas/{slug}', [PeminjamanAlatController::class, 'detailAktifitasPeminjaman'])->name('detail.aktivitas.peminjaman');
+    Route::get('/mahasiswa/scan-view', [PeminjamanAlatController::class, 'scanView'])->name('scan.aktivitas.peminjaman');
+    Route::get('/mahasiswa/transaksi/peminjaman-alat/{key}', [PeminjamanAlatController::class, 'showUserTransactions'])->name('detail.transaksi');
+    Route::post('/mahasiswa/submit-pengajuan-alat', [PeminjamanAlatController::class, 'submitTransaction'])->name('submit-pengajuan-transaksi');
+    Route::get('/mahasiswa/update-scan-status/{key}', [PeminjamanAlatController::class, 'updateScanStatus'])->name('update.scan.status');
 
-    // SECTION Route Aktifitas Peminjaman
+    // SECTION Route Aktifitas Peminjaman Ruangan
     Route::get('/mahasiswa/peminjaman-ruangan', [DashboardController::class, 'indexMahasiswa'])->name('peminjaman.ruangan');
 });
