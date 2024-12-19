@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CancelExpiredTransaction;
 use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
@@ -109,7 +110,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // NOTE
     // ANCHOR Halaman qrCode
     public function showQrCodePage(Request $request)
     {
@@ -257,6 +257,19 @@ class PeminjamanAlatController extends Controller
                     ->with('error', 'Alat sedang dalam tahap pengajuan oleh mahasiswa lain pada rentang tanggal berikut: ' . $dates);
             }
 
+            // NOTE Checking waktu kadaluwarsa pada saat pengajuan
+            $tanggalPinjam = Carbon::parse($validatedTransaksi['tanggal_pinjam']);
+
+            if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
+                // Jika pinjam hari ini sebelum jam 9 pagi, waktu kedaluwarsa adalah jam 9 pagi hari ini + 1 menit
+                $waktuKedaluwarsa = $this->startOfDay->addMinute();
+            } else if ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
+                $waktuKedaluwarsa = $this->currentTime->addMinutes(45);
+            } else {
+                // Jika pinjam pada jam kerja lainnya atau tanggal berikutnya
+                $waktuKedaluwarsa = $tanggalPinjam->setTime(9, 45)->addMinute();
+            }
+
             $unitData = Unit::find($request->input('id_unit'));
             $namaUnit = strtoupper(substr($unitData->unit->nama_alat ?? 'XX', 0, 2));
             $idUnit = $request->input('id_unit');
@@ -265,11 +278,11 @@ class PeminjamanAlatController extends Controller
             $hashing = strtoupper(hash('sha256', $idUser . $salt));
             $randomNumber = rand(10000, 99999);
             $noTransaksi = $namaUnit . substr($hashing, 0, 8) . $idUnit . $randomNumber;
-            $waktuSekarang = now();
-            $waktuKedaluwarsa = $waktuSekarang->addMinutes(1); // NOTE meperpendek dulu masa kadaluwarsa dari 45 menit ke 1 menit
 
             // Buat transaksi baru
             $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi, $waktuKedaluwarsa);
+
+            CancelExpiredTransaction::dispatch($transaksi->id)->delay($waktuKedaluwarsa);
 
             return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
@@ -391,33 +404,6 @@ class PeminjamanAlatController extends Controller
             'mahasiswa' => $mahasiswaId,
             'transactions' => $transactions,
         ]);
-    }
-
-    // ANCHOR Update status peminjaman
-    public function updateStatus($no_transaksi, Request $request)
-    {
-        // Validasi status yang diterima
-        $request->validate([
-            'status' => 'required|in:dibatalkan',
-        ]);
-
-
-        // / Cek apakah status ada di request
-        if (!$request->has('status') || !$request->status) {
-            return response()->json(['message' => 'Status tidak valid'], 400);
-        }
-
-        // Cari transaksi berdasarkan no_transaksi
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->first();
-
-        if (!$transaksi) {
-            return response()->json(['message' => 'Transaksi tidak ditemukan'], 404);
-        }
-
-        // Update status transaksi menjadi dibatalkan
-        $transaksi->updateTransaksiStatus($request->status);
-
-        return response()->json(['message' => 'Status transaksi berhasil diperbarui'], 200);
     }
 
     // ANCHOR Submit pengajuan peminjaman alat
