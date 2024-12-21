@@ -7,6 +7,7 @@ use App\Http\Controllers\InventarisRuanganController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PeminjamanAlatController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,10 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
 // ANCHOR Mahasiswa
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
+    // SECTION ROUTE Profile
+    Route::get('/mahasiswa/profile', [ProfileController::class, 'profileMahasiswa'])->name('profile.mhs');
+    Route::put('/mahasiswa/update/profile/{id}', [ProfileController::class, 'updateProfileMhs'])->name('update.profile.mhs');
+
     // SECTION Route Dashboard
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
 
