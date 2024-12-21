@@ -11,11 +11,15 @@
     <!-- ANCHOR PROFILE -->
     <section class="flex h-[300px] flex-col items-center justify-center gap-4 px-10 py-4 font-poppins text-white">
         <div class="rounded-full border-2 border-white p-1">
-            <img src="/img/avatar.png" alt="avatar" class="w-20 rounded-full bg-white p-1">
+            <a href="{{ route('profile.mhs') }}">
+                <img src="/img/avatar.png" alt="avatar" class="w-20 rounded-full bg-white p-1">
+            </a>
         </div>
         <div class="text-center">
-            <h1 class="text-base">{{ $finalName }}</h1>
-            <p class="text-sm font-light">{{ $role }}</p>
+            <a href="{{ route('profile.mhs') }}">
+                <h1 class="text-base">{{ $finalName }}</h1>
+                <p class="text-sm font-light">{{ $role }}</p>
+            </a>
         </div>
     </section>
 
