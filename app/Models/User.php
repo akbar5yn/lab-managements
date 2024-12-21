@@ -12,12 +12,21 @@ class User extends Authenticatable // Extend the Authenticatable class
     protected $fillable = [
         'name',
         'username',
-        'username',
+        'email',
         'password',
-        'role',
+        'phone_number',
     ];
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function updateProfile($email, $phone_number)
+    {
+        $this->email = $email;
+        $this->phone_number = $phone_number;
+
+        // Simpan perubahan pada instance ini
+        return $this->save();
     }
 }
