@@ -6,6 +6,7 @@ use App\Jobs\CancelExpiredTransaction;
 use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -238,6 +239,13 @@ class PeminjamanAlatController extends Controller
         Log::info('Request masuk ke metode pinjamAlat', $request->all());
 
         try {
+            // ANCHOR Cek data email & no hp
+
+            $user = User::findOrFail($request->input('id_user'));
+
+            if (empty($user->email) || empty($user->phone_number)) {
+                return redirect()->route('profile.mhs')->with('error', 'Silakan lengkapi email dan nomor handphone Anda sebelum melakukan peminjaman.');
+            }
             // Cek apakah ada pengajuan lain untuk alat yang sama pada rentang tanggal yang diajukan
             $overlappingRequests = TransaksiPeminjamanAlat::where('id_unit', $unit)
                 ->where(function ($query) use ($validatedTransaksi) {
