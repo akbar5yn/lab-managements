@@ -62,7 +62,7 @@
                                 <td class="rounded-md border border-slate-700 p-2">Email</td>
                                 <td class="flex w-full items-center rounded-md border border-slate-700">
                                     <input type="text" name="email" id="email"
-                                        class="{{ $dataUser->email }} w-full rounded-md border-none focus:outline-none focus:ring-0"
+                                        class="{{ $dataUser->email }} w-full rounded-md border-none"
                                         value="{{ $dataUser->email ? substr($dataUser->email, 0, strpos($dataUser->email, '@')) : '' }}"
                                         placeholder="Silahkan masukan email depan anda" />
                                     <span class="pr-2 text-gray-500">
@@ -74,7 +74,7 @@
                                 <td class="rounded-md border border-slate-700 p-2">Nomor Handphone</td>
                                 <td class="flex w-full rounded-md border border-slate-700">
                                     <input type="text" name="phone_number" id="phone_number"
-                                        class="w-full rounded-md border-none bg-none focus:outline-none focus:ring-0"
+                                        class="w-full rounded-md border-none bg-none"
                                         placeholder="Silahkan masukan nomor handphone anda"
                                         value="{{ $dataUser->phone_number }}"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
@@ -92,4 +92,17 @@
 
         </section>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const emailInput = document.getElementById("email");
+            const phoneInput = document.getElementById("phone_number");
+
+            if (!emailInput.value.trim()) {
+                emailInput.focus();
+            } else if (!phoneInput.value.trim()) {
+                phoneInput.focus();
+            }
+        });
+    </script>
 </x-layout>
