@@ -47,8 +47,10 @@
                     <form class="space-y-6" action="{{ route('authenticate') }}" method="POST">
                         @csrf
                         <div>
-                            <label for="username"
-                                class="block text-xs font-medium leading-6 text-[#f6fafd]">Username</label>
+                            <label id="username" for="username"
+                                class="block text-xs font-medium leading-6 text-[#f6fafd]">
+                                Username
+                            </label>
                             <div class="relative mt-2">
                                 <input id="username" name="username" type="text"
                                     class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6"
@@ -92,7 +94,6 @@
             };
         </script>
     @endif
-
 </body>
 
 </html>

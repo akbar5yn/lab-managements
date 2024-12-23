@@ -4,6 +4,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InventarisAlat;
+use App\Models\Ruangan;
+use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +25,9 @@ class DashboardController extends Controller
         $title = 'Dasboard';
         $name = $user->name;
         $role = $user->role;
+        $totalUnit = Unit::count();
+        $totalMhs = User::where('role', 'mahasiswa')->count();
+        $unitRusak = Unit::where('kondisi', 'Rusak')->count();
         $schedules = [
             [
                 'nim' => '2000016001',
@@ -60,10 +67,24 @@ class DashboardController extends Controller
             ],
         ];
         // Konten dashboard
-        return view('laboran.dashboard', compact('title', 'name', 'role', 'schedules'));
+        return view('laboran.dashboard', compact('title', 'name', 'role', 'schedules', 'totalUnit', 'totalMhs', 'unitRusak'));
     }
     public function indexMahasiswa()
     {
-        return view('mahasiswa.dashboard');
+        $user = Auth::user();
+        $title = 'Dasboard';
+        $name = $user->name;
+        $role = $user->role;
+        $prodi = $user->prodi;
+
+        $getUnit = InventarisAlat::withCount([
+            'alat' => function ($query) {
+                $query->where('kondisi', 'Normal');
+            }
+        ])->get();
+
+
+        $ruanganTersedia = Ruangan::all();
+        return view('mahasiswa.dashboard', compact('title', 'name', 'role', 'prodi', 'getUnit', 'ruanganTersedia'));
     }
 }

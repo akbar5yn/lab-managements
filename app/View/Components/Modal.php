@@ -6,20 +6,18 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Sidebar extends Component
+class Modal extends Component
 {
+
+    public $title;
+    public $button;
     /**
      * Create a new component instance.
      */
-
-    public $role;
-    public $name;
-    public $userRole;
-    public function __construct($getRole, $getName)
+    public function __construct($attributeTitle, $attributeButton)
     {
-        $this->userRole = auth()->check() ? auth()->user()->role : null;
-        $this->role = $getRole;
-        $this->name = $getName;
+        $this->title = $attributeTitle;
+        $this->button = $attributeButton;
     }
 
     /**
@@ -27,6 +25,6 @@ class Sidebar extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.sidebar');
+        return view('components.modal');
     }
 }

@@ -35,12 +35,12 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        $credentials = $request->only('username', 'password');
+        // Tentukan kredensial berdasarkan role
+        $credentials =  $request->only('username', 'password');
 
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             // Redirect berdasarkan role
             if ($user->role === 'laboran') {
                 return redirect()->route('laboran');
@@ -50,5 +50,13 @@ class LoginController extends Controller
         } else {
             return redirect()->route('login')->with('failed', 'Username atau password salah');
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
     }
 }
