@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\CheckOverlapingDateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisAlatController;
 use App\Http\Controllers\InventarisRuanganController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PeminjamanAlatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitController;
