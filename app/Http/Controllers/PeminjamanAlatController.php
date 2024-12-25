@@ -37,7 +37,7 @@ class PeminjamanAlatController extends Controller
         // ANCHOR set rule hours
         $this->currentTime = Carbon::now('Asia/Jakarta');
         $this->startOfDay = $this->currentTime->copy()->setTime(9, 0, 0);
-        $this->endOfDay = $this->currentTime->copy()->setTime(23, 0, 0); //NOTE - sementara di ubah bts waktu dari jam 3 ke jam lain 
+        $this->endOfDay = $this->currentTime->copy()->setTime(15, 0, 0);
         $this->today = Carbon::now('Asia/Jakarta')->toDateString();
     }
 
@@ -117,11 +117,11 @@ class PeminjamanAlatController extends Controller
         // Buat nilai acak untuk QR key
         $randomValue = Str::random(32);
 
-        // Tentukan waktu kadaluarsa (misalnya 10 menit)
-        $expirationTime = now()->addMinutes(10);
+        // Tentukan waktu kadaluarsa (misalnya 3 menit)
+        $expirationTime = now()->addMinutes(3);
 
         // Simpan ke Redis dengan TTL (time-to-live) 10 menit
-        Redis::setex("qr:$randomValue", 600, json_encode([
+        Redis::setex("qr:$randomValue", 180, json_encode([
             'qr_access_key' => $randomValue,
             'qr_access_time' => $expirationTime,
             'is_scanned' => false,
@@ -154,17 +154,6 @@ class PeminjamanAlatController extends Controller
     {
         $subtitle = 'Informasi Alat';
 
-        if ($this->currentTime->lessThan($this->startOfDay)) {
-            $minDate = $this->startOfDay->toDateString();
-        } elseif ($this->currentTime->greaterThanOrEqualTo($this->endOfDay)) {
-            $minDate = $this->currentTime->addDay()->setTime(9, 0, 0)->toDateString();
-        } else {
-            $minDate = $this->currentTime->toDateString();
-        }
-
-        $maxDate = $this->currentTime->addDays(5)->toDateString();
-        $minReturnDate = $this->currentTime->copy()->addDay()->toDateString();
-
         $getUnit = InventarisAlat::withCount([
             'alat' => function ($query) {
                 $query->where('kondisi', 'Normal');
@@ -179,9 +168,6 @@ class PeminjamanAlatController extends Controller
             'role' => $this->role,
             'user_id' => $this->user_id,
             'getUnit' => $getUnit,
-            'minDate' => $minDate,
-            'maxDate' => $maxDate,
-            'minReturnDate' => $minReturnDate
         ]);
     }
 
@@ -356,7 +342,7 @@ class PeminjamanAlatController extends Controller
         $qrData['is_scanned'] = true;
 
         // Simpan kembali ke Redis dengan status yang sudah diperbarui
-        Redis::setex($redisKey, 600, json_encode($qrData));
+        Redis::setex($redisKey, 180, json_encode($qrData));
 
         return response()->json(['success' => true]);
     }
