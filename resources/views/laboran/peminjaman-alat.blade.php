@@ -20,9 +20,9 @@
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         Nama Peminjam</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        No Handphone</p>
+                        Nomor Transaksi</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Email</p>
+                        Status</p>
                     <p class="flex h-full items-center justify-center px-2 py-2 text-center">
                         Aksi</p>
                 </div>
@@ -31,9 +31,20 @@
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->name ?? 'User tidak ditemukan' }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUser->phone_number }}</p>
+                        <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
-                            {{ $transaction->relasiUser->email }}</p>
+                            <span
+                                class="{{ $transaction->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
+                                @php
+                                    $statusLabels = [
+                                        'belum_dikembalikan' => 'Belum Dikembalikan',
+                                        'dipinjam' => 'Dipinjam',
+                                        'dikembalikan' => 'Dikembalikan',
+                                        'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
+                                    ];
+                                @endphp
+                                {{ $statusLabels[$transaction->status] ?? ucfirst($transaction->status) }}
+                            </span>
                         <div class="flex items-center justify-center gap-5">
                             <a href="{{ route('peminjaman.alat.berlangsung.detail', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
