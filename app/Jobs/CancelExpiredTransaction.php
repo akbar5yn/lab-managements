@@ -30,7 +30,7 @@ class CancelExpiredTransaction implements ShouldQueue
         $transaksi = TransaksiPeminjamanAlat::find($this->noTransaksi);
 
         if ($transaksi && $transaksi->status === 'pending') {
-            $transaksi->update(['status' => 'dibatalkan']);
+            $transaksi->update(['status' => 'expire']);
         }
     }
 }
