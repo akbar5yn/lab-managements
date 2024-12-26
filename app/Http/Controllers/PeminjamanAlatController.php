@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\CancelExpiredTransaction;
+use App\Jobs\ReturnedLateTransaction;
 use App\Models\InventarisAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
@@ -210,6 +211,31 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+
+    public function hitungWaktuKedaluwarsa($tanggalPinjam)
+    {
+
+        if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
+            return $this->startOfDay->addMinute(45);
+        } elseif ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
+            return $this->currentTime->addMinutes(45);
+        } else {
+            return $tanggalPinjam->setTime(9, 45)->addMinute();
+        }
+    }
+
+    public function checkReturnedLate($tanggalKembali)
+    {
+        $currentTime = Carbon::now('Asia/Jakarta');
+        $delay = $currentTime->diffInSeconds($tanggalKembali, false);
+
+        Log::info('tgl returned ' . $tanggalKembali);
+        Log::info('currentTime returned ' . $currentTime);
+
+        return $delay;
+    }
+
+
     // ANCHOR fungsi pinjam alat
     public function pinjamAlat(Request $request, $slug, $unit)
     {
@@ -253,16 +279,9 @@ class PeminjamanAlatController extends Controller
 
             // NOTE Checking waktu kadaluwarsa pada saat pengajuan
             $tanggalPinjam = Carbon::parse($validatedTransaksi['tanggal_pinjam']);
+            $waktuKedaluwarsa = $this->hitungWaktuKedaluwarsa($tanggalPinjam);
 
-            if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
-                // Jika pinjam hari ini sebelum jam 9 pagi, waktu kedaluwarsa adalah jam 9 pagi hari ini + 1 menit
-                $waktuKedaluwarsa = $this->startOfDay->addMinute(45);
-            } else if ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
-                $waktuKedaluwarsa = $this->currentTime->addMinutes(45);
-            } else {
-                // Jika pinjam pada jam kerja lainnya atau tanggal berikutnya
-                $waktuKedaluwarsa = $tanggalPinjam->setTime(9, 45)->addMinute();
-            }
+
 
             $unitData = Unit::find($request->input('id_unit'));
             $namaUnit = strtoupper(substr($unitData->unit->nama_alat ?? 'XX', 0, 2));
@@ -277,6 +296,17 @@ class PeminjamanAlatController extends Controller
             $transaksi = TransaksiPeminjamanAlat::createNewTransaksi($validatedTransaksi, $noTransaksi, $waktuKedaluwarsa);
 
             CancelExpiredTransaction::dispatch($transaksi->id)->delay($waktuKedaluwarsa);
+
+            // NOTE Checking waktu pengembalian
+            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'])->setTime(15, 0, 0);
+            $delay = $this->checkReturnedLate($tanggalKembali);
+            if ($delay > 0) {
+                // Jika belum lewat batas waktu, jalankan job dengan delay
+                ReturnedLateTransaction::dispatch($transaksi->id)->delay($delay);
+            } else {
+                // Jika sudah terlambat, langsung proses
+                ReturnedLateTransaction::dispatch($transaksi->id);
+            }
 
             return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
