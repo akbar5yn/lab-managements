@@ -256,7 +256,7 @@ class PeminjamanAlatController extends Controller
 
             if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
                 // Jika pinjam hari ini sebelum jam 9 pagi, waktu kedaluwarsa adalah jam 9 pagi hari ini + 1 menit
-                $waktuKedaluwarsa = $this->startOfDay->addMinute();
+                $waktuKedaluwarsa = $this->startOfDay->addMinute(45);
             } else if ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
                 $waktuKedaluwarsa = $this->currentTime->addMinutes(45);
             } else {
@@ -364,7 +364,7 @@ class PeminjamanAlatController extends Controller
         $qrData = json_decode($qrData, true); // Decode JSON menjadi array
 
         if (!$qrData) {
-            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code tidak valid atau sudah kedaluwarsa. Mohon untuk hubungi laboran');
+            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code tidak valid atau sudah kedaluwarsa. Mohon untuk hubungi laboran untuk melakukan scan QR Code lagi');
         }
 
         if (!$qrData['is_scanned']) {
