@@ -75,7 +75,25 @@
 
                     if (statusTransaksi === 'dipinjam') {
                         clearInterval(countdownInterval);
-                        document.getElementById('countdown').innerText = 'Transaksi sudah di-scan';
+                        document.getElementById('countdown').innerText = '00:00:00';
+                        return;
+                    }
+
+                    if (statusTransaksi === 'terlambat_dikembalikan') {
+                        clearInterval(countdownInterval);
+                        document.getElementById('countdown').innerText = '00:00:00';
+                        return;
+                    }
+
+                    if (statusTransaksi === 'dikembalikan') {
+                        clearInterval(countdownInterval);
+                        document.getElementById('countdown').innerText = '00:00:00';
+                        return;
+                    }
+
+                    if (statusTransaksi === 'dibatalkan') {
+                        clearInterval(countdownInterval);
+                        document.getElementById('countdown').innerText = '00:00:00';
                         return;
                     }
 
@@ -84,7 +102,7 @@
                     const timeLeft = endTime - currentTime;
 
                     if (timeLeft <= 0) {
-                        document.getElementById('countdown').innerText = 'Transaksi dibatalkan karena kedaluwarsa';
+                        document.getElementById('countdown').innerText = '00:00:00';
                         clearInterval(countdownInterval);
                     } else {
                         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
