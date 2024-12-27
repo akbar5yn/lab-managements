@@ -80,10 +80,9 @@ class PeminjamanAlatController extends Controller
     // ANCHOR peminjaman berlangsung
     public function peminjamanBerlangsung()
     {
-        $user = Auth::user();
         $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
             ->withCount('relasiUnit')
-            ->where('status', 'dipinjam')
+            ->whereIn('status', ['dipinjam', 'terlambat_dikembalikan'])
             ->get();
 
         return view('laboran.peminjaman-alat', [
