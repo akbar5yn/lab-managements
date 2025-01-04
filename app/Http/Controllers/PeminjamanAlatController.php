@@ -180,6 +180,7 @@ class PeminjamanAlatController extends Controller
         $namaAlat = $alat->nama_alat;
 
         $allUnits = Unit::where('id_alat', $alat->id)
+            ->where('kondisi', ['Normal'])
             ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
             }])->get();
