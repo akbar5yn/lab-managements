@@ -46,10 +46,6 @@ class TransaksiPeminjamanAlat extends Model
         ]);
     }
 
-    public function updateTransaksiStatus($status)
-    {
-        $this->update(['status' => $status]);
-    }
 
     public function submitTransaction($status)
     {
