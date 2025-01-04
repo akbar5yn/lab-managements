@@ -28,7 +28,7 @@
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         Nomor Transaksi</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Status</p>
+                        Status Peminjaman</p>
                     <p class="flex h-full items-center justify-center px-2 py-2 text-center">
                         Aksi</p>
                 </div>
@@ -40,8 +40,8 @@
                             {{ $transaction->relasiUser->name ?? 'User tidak ditemukan' }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}
                         </p>
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">
-                            <span
+                        <div class="border-r border-gray-400 px-2 py-2 text-center">
+                            <p
                                 class="{{ $transaction->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
                                 @php
                                     $statusLabels = [
@@ -52,8 +52,8 @@
                                     ];
                                 @endphp
                                 {{ $statusLabels[$transaction->status] ?? ucfirst($transaction->status) }}
-                            </span>
-                        </p>
+                            </p>
+                        </div>
                         <div class="flex items-center justify-center gap-5">
                             <a href="{{ route('detail.pengajuan.alat', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
