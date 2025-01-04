@@ -49,7 +49,6 @@
                         <div class="flex items-center justify-center gap-5">
                             <a href="{{ route('peminjaman.alat.berlangsung.detail', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
-                            <button class="rounded bg-red-400 px-2 text-white">Hubungi</button>
                         </div>
                     </div>
                 @endforeach
