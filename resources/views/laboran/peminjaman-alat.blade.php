@@ -32,8 +32,8 @@
                         <p class="border-r border-gray-400 px-2 py-2">
                             {{ $transaction->relasiUser->name ?? 'User tidak ditemukan' }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">
-                            <span
+                        <div class="border-r border-gray-400 px-2 py-2 text-center">
+                            <p
                                 class="{{ $transaction->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
                                 @php
                                     $statusLabels = [
@@ -44,10 +44,12 @@
                                     ];
                                 @endphp
                                 {{ $statusLabels[$transaction->status] ?? ucfirst($transaction->status) }}
-                            </span>
+                            </p>
+                        </div>
                         <div class="flex items-center justify-center gap-5">
                             <a href="{{ route('peminjaman.alat.berlangsung.detail', ['slug' => $transaction->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail</a>
+                            <button class="rounded bg-red-400 px-2 text-white">Hubungi</button>
                         </div>
                     </div>
                 @endforeach
