@@ -58,4 +58,21 @@ class RiwayatTransaksiAlatController extends Controller
             return redirect()->route('riwayat.peminjaman.alat')->with('error', 'Terjadi kesalahan saat melakukan verifikasi pengembalian: ' . $e->getMessage());
         }
     }
+
+    public function detailRiwayatTransaksi($no_transaksi)
+    {
+        $subtitle = 'Detail Riwayat';
+
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
+            ->with(['relasiUser', 'relasiUnit', 'relasiRiwayatTransaksi'])
+            ->firstOrFail();
+
+        return view('laboran.detail-riwayat-transaksi-alat', [
+            'title' => $this->title,
+            'subtitle' => $subtitle,
+            'role' => $this->role,
+            'name' => $this->name,
+            'transaksi' => $transaksi
+        ]);
+    }
 }
