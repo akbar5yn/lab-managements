@@ -10,6 +10,8 @@
                     class="{{ request()->is('laboran/peminjaman-alat/pengajuan') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">Pengajuan</a>
                 <a href="{{ route('peminjaman.alat.berlangsung') }}"
                     class="{{ request()->is('laboran/peminjaman-alat/berlangsung') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">Berlangsung</a>
+                <a href="{{ route('riwayat.peminjaman.alat') }}"
+                    class="{{ request()->is('laboran/riwayat-peminjaman-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">Riwayat</a>
             </div>
             <a href="{{ route('qrcode.page') }}"
                 class="{{ request()->is('laboran/qrcode') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">QR
@@ -41,14 +43,10 @@
                         <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->no_transaksi }}
                         </p>
                         <div class="border-r border-gray-400 px-2 py-2 text-center">
-                            <p
-                                class="{{ $transaction->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
+                            <p class="rounded bg-gray-200 text-gray-600">
                                 @php
                                     $statusLabels = [
-                                        'belum_dikembalikan' => 'Belum Dikembalikan',
-                                        'dipinjam' => 'Dipinjam',
-                                        'dikembalikan' => 'Dikembalikan',
-                                        'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
+                                        'pending' => 'Pending',
                                     ];
                                 @endphp
                                 {{ $statusLabels[$transaction->status] ?? ucfirst($transaction->status) }}
