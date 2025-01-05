@@ -31,4 +31,12 @@ class RiwayatTransaksiAlat extends Model
 
         return $riwayat;
     }
+
+    public static function expireTransaction($no_transaksi)
+    {
+        return self::create([
+            'no_transaksi' => $no_transaksi,
+            'kondisi_alat' => 'normal',
+        ]);
+    }
 }
