@@ -43,7 +43,7 @@
                         <x-heroicon-s-square-3-stack-3d class="w-6" />
                     </div>
                     <div>
-                        <p class="font-semi-bold text-xl font-semibold">20</p>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalPengajuan }}</p>
                         <p class="text-sm text-gray-600">Pengajuan Peminjaman <br> Alat & Barang</p>
                     </div>
                 </div>
