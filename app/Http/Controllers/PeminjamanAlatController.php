@@ -180,6 +180,7 @@ class PeminjamanAlatController extends Controller
         $namaAlat = $alat->nama_alat;
 
         $allUnits = Unit::where('id_alat', $alat->id)
+            ->where('kondisi', ['Normal'])
             ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
             }])->get();
@@ -263,7 +264,7 @@ class PeminjamanAlatController extends Controller
                     $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
-                ->where('status', '!=', 'dikembalikan') // Abaikan pengajuan yang ditolak
+                ->whereNotIn('status', ['dikembalikan', 'expire']) // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
 
             // Jika ada pengajuan lain pada tanggal tersebut

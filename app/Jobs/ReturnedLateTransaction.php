@@ -2,10 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Mail\LateReturnMail;
 use App\Models\TransaksiPeminjamanAlat;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ReturnedLateTransaction implements ShouldQueue
 {
@@ -29,6 +31,12 @@ class ReturnedLateTransaction implements ShouldQueue
 
         if ($transaksi && $transaksi->status === 'dipinjam') {
             $transaksi->update(['status' => 'terlambat_dikembalikan']);
+            try {
+                Mail::to($transaksi->relasiUser->email)->send(new LateReturnMail($transaksi));
+                Log::info('Email berhasil dikirim.');
+            } catch (\Exception $e) {
+                Log::error('Gagal mengirim email:', ['error' => $e->getMessage()]);
+            }
         }
     }
 }

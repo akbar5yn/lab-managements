@@ -6,6 +6,7 @@ use App\Http\Controllers\InventarisRuanganController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeminjamanAlatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RiwayatTransaksiAlatController;
 use App\Http\Controllers\UnitController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,11 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
     // SECTION - Route Qr Code
     Route::get('/laboran/qrcode', [PeminjamanAlatController::class, 'showQrCodePage'])->name('qrcode.page');
+
+    // SECTION - Route Riwayat transaksi
+    Route::post('/laboran/riwayat-transaksi-alat', [RiwayatTransaksiAlatController::class, 'createRiwayatTransaksiAlat'])->name('post.riwayat.transaksi.alat');
+    Route::get('/laboran/riwayat-peminjaman-alat', [RiwayatTransaksiAlatController::class, 'riwayatPeminjamanAlat'])->name('riwayat.peminjaman.alat');
+    Route::get('/laboran/detail-riwayat-peminjaman-alat/{slug}', [RiwayatTransaksiAlatController::class, 'detailRiwayatTransaksi'])->name('detail.riwayat');
 });
 
 // ANCHOR Mahasiswa

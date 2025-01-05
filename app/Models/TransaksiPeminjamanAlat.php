@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 
 class TransaksiPeminjamanAlat extends Model
@@ -32,6 +33,11 @@ class TransaksiPeminjamanAlat extends Model
         return $this->belongsTo(Unit::class, 'id_unit');
     }
 
+    public function relasiRiwayatTransaksi(): HasOne
+    {
+        return $this->hasOne(RiwayatTransaksiAlat::class, 'no_transaksi', 'no_transaksi');
+    }
+
     public static function createNewTransaksi(array $data, $noTransaksi, $kedaluwarsa)
     {
         return self::create([
@@ -46,10 +52,6 @@ class TransaksiPeminjamanAlat extends Model
         ]);
     }
 
-    public function updateTransaksiStatus($status)
-    {
-        $this->update(['status' => $status]);
-    }
 
     public function submitTransaction($status)
     {

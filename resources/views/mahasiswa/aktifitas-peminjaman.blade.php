@@ -80,8 +80,8 @@
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->relasiUnit->unit->nama_alat }}</p>
                     <p class="border-r border-gray-400 px-2 py-2">{{ $transaction->keperluan }}</p>
 
-                    <p class="border-r border-gray-400 px-2 py-2 text-center capitalize">
-                        <span
+                    <div class="border-r border-gray-400 px-2 py-2 text-center capitalize">
+                        <p
                             class="{{ $transaction->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
                             @php
                                 $statusLabels = [
@@ -92,8 +92,8 @@
                                 ];
                             @endphp
                             {{ $statusLabels[$transaction->status] ?? ucfirst($transaction->status) }}
-                        </span>
-                    </p>
+                        </p>
+                    </div>
                     <div class="flex w-full items-center justify-center">
 
                         <a href="{{ route('detail.aktivitas.peminjaman', ['slug' => $transaction->no_transaksi]) }}"
