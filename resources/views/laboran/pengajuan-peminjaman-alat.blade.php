@@ -26,7 +26,7 @@
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         No</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
-                        Nama Peminjaman</p>
+                        Nama Peminjam</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
                         Nomor Transaksi</p>
                     <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
