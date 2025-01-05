@@ -47,7 +47,7 @@
                             </p>
                         </div>
                         <div class="flex items-center justify-center gap-5">
-                            <a href="{{ route('peminjaman.alat.berlangsung.detail', ['slug' => $riwayat->no_transaksi]) }}"
+                            <a href="{{ route('detail.riwayat', ['slug' => $riwayat->no_transaksi]) }}"
                                 class="rounded bg-blue-400 px-2 text-white">Detail Riwayat</a>
                         </div>
                     </div>
