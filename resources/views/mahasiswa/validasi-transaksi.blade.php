@@ -22,7 +22,7 @@
                     <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                         Tanggal Kembali</p>
                     <p class="h-full border-gray-400 px-2 py-2 font-medium">
-                        Detail</p>
+                        Aksi</p>
                 </div>
 
                 @php
