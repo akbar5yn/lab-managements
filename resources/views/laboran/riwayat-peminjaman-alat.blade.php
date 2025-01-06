@@ -27,7 +27,11 @@
                     <p class="flex h-full items-center justify-center px-2 py-2 text-center">
                         Aksi</p>
                 </div>
-                @foreach ($riwayatPeminjamanAlat as $riwayat)
+
+                @php
+                    $sortedTransaction = collect($riwayatPeminjamanAlat)->sortByDesc('created_at');
+                @endphp
+                @foreach ($sortedTransaction as $riwayat)
                     <div class="grid grid-cols-[4%_25%_25%_25%_auto] border-b border-gray-400">
                         <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">
