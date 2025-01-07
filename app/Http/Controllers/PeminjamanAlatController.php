@@ -318,7 +318,9 @@ class PeminjamanAlatController extends Controller
     // ANCHOR aktifitas peminjaman
     public function aktifitasPeminjaman()
     {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)->get();
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)
+            ->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
+            ->get();
 
         return view('mahasiswa.aktifitas-peminjaman', [
             'name' => $this->name,
