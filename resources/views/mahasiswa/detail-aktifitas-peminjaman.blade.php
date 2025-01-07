@@ -4,17 +4,14 @@
     <x-slot:role>{{ $role }}</x-slot:role>
     <main class="flex h-full flex-col gap-4 overflow-y-scroll">
         <!-- SECTION Show Alat-->
+        <!-- TODO Tambahkan Nama peminjam->
+        <!-- TODO Tambahkan status peminjaman->
+        <!-- NOTE APAKAH PERLU PERBAIKAN DESAIN->
         <section>
             <!-- ANCHOR Button Navigation-->
+        <section class="flex justify-between gap-2 rounded-xl bg-white p-4 shadow-md">
             <div class="flex gap-2">
-                <a href="{{ route('informasi.alat') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/informasi') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
-                    Informasi Alat
-                </a>
-                <a href="{{ route('aktivitas.peminjaman') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas*') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
-                    Aktivitas Peminjaman
-                </a>
+                <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
             </div>
         </section>
         <section class="relative flex h-full max-w-full flex-col rounded-xl bg-[#FFFFFF] p-4 shadow-md">
