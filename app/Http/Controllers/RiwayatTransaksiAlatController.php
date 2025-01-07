@@ -26,13 +26,27 @@ class RiwayatTransaksiAlatController extends Controller
 
     public function riwayatPeminjamanAlat()
     {
-        $data = RiwayatTransaksiAlat::all();
+        $data = null;
+        $riwayatMahasiswa = null;
 
-        return view('laboran.riwayat-peminjaman-alat', [
+        if (Auth::user()->role == 'laboran') {
+            $data = RiwayatTransaksiAlat::all();
+        }
+
+        if (Auth::user()->role == 'mahasiswa') {
+            $riwayatMahasiswa = RiwayatTransaksiAlat::with(['relasiTransaksiAlat'])
+                ->whereHas('relasiTransaksiAlat', function ($query) {
+                    $query->where('id_user', Auth::id());
+                })
+                ->get();
+        }
+
+        return view('riwayat-peminjaman-alat', [
             'title' => $this->title,
             'name' => $this->name,
             'role' => $this->role,
-            'riwayatPeminjamanAlat' => $data
+            'riwayatPeminjamanAlat' => $data,
+            'riwayatMahasiswa' => $riwayatMahasiswa
         ]);
     }
     public function createRiwayatTransaksiAlat(Request $request)
@@ -67,7 +81,7 @@ class RiwayatTransaksiAlatController extends Controller
             ->with(['relasiUser', 'relasiUnit', 'relasiRiwayatTransaksi'])
             ->firstOrFail();
 
-        return view('laboran.detail-riwayat-transaksi-alat', [
+        return view('detail-riwayat-transaksi-alat', [
             'title' => $this->title,
             'subtitle' => $subtitle,
             'role' => $this->role,
