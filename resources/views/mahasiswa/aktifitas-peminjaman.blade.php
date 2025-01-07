@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <x-slot:name>{{ $name }}</x-slot:name>
     <x-slot:role>{{ $role }}</x-slot:role>
-    <main class="flex h-full flex-col gap-4 overflow-y-scroll">
+    <main class="flex h-full flex-col gap-4">
         @if (Session::has('success'))
             <script>
                 window.onload = function() {
@@ -43,22 +43,15 @@
             </script>
         @endif
         <!-- SECTION Show Alat-->
-        <section>
+        <section class="flex justify-between gap-2 rounded-xl bg-white p-4 shadow-md">
             <!-- ANCHOR Button Navigation-->
             <div class="flex gap-2">
-                <a href="{{ route('informasi.alat') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/informasi') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
-                    Informasi Alat
-                </a>
-                <a href="{{ route('aktivitas.peminjaman') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
-                    Aktivitas Peminjaman
-                </a>
+                <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
             </div>
         </section>
-        <section class="flex max-w-full flex-col rounded-xl bg-[#FFFFFF] p-4 shadow-md">
+        <section class="flex h-full max-w-full flex-col overflow-y-scroll rounded-xl bg-[#FFFFFF] shadow-md">
             <div
-                class="sticky top-0 z-10 mt-4 grid grid-cols-[15%_20%_30.3%_20.3%_auto] items-center border-b border-gray-400 bg-[#F6F8FB] text-center shadow">
+                class="sticky top-0 z-10 grid grid-cols-[15%_20%_30.3%_20.3%_auto] items-center border-b border-gray-400 bg-[#2D3648] text-center text-white shadow">
                 <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
                     No Transaksi</p>
                 <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
@@ -105,7 +98,7 @@
         </section>
 
         <!-- SECTION button scan -->
-        <div class="absolute bottom-4 right-4">
+        <div class="flex w-full justify-end">
             <a href="{{ route('scan.aktivitas.peminjaman') }}"
                 class="rounded-md bg-green-500 px-2 py-1 text-white">Scan Peminjaman</a>
         </div>
