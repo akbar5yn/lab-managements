@@ -79,6 +79,7 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/scan-view', [PeminjamanAlatController::class, 'scanView'])->name('scan.aktivitas.peminjaman');
     Route::get('/mahasiswa/transaksi/peminjaman-alat/{key}', [PeminjamanAlatController::class, 'showUserTransactions'])->name('detail.transaksi');
     Route::post('/mahasiswa/submit-pengajuan-alat', [PeminjamanAlatController::class, 'submitTransaction'])->name('submit-pengajuan-transaksi');
+    Route::put('/mahasiswa/batatlkan-pengajuan-alat/{slug}', [PeminjamanAlatController::class, 'batalkanPeminjamanAlat'])->name('batalkan.peminjaman.alat');
     Route::get('/mahasiswa/update-scan-status/{key}', [PeminjamanAlatController::class, 'updateScanStatus'])->name('update.scan.status');
 
     // SECTION Route Aktifitas Peminjaman Ruangan
