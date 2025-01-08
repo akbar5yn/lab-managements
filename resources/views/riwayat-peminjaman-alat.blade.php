@@ -89,9 +89,11 @@
                                 <hr class="col-span-5 my-2 border">
                                 <div></div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Nama Alat</h4>
+                                    <h4 class="text-sm font-medium">Nama Alat - No Unit</h4>
                                     <p class="text-light text-[12px] text-gray-500">
-                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }}</p>
+                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }} -
+                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->no_unit }}
+                                    </p>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium">Tanggal Pinjam</h4>
@@ -178,9 +180,11 @@
                                 <hr class="col-span-5 my-2 border">
                                 <div></div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Nama Alat</h4>
+                                    <h4 class="text-sm font-medium">Nama Alat - No Unit</h4>
                                     <p class="text-light text-[12px] text-gray-500">
-                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }}</p>
+                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }} -
+                                        {{ $riwayat->relasiTransaksiAlat->relasiUnit->no_unit }}
+                                    </p>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium">Tanggal Pinjam</h4>
