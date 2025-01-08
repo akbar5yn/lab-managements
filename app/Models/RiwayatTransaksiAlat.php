@@ -39,4 +39,12 @@ class RiwayatTransaksiAlat extends Model
             'kondisi_alat' => 'normal',
         ]);
     }
+
+    public static function createRiwayatPembatalan($no_transaksi)
+    {
+        return self::create([
+            'no_transaksi' => $no_transaksi,
+            'kondisi_alat' => 'normal',
+        ]);
+    }
 }
