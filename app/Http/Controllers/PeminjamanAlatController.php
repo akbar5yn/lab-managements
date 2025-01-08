@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\CancelExpiredTransaction;
 use App\Jobs\ReturnedLateTransaction;
 use App\Models\InventarisAlat;
+use App\Models\RiwayatTransaksiAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
 use App\Models\User;
@@ -264,7 +265,7 @@ class PeminjamanAlatController extends Controller
                     $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
-                ->whereNotIn('status', ['dikembalikan', 'expire']) // Abaikan pengajuan yang ditolak
+                ->whereNotIn('status', ['dikembalikan', 'expire', 'dibatalkan']) // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
 
             // Jika ada pengajuan lain pada tanggal tersebut
@@ -454,5 +455,20 @@ class PeminjamanAlatController extends Controller
         }
 
         return redirect()->route('aktivitas.peminjaman')->with('success', 'Semua status transaksi berhasil diubah menjadi dipinjam.');
+    }
+
+    public function batalkanPeminjamanAlat($no_transaksi)
+    {
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->first();
+
+        try {
+            if ($transaksi->status === "pending") {
+                $update = $transaksi->batalkanTransaksi('dibatalkan');
+                $riwayat = RiwayatTransaksiAlat::createRiwayatPembatalan($no_transaksi);
+                return back()->with('success', 'Peminjaman dibatalkan.');
+            }
+        } catch (\Throwable $e) {
+            Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
+        }
     }
 }
