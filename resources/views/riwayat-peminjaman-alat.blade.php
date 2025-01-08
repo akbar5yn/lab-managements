@@ -208,8 +208,11 @@
 
     <style>
         .glow-left {
-            box-shadow: inset 8px 0 10px -10px rgba(16, 185, 129, 0.6);
-            /* Shadow hijau ke kiri */
+            box-shadow:
+                inset 8px 0 15px -10px rgba(16, 185, 129, 0.6),
+                inset 0 8px 10px -10px rgba(48, 48, 48, 0.6),
+                inset 0 -8px 10px -10px rgba(48, 48, 48, 0.6)
+                /* Shadow hijau ke kiri */
         }
     </style>
 </x-layout>
