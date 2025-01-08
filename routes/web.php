@@ -15,6 +15,13 @@ Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::middleware(['auth'])->group(function () {
+    // SECTION - Route Riwayat transaksi
+    Route::post('/riwayat-transaksi-alat', [RiwayatTransaksiAlatController::class, 'createRiwayatTransaksiAlat'])->name('post.riwayat.transaksi.alat');
+    Route::get('/riwayat-peminjaman-alat', [RiwayatTransaksiAlatController::class, 'riwayatPeminjamanAlat'])->name('riwayat.peminjaman.alat');
+});
+
+
 // ANCHOR Laboran
 Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
@@ -46,11 +53,6 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
     // SECTION - Route Qr Code
     Route::get('/laboran/qrcode', [PeminjamanAlatController::class, 'showQrCodePage'])->name('qrcode.page');
-
-    // SECTION - Route Riwayat transaksi
-    Route::post('/laboran/riwayat-transaksi-alat', [RiwayatTransaksiAlatController::class, 'createRiwayatTransaksiAlat'])->name('post.riwayat.transaksi.alat');
-    Route::get('/laboran/riwayat-peminjaman-alat', [RiwayatTransaksiAlatController::class, 'riwayatPeminjamanAlat'])->name('riwayat.peminjaman.alat');
-    Route::get('/laboran/detail-riwayat-peminjaman-alat/{slug}', [RiwayatTransaksiAlatController::class, 'detailRiwayatTransaksi'])->name('detail.riwayat');
 });
 
 // ANCHOR Mahasiswa
