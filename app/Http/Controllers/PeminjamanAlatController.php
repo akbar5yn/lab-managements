@@ -60,23 +60,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR Detail Pengajuan Peminjaman
-    public function detailPengajuanAlat($no_transaksi)
-    {
-        $subtitle = 'Pengajuan';
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-pengajuan-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR peminjaman berlangsung
     public function peminjamanBerlangsung()
