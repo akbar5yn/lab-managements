@@ -77,23 +77,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail peminjaman berlangsung
-    public function detailPeminjamanBerlangsung($no_transaksi)
-    {
-        $subtitle = "Berlangsung";
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-peminjaman-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR Halaman qrCode
     public function showQrCodePage(Request $request)
