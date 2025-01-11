@@ -114,6 +114,40 @@ document.querySelectorAll('.update-form').forEach(form => {
     });
 });
 
+document.querySelectorAll('.delete-transaksi').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah form dari pengiriman otomatis
+
+        const formElement = this; // Menyimpan referensi ke form yang akan dihapus
+
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Ini akan membatalkan transaksi alat yang Anda buat!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Batalkan!',
+            cancelButtonText: 'Tidak!',
+            didOpen: () => {
+                // Menyesuaikan body SweetAlert setelah elemen dirender ke DOM
+                const swalBody = document.querySelector('body.swal2-height-auto');
+                if (swalBody) {
+                    swalBody.style.minHeight = '100vh';
+                    swalBody.style.maxHeight = '100vh';
+                    swalBody.style.overflowY = 'auto';
+                }
+            }
+        }).then((result) => {
+            // Mengirim form jika pengguna mengkonfirmasi
+            if (result.isConfirmed) {
+                formElement.submit();
+            }
+        });
+    });
+});
+
+
 
 window.Html5Qrcode = Html5Qrcode;
 window.showAlert = showAlert;

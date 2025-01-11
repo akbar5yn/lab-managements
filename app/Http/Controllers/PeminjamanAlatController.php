@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\CancelExpiredTransaction;
 use App\Jobs\ReturnedLateTransaction;
 use App\Models\InventarisAlat;
+use App\Models\RiwayatTransaksiAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
 use App\Models\User;
@@ -59,23 +60,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR Detail Pengajuan Peminjaman
-    public function detailPengajuanAlat($no_transaksi)
-    {
-        $subtitle = 'Pengajuan';
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-pengajuan-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR peminjaman berlangsung
     public function peminjamanBerlangsung()
@@ -93,23 +77,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail peminjaman berlangsung
-    public function detailPeminjamanBerlangsung($no_transaksi)
-    {
-        $subtitle = "Berlangsung";
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-peminjaman-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR Halaman qrCode
     public function showQrCodePage(Request $request)
@@ -264,7 +231,7 @@ class PeminjamanAlatController extends Controller
                     $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
-                ->whereNotIn('status', ['dikembalikan', 'expire']) // Abaikan pengajuan yang ditolak
+                ->whereNotIn('status', ['dikembalikan', 'expire', 'dibatalkan']) // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
 
             // Jika ada pengajuan lain pada tanggal tersebut
@@ -318,7 +285,10 @@ class PeminjamanAlatController extends Controller
     // ANCHOR aktifitas peminjaman
     public function aktifitasPeminjaman()
     {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)->get();
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::with(['relasiUnit.unit', 'relasiUser'])->where('id_user', $this->user_id)
+            ->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
+            ->get()
+            ->sortByDesc('created_at')->values()->toArray();
 
         return view('mahasiswa.aktifitas-peminjaman', [
             'name' => $this->name,
@@ -328,18 +298,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail aktifitas peminjaman
-    public function detailAktifitasPeminjaman($no_transaksi)
-    {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->get();
-
-        return view('mahasiswa.detail-aktifitas-peminjaman', [
-            'name' => $this->name,
-            'title' => $this->title,
-            'role' => $this->role,
-            'transactionDetails' => $aktifitasPeminjaman
-        ]);
-    }
 
     // ANCHOR Scan View
     public function scanView()
@@ -452,5 +410,20 @@ class PeminjamanAlatController extends Controller
         }
 
         return redirect()->route('aktivitas.peminjaman')->with('success', 'Semua status transaksi berhasil diubah menjadi dipinjam.');
+    }
+
+    public function batalkanPeminjamanAlat($no_transaksi)
+    {
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->first();
+
+        try {
+            if ($transaksi->status === "pending") {
+                $update = $transaksi->batalkanTransaksi('dibatalkan');
+                $riwayat = RiwayatTransaksiAlat::createRiwayatPembatalan($no_transaksi);
+                return back()->with('success', 'Peminjaman dibatalkan.');
+            }
+        } catch (\Throwable $e) {
+            Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
+        }
     }
 }

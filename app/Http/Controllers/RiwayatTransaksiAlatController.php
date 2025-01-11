@@ -26,13 +26,27 @@ class RiwayatTransaksiAlatController extends Controller
 
     public function riwayatPeminjamanAlat()
     {
-        $data = RiwayatTransaksiAlat::all();
+        $data = null;
+        $riwayatMahasiswa = null;
 
-        return view('laboran.riwayat-peminjaman-alat', [
+        if (Auth::user()->role == 'laboran') {
+            $data = RiwayatTransaksiAlat::all();
+        }
+
+        if (Auth::user()->role == 'mahasiswa') {
+            $riwayatMahasiswa = RiwayatTransaksiAlat::with(['relasiTransaksiAlat'])
+                ->whereHas('relasiTransaksiAlat', function ($query) {
+                    $query->where('id_user', Auth::id());
+                })
+                ->get();
+        }
+
+        return view('riwayat-peminjaman-alat', [
             'title' => $this->title,
             'name' => $this->name,
             'role' => $this->role,
-            'riwayatPeminjamanAlat' => $data
+            'riwayatPeminjamanAlat' => $data,
+            'riwayatMahasiswa' => $riwayatMahasiswa
         ]);
     }
     public function createRiwayatTransaksiAlat(Request $request)
@@ -57,22 +71,5 @@ class RiwayatTransaksiAlatController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('riwayat.peminjaman.alat')->with('error', 'Terjadi kesalahan saat melakukan verifikasi pengembalian: ' . $e->getMessage());
         }
-    }
-
-    public function detailRiwayatTransaksi($no_transaksi)
-    {
-        $subtitle = 'Detail Riwayat';
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit', 'relasiRiwayatTransaksi'])
-            ->firstOrFail();
-
-        return view('laboran.detail-riwayat-transaksi-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
     }
 }

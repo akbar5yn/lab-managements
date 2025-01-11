@@ -7,10 +7,7 @@
 
         <section class="flex max-w-full justify-between rounded-xl bg-white p-4 shadow-md">
             <div class="flex gap-4">
-                <a href="{{ route('pengajuan.peminjaman.alat') }}"
-                    class="{{ request()->is('laboran/peminjaman-alat/pengajuan') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">Pengajuan</a>
-                <a href="{{ route('peminjaman.alat.berlangsung') }}"
-                    class="{{ request()->is('laboran/peminjaman-alat/berlangsung') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">Berlangsung</a>
+                <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
             </div>
             <a href="{{ route('qrcode.page') }}"
                 class="{{ request()->is('laboran/qrcode') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-4 py-2">QR
