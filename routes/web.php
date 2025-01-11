@@ -8,6 +8,7 @@ use App\Http\Controllers\PeminjamanAlatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RiwayatTransaksiAlatController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,10 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
     // SECTION - Route Qr Code
     Route::get('/laboran/qrcode', [PeminjamanAlatController::class, 'showQrCodePage'])->name('qrcode.page');
+
+    // SECTION - Tambah mahasiswa
+    Route::get('/laboran/data-mahasiswa', [UserController::class, 'storeMhs'])->name('data.mahasiswa');
+    Route::post('/laboran/tambah-mahasiswa', [UserController::class, 'postMahasiswa'])->name('create.mahasiswa');
 });
 
 // ANCHOR Mahasiswa
