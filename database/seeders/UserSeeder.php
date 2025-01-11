@@ -26,11 +26,11 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Miftahul Rizqha',
-                'username' => '2000016130',
+                'username' => '2211016031',
                 'prodi' => 'sistem informasi',
-                'password' =>  Hash::make('2000016130'),
-                'email' => 'mifta@gmail.com',
-                'phone_number' => '085200110022',
+                'password' =>  Hash::make('2211016031'),
+                'email' => '',
+                'phone_number' => '',
                 'role' => 'mahasiswa'
             ],
             [
@@ -38,8 +38,8 @@ class UserSeeder extends Seeder
                 'username' => '2000016001',
                 'prodi' => 'teknologi informasi',
                 'password' =>  Hash::make('2000016001'),
-                'email' => 'farid@gmail.com',
-                'phone_number' => '085200110022',
+                'email' => '',
+                'phone_number' => '',
                 'role' => 'mahasiswa'
             ],
             [
@@ -47,8 +47,8 @@ class UserSeeder extends Seeder
                 'username' => '2000016003',
                 'prodi' => 'matematika',
                 'password' =>  Hash::make('2000016003'),
-                'email' => 'teguh@gmail.com',
-                'phone_number' => '085200110022',
+                'email' => '',
+                'phone_number' => '',
                 'role' => 'mahasiswa'
             ]
         ];

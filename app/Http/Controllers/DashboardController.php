@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventarisAlat;
 use App\Models\Ruangan;
+use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class DashboardController extends Controller
         $totalUnit = Unit::count();
         $totalMhs = User::where('role', 'mahasiswa')->count();
         $unitRusak = Unit::where('kondisi', 'Rusak')->count();
+        $totalPengajuan = TransaksiPeminjamanAlat::where('status', 'pending')->count();
         $schedules = [
             [
                 'nim' => '2000016001',
@@ -67,7 +69,7 @@ class DashboardController extends Controller
             ],
         ];
         // Konten dashboard
-        return view('laboran.dashboard', compact('title', 'name', 'role', 'schedules', 'totalUnit', 'totalMhs', 'unitRusak'));
+        return view('laboran.dashboard', compact('title', 'name', 'role', 'schedules', 'totalUnit', 'totalMhs', 'unitRusak', 'totalPengajuan'));
     }
     public function indexMahasiswa()
     {

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\CancelExpiredTransaction;
+use App\Jobs\ReturnedLateTransaction;
 use App\Models\InventarisAlat;
+use App\Models\RiwayatTransaksiAlat;
 use App\Models\TransaksiPeminjamanAlat;
 use App\Models\Unit;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +39,7 @@ class PeminjamanAlatController extends Controller
         // ANCHOR set rule hours
         $this->currentTime = Carbon::now('Asia/Jakarta');
         $this->startOfDay = $this->currentTime->copy()->setTime(9, 0, 0);
-        $this->endOfDay = $this->currentTime->copy()->setTime(23, 0, 0); //NOTE - sementara di ubah bts waktu dari jam 3 ke jam lain 
+        $this->endOfDay = $this->currentTime->copy()->setTime(15, 0, 0);
         $this->today = Carbon::now('Asia/Jakarta')->toDateString();
     }
 
@@ -57,31 +60,13 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR Detail Pengajuan Peminjaman
-    public function detailPengajuanAlat($no_transaksi)
-    {
-        $subtitle = 'Pengajuan';
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-pengajuan-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR peminjaman berlangsung
     public function peminjamanBerlangsung()
     {
-        $user = Auth::user();
         $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
             ->withCount('relasiUnit')
-            ->where('status', 'dipinjam')
+            ->whereIn('status', ['dipinjam', 'terlambat_dikembalikan'])
             ->get();
 
         return view('laboran.peminjaman-alat', [
@@ -92,23 +77,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail peminjaman berlangsung
-    public function detailPeminjamanBerlangsung($no_transaksi)
-    {
-        $subtitle = "Berlangsung";
-
-        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)
-            ->with(['relasiUser', 'relasiUnit'])
-            ->firstOrFail();
-
-        return view('laboran.detail-peminjaman-alat', [
-            'title' => $this->title,
-            'subtitle' => $subtitle,
-            'role' => $this->role,
-            'name' => $this->name,
-            'transaksi' => $transaksi
-        ]);
-    }
 
     // ANCHOR Halaman qrCode
     public function showQrCodePage(Request $request)
@@ -116,11 +84,11 @@ class PeminjamanAlatController extends Controller
         // Buat nilai acak untuk QR key
         $randomValue = Str::random(32);
 
-        // Tentukan waktu kadaluarsa (misalnya 10 menit)
-        $expirationTime = now()->addMinutes(10);
+        // Tentukan waktu kadaluarsa (misalnya 3 menit)
+        $expirationTime = now()->addMinutes(3);
 
         // Simpan ke Redis dengan TTL (time-to-live) 10 menit
-        Redis::setex("qr:$randomValue", 600, json_encode([
+        Redis::setex("qr:$randomValue", 180, json_encode([
             'qr_access_key' => $randomValue,
             'qr_access_time' => $expirationTime,
             'is_scanned' => false,
@@ -153,17 +121,6 @@ class PeminjamanAlatController extends Controller
     {
         $subtitle = 'Informasi Alat';
 
-        if ($this->currentTime->lessThan($this->startOfDay)) {
-            $minDate = $this->startOfDay->toDateString();
-        } elseif ($this->currentTime->greaterThanOrEqualTo($this->endOfDay)) {
-            $minDate = $this->currentTime->addDay()->setTime(9, 0, 0)->toDateString();
-        } else {
-            $minDate = $this->currentTime->toDateString();
-        }
-
-        $maxDate = $this->currentTime->addDays(5)->toDateString();
-        $minReturnDate = $this->currentTime->copy()->addDay()->toDateString();
-
         $getUnit = InventarisAlat::withCount([
             'alat' => function ($query) {
                 $query->where('kondisi', 'Normal');
@@ -178,9 +135,6 @@ class PeminjamanAlatController extends Controller
             'role' => $this->role,
             'user_id' => $this->user_id,
             'getUnit' => $getUnit,
-            'minDate' => $minDate,
-            'maxDate' => $maxDate,
-            'minReturnDate' => $minReturnDate
         ]);
     }
 
@@ -193,6 +147,7 @@ class PeminjamanAlatController extends Controller
         $namaAlat = $alat->nama_alat;
 
         $allUnits = Unit::where('id_alat', $alat->id)
+            ->where('kondisi', ['Normal'])
             ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
             }])->get();
@@ -223,6 +178,31 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
+
+    public function hitungWaktuKedaluwarsa($tanggalPinjam)
+    {
+
+        if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
+            return $this->startOfDay->addMinute(45);
+        } elseif ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
+            return $this->currentTime->addMinutes(45);
+        } else {
+            return $tanggalPinjam->setTime(9, 45)->addMinute();
+        }
+    }
+
+    public function checkReturnedLate($tanggalKembali)
+    {
+        $currentTime = Carbon::now('Asia/Jakarta');
+        $delay = $currentTime->diffInSeconds($tanggalKembali, false);
+
+        Log::info('tgl returned ' . $tanggalKembali);
+        Log::info('currentTime returned ' . $currentTime);
+
+        return $delay;
+    }
+
+
     // ANCHOR fungsi pinjam alat
     public function pinjamAlat(Request $request, $slug, $unit)
     {
@@ -238,13 +218,20 @@ class PeminjamanAlatController extends Controller
         Log::info('Request masuk ke metode pinjamAlat', $request->all());
 
         try {
+            // ANCHOR Cek data email & no hp
+
+            $user = User::findOrFail($request->input('id_user'));
+
+            if (empty($user->email) || empty($user->phone_number)) {
+                return redirect()->route('profile.mhs')->with('error', 'Silakan lengkapi email dan nomor handphone Anda sebelum melakukan peminjaman.');
+            }
             // Cek apakah ada pengajuan lain untuk alat yang sama pada rentang tanggal yang diajukan
             $overlappingRequests = TransaksiPeminjamanAlat::where('id_unit', $unit)
                 ->where(function ($query) use ($validatedTransaksi) {
                     $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
-                ->where('status', '!=', 'dikembalikan') // Abaikan pengajuan yang ditolak
+                ->whereNotIn('status', ['dikembalikan', 'expire', 'dibatalkan']) // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
 
             // Jika ada pengajuan lain pada tanggal tersebut
@@ -259,16 +246,9 @@ class PeminjamanAlatController extends Controller
 
             // NOTE Checking waktu kadaluwarsa pada saat pengajuan
             $tanggalPinjam = Carbon::parse($validatedTransaksi['tanggal_pinjam']);
+            $waktuKedaluwarsa = $this->hitungWaktuKedaluwarsa($tanggalPinjam);
 
-            if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
-                // Jika pinjam hari ini sebelum jam 9 pagi, waktu kedaluwarsa adalah jam 9 pagi hari ini + 1 menit
-                $waktuKedaluwarsa = $this->startOfDay->addMinute();
-            } else if ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
-                $waktuKedaluwarsa = $this->currentTime->addMinutes(45);
-            } else {
-                // Jika pinjam pada jam kerja lainnya atau tanggal berikutnya
-                $waktuKedaluwarsa = $tanggalPinjam->setTime(9, 45)->addMinute();
-            }
+
 
             $unitData = Unit::find($request->input('id_unit'));
             $namaUnit = strtoupper(substr($unitData->unit->nama_alat ?? 'XX', 0, 2));
@@ -284,6 +264,17 @@ class PeminjamanAlatController extends Controller
 
             CancelExpiredTransaction::dispatch($transaksi->id)->delay($waktuKedaluwarsa);
 
+            // NOTE Checking waktu pengembalian
+            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'])->setTime(15, 0, 0);
+            $delay = $this->checkReturnedLate($tanggalKembali);
+            if ($delay > 0) {
+                // Jika belum lewat batas waktu, jalankan job dengan delay
+                ReturnedLateTransaction::dispatch($transaksi->id)->delay($delay);
+            } else {
+                // Jika sudah terlambat, langsung proses
+                ReturnedLateTransaction::dispatch($transaksi->id);
+            }
+
             return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
         } catch (\Throwable $e) {
             Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
@@ -294,7 +285,10 @@ class PeminjamanAlatController extends Controller
     // ANCHOR aktifitas peminjaman
     public function aktifitasPeminjaman()
     {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)->get();
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::with(['relasiUnit.unit', 'relasiUser'])->where('id_user', $this->user_id)
+            ->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
+            ->get()
+            ->sortByDesc('created_at')->values()->toArray();
 
         return view('mahasiswa.aktifitas-peminjaman', [
             'name' => $this->name,
@@ -304,18 +298,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail aktifitas peminjaman
-    public function detailAktifitasPeminjaman($no_transaksi)
-    {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->get();
-
-        return view('mahasiswa.detail-aktifitas-peminjaman', [
-            'name' => $this->name,
-            'title' => $this->title,
-            'role' => $this->role,
-            'transactionDetails' => $aktifitasPeminjaman
-        ]);
-    }
 
     // ANCHOR Scan View
     public function scanView()
@@ -348,7 +330,7 @@ class PeminjamanAlatController extends Controller
         $qrData['is_scanned'] = true;
 
         // Simpan kembali ke Redis dengan status yang sudah diperbarui
-        Redis::setex($redisKey, 600, json_encode($qrData));
+        Redis::setex($redisKey, 180, json_encode($qrData));
 
         return response()->json(['success' => true]);
     }
@@ -370,7 +352,7 @@ class PeminjamanAlatController extends Controller
         $qrData = json_decode($qrData, true); // Decode JSON menjadi array
 
         if (!$qrData) {
-            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code tidak valid atau sudah kedaluwarsa. Mohon untuk hubungi laboran');
+            return redirect()->route('aktivitas.peminjaman')->with('error', 'QR Code tidak valid atau sudah kedaluwarsa. Mohon untuk hubungi laboran untuk melakukan scan QR Code lagi');
         }
 
         if (!$qrData['is_scanned']) {
@@ -428,5 +410,20 @@ class PeminjamanAlatController extends Controller
         }
 
         return redirect()->route('aktivitas.peminjaman')->with('success', 'Semua status transaksi berhasil diubah menjadi dipinjam.');
+    }
+
+    public function batalkanPeminjamanAlat($no_transaksi)
+    {
+        $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->first();
+
+        try {
+            if ($transaksi->status === "pending") {
+                $update = $transaksi->batalkanTransaksi('dibatalkan');
+                $riwayat = RiwayatTransaksiAlat::createRiwayatPembatalan($no_transaksi);
+                return back()->with('success', 'Peminjaman dibatalkan.');
+            }
+        } catch (\Throwable $e) {
+            Log::error('Error saat melakukan transaksi peminjaman alat: ' . $e->getMessage());
+        }
     }
 }

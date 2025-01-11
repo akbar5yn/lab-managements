@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\CheckOverlapingDateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisAlatController;
 use App\Http\Controllers\InventarisRuanganController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PeminjamanAlatController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RiwayatTransaksiAlatController;
 use App\Http\Controllers\UnitController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    // SECTION - Route Riwayat transaksi
+    Route::post('/riwayat-transaksi-alat', [RiwayatTransaksiAlatController::class, 'createRiwayatTransaksiAlat'])->name('post.riwayat.transaksi.alat');
+    Route::get('/riwayat-peminjaman-alat', [RiwayatTransaksiAlatController::class, 'riwayatPeminjamanAlat'])->name('riwayat.peminjaman.alat');
+});
+
 
 // ANCHOR Laboran
 Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
@@ -40,9 +47,7 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
     // SECTION - Route Peminjaman Alat
     Route::get('/laboran/peminjaman-alat/pengajuan', [PeminjamanAlatController::class, 'pengajuanPeminjaman'])->name('pengajuan.peminjaman.alat');
-    Route::get('/laboran/peminjaman-alat/pengajuan/{slug}', [PeminjamanAlatController::class, 'detailPengajuanAlat'])->name('detail.pengajuan.alat');
     Route::get('/laboran/peminjaman-alat/berlangsung', [PeminjamanAlatController::class, 'peminjamanBerlangsung'])->name('peminjaman.alat.berlangsung');
-    Route::get('/laboran/peminjaman-alat/berlangsung/{slug}', [PeminjamanAlatController::class, 'detailPeminjamanBerlangsung'])->name('peminjaman.alat.berlangsung.detail');
 
     // SECTION - Route Qr Code
     Route::get('/laboran/qrcode', [PeminjamanAlatController::class, 'showQrCodePage'])->name('qrcode.page');
@@ -50,6 +55,10 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
 
 // ANCHOR Mahasiswa
 Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
+    // SECTION ROUTE Profile
+    Route::get('/mahasiswa/profile', [ProfileController::class, 'profileMahasiswa'])->name('profile.mhs');
+    Route::put('/mahasiswa/update/profile/{id}', [ProfileController::class, 'updateProfileMhs'])->name('update.profile.mhs');
+
     // SECTION Route Dashboard
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
 
@@ -64,10 +73,10 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
 
     // SECTION Route Aktifitas Peminjaman
     Route::get('/mahasiswa/peminjaman-alat/aktifitas', [PeminjamanAlatController::class, 'aktifitasPeminjaman'])->name('aktivitas.peminjaman');
-    Route::get('/mahasiswa/peminjaman-alat/aktifitas/{slug}', [PeminjamanAlatController::class, 'detailAktifitasPeminjaman'])->name('detail.aktivitas.peminjaman');
     Route::get('/mahasiswa/scan-view', [PeminjamanAlatController::class, 'scanView'])->name('scan.aktivitas.peminjaman');
     Route::get('/mahasiswa/transaksi/peminjaman-alat/{key}', [PeminjamanAlatController::class, 'showUserTransactions'])->name('detail.transaksi');
     Route::post('/mahasiswa/submit-pengajuan-alat', [PeminjamanAlatController::class, 'submitTransaction'])->name('submit-pengajuan-transaksi');
+    Route::put('/mahasiswa/batatlkan-pengajuan-alat/{slug}', [PeminjamanAlatController::class, 'batalkanPeminjamanAlat'])->name('batalkan.peminjaman.alat');
     Route::get('/mahasiswa/update-scan-status/{key}', [PeminjamanAlatController::class, 'updateScanStatus'])->name('update.scan.status');
 
     // SECTION Route Aktifitas Peminjaman Ruangan

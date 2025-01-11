@@ -34,16 +34,10 @@
 
         <!-- SECTION Show Alat-->
         <!-- ANCHOR Button Navigation and filtering-->
-        <section class="flex justify-between gap-2">
+        <section class="flex justify-between gap-2 rounded-xl bg-white p-4 shadow-md">
             <div class="flex gap-2">
-                <a href="{{ route('informasi.alat') }}"
-                    class="{{ request()->is('mahasiswa/informasi-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
-                    Informasi Alat
-                </a>
-                <a href="{{ route('aktivitas.peminjaman') }}"
-                    class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg border px-2 py-1 text-lg font-medium shadow-sm">
-                    Aktivitas Peminjaman
-                </a>
+                <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
+
             </div>
             <div class="flex items-center gap-2">
                 <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
