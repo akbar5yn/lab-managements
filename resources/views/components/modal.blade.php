@@ -4,7 +4,8 @@
         x-bind:class="{
             'border-[#559f86] border bg-[#d0f1e6] px-5 py-2 rounded-lg': '{{ $button }}'
             === 'Tambah Alat' || '{{ $button }}'
-            === 'Tambahkan Ruangan',
+            === 'Tambahkan Ruangan' || '{{ $button }}'
+            === 'Tambah Mahasiswa',
             'bg-green-600 text-white px-2 rounded ': '{{ $button }}'
             === 'Edit',
             'absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base border': '{{ $button }}'
