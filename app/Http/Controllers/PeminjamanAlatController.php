@@ -285,9 +285,10 @@ class PeminjamanAlatController extends Controller
     // ANCHOR aktifitas peminjaman
     public function aktifitasPeminjaman()
     {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('id_user', $this->user_id)
+        $aktifitasPeminjaman = TransaksiPeminjamanAlat::with(['relasiUnit.unit', 'relasiUser'])->where('id_user', $this->user_id)
             ->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
-            ->get();
+            ->get()
+            ->sortByDesc('created_at')->values()->toArray();
 
         return view('mahasiswa.aktifitas-peminjaman', [
             'name' => $this->name,
@@ -297,18 +298,6 @@ class PeminjamanAlatController extends Controller
         ]);
     }
 
-    // ANCHOR detail aktifitas peminjaman
-    public function detailAktifitasPeminjaman($no_transaksi)
-    {
-        $aktifitasPeminjaman = TransaksiPeminjamanAlat::where('no_transaksi', $no_transaksi)->get();
-
-        return view('mahasiswa.detail-aktifitas-peminjaman', [
-            'name' => $this->name,
-            'title' => $this->title,
-            'role' => $this->role,
-            'transactionDetails' => $aktifitasPeminjaman
-        ]);
-    }
 
     // ANCHOR Scan View
     public function scanView()
