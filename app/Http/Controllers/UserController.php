@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function postMahasiswa(Request $request)
     {
-        $validatedData  = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required',
             'username' => 'required|string|unique:users,username|max:255',
             'prodi' => 'required'
@@ -50,6 +50,24 @@ class UserController extends Controller
             return redirect()->route('data.mahasiswa')->with('success', 'Data Mahasiswa berhasil ditambahkan');
         } catch (\Throwable $th) {
             return redirect()->route('data.mahasiswa')->with('error', 'Terjadi kesalahan saat melakukan penambahan mahasiswa: ' . $th->getMessage());
+        }
+    }
+
+    public function updateMahasiswa(Request $reqeust, $id)
+    {
+        // dd($reqeust->all());
+        $validatedData = $reqeust->validate([
+            'name' => 'required',
+            'prodi' => 'required',
+            'username' => 'required|string|unique:users,username,' . $id . '|max:255'
+        ]);
+
+        try {
+            $findMhs = User::findOrFail($id);
+            $findMhs->updateMahasiswa($validatedData);
+            return redirect()->route('data.mahasiswa')->with('success', 'Data Mahasiswa berhasil diupdate');
+        } catch (\Throwable $th) {
+            return redirect()->route('data.mahasiswa')->with('error', 'Terjadi kesalahan saat melakukan update data mahasiswa: ' . $th->getMessage());
         }
     }
 }
