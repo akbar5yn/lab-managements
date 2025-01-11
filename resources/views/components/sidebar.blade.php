@@ -87,6 +87,12 @@
                             class="{{ request()->is('jadwal-ruangan') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Jadwal Ruangan</x-nav-link>
                 </li>
+                <li>
+                    <x-nav-link href="{{ route('data.mahasiswa') }}" :active="request()->is('laboran/data-mahasiswa')">
+                        <x-heroicon-s-academic-cap
+                            class="{{ request()->is('laboran/data-mahasiswa') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
+                        Mahasiswa</x-nav-link>
+                </li>
             </ul>
         @elseif($userRole === 'mahasiswa')
             <!-- ANCHOR Menu Mahasiswa-->
