@@ -56,6 +56,7 @@ Route::middleware([CheckRole::class  . ':laboran'])->group(function () {
     // SECTION - Tambah mahasiswa
     Route::get('/laboran/data-mahasiswa', [UserController::class, 'storeMhs'])->name('data.mahasiswa');
     Route::post('/laboran/tambah-mahasiswa', [UserController::class, 'postMahasiswa'])->name('create.mahasiswa');
+    Route::put('/laboran/update-mahasiswa/{id}', [UserController::class, 'updateMahasiswa'])->name('update.mahasiswa');
 });
 
 // ANCHOR Mahasiswa
