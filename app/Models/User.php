@@ -47,4 +47,9 @@ class User extends Authenticatable // Extend the Authenticatable class
             'role' => 'mahasiswa',
         ]);
     }
+
+    public function updateMahasiswa($data)
+    {
+        $this->update($data);
+    }
 }
