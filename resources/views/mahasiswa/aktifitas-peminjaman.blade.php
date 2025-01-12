@@ -147,7 +147,7 @@
                             <h4 class="text-sm font-medium">Waktu Kadaluwarsa</h4>
                             <p id="countdown-{{ $transaction['no_transaksi'] }}"
                                 class="text-light break-words text-[12px] text-gray-500">
-                                {{ $transaction['waktu_kedaluwarsa'] }}</p>
+                                {{ $transaction['waktu_kadaluwarsa'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
             document.addEventListener("DOMContentLoaded", function() {
                 const getTransactions = @json($getTransactions);
                 getTransactions.forEach(transaction => {
-                    const waktuKedaluwarsa = transaction.waktu_kedaluwarsa;
+                    const waktuKedaluwarsa = transaction.waktu_kadaluwarsa;
                     const noTransaksi = transaction.no_transaksi;
                     const statusTransaksi = transaction.status;
 

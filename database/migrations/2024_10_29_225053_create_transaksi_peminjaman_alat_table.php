@@ -27,7 +27,7 @@ return new class extends Migration
             $table->date('tanggal_kembali');
             // $table->enum('status', ['pending', 'dibatalkan', 'berlangsung', 'selesai'])->default('pending');
             $table->enum('status', ['pending', 'dipinjam', 'dikembalikan', 'terlambat_dikembalikan', 'dibatalkan', 'expire'])->default('pending');
-            $table->timestamp('waktu_kedaluwarsa');
+            $table->timestamp('waktu_kadaluwarsa');
             $table->timestamps();
         });
     }

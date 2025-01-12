@@ -19,7 +19,7 @@ class TransaksiPeminjamanAlat extends Model
         'status',
         'tanggal_pinjam',
         'tanggal_kembali',
-        'waktu_kedaluwarsa'
+        'waktu_kadaluwarsa'
     ];
     //
 
@@ -48,7 +48,7 @@ class TransaksiPeminjamanAlat extends Model
             'tanggal_kembali' => $data['tanggal_kembali'],
             'status' => 'pending',
             'no_transaksi' => $noTransaksi,
-            'waktu_kedaluwarsa' => $kedaluwarsa
+            'waktu_kadaluwarsa' => $kedaluwarsa
         ]);
     }
 
