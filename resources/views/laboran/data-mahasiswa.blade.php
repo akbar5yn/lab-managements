@@ -163,7 +163,7 @@
                         class="glow-left grid grid-cols-[4%_25%_25%_25%_auto] border-l-4 border-l-emerald-400 p-2">
                         <div class=""></div>
                         <div>
-                            <h4 class="text-sm font-medium">Name</h4>
+                            <h4 class="text-sm font-medium">Nama </h4>
                             <p class="text-light text-[12px] text-gray-500">
                                 {{ $mahasiswa['name'] }}</p>
                         </div>
