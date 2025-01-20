@@ -52,4 +52,9 @@ class User extends Authenticatable // Extend the Authenticatable class
     {
         $this->update($data);
     }
+
+    public function updatePassword($data)
+    {
+        $this->update($data);
+    }
 }
