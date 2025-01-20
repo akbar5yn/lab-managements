@@ -65,6 +65,9 @@ Route::middleware([CheckRole::class . ':mahasiswa'])->group(function () {
     Route::get('/mahasiswa/profile', [ProfileController::class, 'profileMahasiswa'])->name('profile.mhs');
     Route::put('/mahasiswa/update/profile/{id}', [ProfileController::class, 'updateProfileMhs'])->name('update.profile.mhs');
 
+    // SECTION Ubah password
+    Route::put('/mahasiswa/ubah-password/{nim}', [ProfileController::class, 'updatePassword'])->name('update.password');
+
     // SECTION Route Dashboard
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'indexMahasiswa'])->name('mahasiswa');
 

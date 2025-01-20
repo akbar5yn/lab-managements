@@ -11,7 +11,10 @@
             'absolute bottom-10 left-1/2 -translate-x-1/2 transform rounded-lg border-[#559f86] bg-[#d0f1e6] px-5 py-2 text-base border': '{{ $button }}'
             === 'Tambah Unit',
             'rounded-md bg-blue-400 px-2 text-white shadow-md': '{{ $button }}'
-            === 'Verifikasi Pengembalian'
+            === 'Verifikasi Pengembalian',
+            'w-fit rounded-lg bg-[#2D3648] px-2 py-1 text-lg font-medium text-white shadow-sm': '{{ $button }}'
+            === 'Ubah Password',
+        
         }">
         {{ $button }}
     </button>
