@@ -15,15 +15,29 @@ class InventarisAlatController extends Controller
         // $this->middleware('auth'); // Memastikan semua metode di controller ini dilindungi
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $title = 'Kelola Alat & Barang';
         $name = $user->name;
         $role = $user->role;
-        $alat = InventarisAlat::with('alat')->get();
 
-        return view('laboran.inventaris-alat', compact('title', 'name', 'role', 'alat'));
+        $lokasi = $request->input('lokasi');
+        $search = $request->input('search');
+        $query = InventarisAlat::query();
+
+        if ($lokasi) {
+            $query->where('lokasi', $lokasi);
+        }
+
+        if ($search) {
+            $query->where('nama_alat', 'like', '%' . $search . '%');
+        }
+
+        $getSortedTools = $query->orderBy('created_at', 'desc')->get();
+        $getLokasi = InventarisAlat::select('lokasi')->distinct()->get();
+
+        return view('laboran.inventaris-alat', compact('title', 'name', 'role', 'lokasi', 'getLokasi', 'getSortedTools'));
     }
 
     public function handleRequest(Request $request)
