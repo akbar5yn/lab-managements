@@ -30,21 +30,21 @@
                 <div
                     class="border-1 flex min-w-fit snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] p-2 backdrop-brightness-200">
                     <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
-                        <x-heroicon-s-inbox-arrow-down class="w-6" />
-                    </div>
-                    <div>
-                        <p class="font-semi-bold text-xl font-semibold">20</p>
-                        <p class="text-sm text-gray-600">Pengajuan Peminjaman <br> Ruangan</p>
-                    </div>
-                </div>
-                <div
-                    class="border-1 flex min-w-fit snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] p-2 backdrop-brightness-200">
-                    <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
                         <x-heroicon-s-square-3-stack-3d class="w-6" />
                     </div>
                     <div>
                         <p class="font-semi-bold text-xl font-semibold">{{ $totalPengajuan }}</p>
                         <p class="text-sm text-gray-600">Pengajuan Peminjaman <br> Alat & Barang</p>
+                    </div>
+                </div>
+                <div
+                    class="border-1 flex min-w-fit snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] p-2 backdrop-brightness-200">
+                    <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
+                        <x-heroicon-s-inbox-arrow-down class="w-6" />
+                    </div>
+                    <div>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalPeminjaman }}</p>
+                        <p class="text-sm text-gray-600">Peminjaman <br> Alat & Barang Berlangsung</p>
                     </div>
                 </div>
                 <div
@@ -60,11 +60,12 @@
             </article>
         </section>
 
-        <div class="grid h-full grid-cols-2 gap-5">
+        <div class="grid h-full grid-cols-2 gap-5 overflow-y-hidden pb-1">
 
-            <!-- ANCHOR Penggunaan Ruangan -->
-            <section class="flex h-full max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
-                <h2 class="text-lg font-medium">Penggunaan Ruangan</h2>
+            <!-- ANCHOR Penggunaan alat dan barang -->
+            <section
+                class="sticky top-0 flex h-full max-w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-[#FFFFFF] p-4 shadow-md">
+                <h2 class="text-lg font-medium">Informasi Pengajuan Alat & Barang</h2>
 
                 <!-- ANCHOR Filtering by lab dan tanggal -->
                 <section class="flex items-center justify-between">
@@ -92,7 +93,7 @@
                                 x-transition:leave="transition ease-in duration-75 transform"
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-95"
-                                class="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                class="absolute left-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                 <div class="py-1" role="none">
                                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
@@ -106,75 +107,124 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <input type="date" value="{{ date('Y-m-d') }}"
-                            class="rounded-lg border py-1 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    </div>
+
                 </section>
 
                 <!-- ANCHOR Table -->
-                <section class="flex h-full flex-col justify-between">
-                    <table class="w-full table-auto">
-                        <thead class="">
-                            <tr class="text-left">
-                                <th class="border-b border-slate-300 py-2 pl-2 text-sm">No</th>
-                                <th class="border-b border-slate-300 py-2 pl-2 text-sm">Peminjam</th>
-                                <th class="border-b border-slate-300 py-2 pl-2 text-sm">Waktu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (collect($schedules)->sortBy(function ($schedule) {
-        // Mengambil waktu mulai dari rentang waktu
-        $startTime = explode(' - ', $schedule['waktu'])[0];
-        return strtotime($startTime);
-    }) as $schedule)
-                                <tr class="schedule-row">
-                                    <td class="border-b border-slate-300 py-2 pl-2 text-sm">{{ $loop->iteration }}</td>
-                                    <td class="border-b border-slate-300 py-2 pl-2 text-sm">{{ $schedule['name'] }}</td>
-                                    <td class="border-b border-slate-300 py-2 pl-2 text-sm">{{ $schedule['waktu'] }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <div class="mt-2 flex w-full justify-center text-[#559f86]">
-                        <x-nav-link href="/jadwal-ruangan" :active="request()->is('jadwal-ruangan')">Lihat Selengkapnya</x-nav-link>
+                <section class="flex h-full flex-col gap-5 overflow-y-scroll">
+                    <div
+                        class="sticky top-0 z-10 grid grid-cols-[4%_48%_48%] items-center rounded-md border-b border-gray-400 bg-[#2D3648] text-sm text-white shadow">
+                        <p
+                            class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                            No</p>
+                        <p
+                            class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                            Nama Peminjam</p>
+                        <p class="flex h-full items-center justify-center px-2 py-2 text-center">
+                            Nama Alat</p>
+
                     </div>
+                    @if ($transaksiPengajuanPeminjaman)
+                        @foreach ($transaksiPengajuanPeminjaman as $pengajuan)
+                            <div
+                                class="calendar-button grid w-full grid-cols-[4%_48%_48%] items-center rounded-md border border-gray-400 text-sm shadow">
+                                <span class="border-r border-gray-400 p-2">{{ $loop->iteration }}</span>
+                                <span class="border-r border-gray-400 p-2">{{ $pengajuan->relasiUser->name }}</span>
+                                <span class="p-2">{{ $pengajuan->relasiUnit->unit->nama_alat }}
+                                </span>
+                            </div>
+                        @endforeach
+                    @else
+                        <div
+                            class="grid grid-cols-[4%_48%_48%] rounded-md border border-gray-500 p-1 text-center text-sm">
+                            <p class="col-span-3 text-gray-500">Tidak ada transaksi pengajuan peminjaman yang sedang
+                                berlangsung.
+                            </p>
+                        </div>
+                    @endif
                 </section>
             </section>
+            <section
+                class="sticky top-0 flex h-full max-w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-[#FFFFFF] p-4 shadow-md">
+                <h2 class="text-lg font-medium">Informasi Penggunaan Alat & Barang</h2>
 
-            <!-- ANCHOR Penggunaan Alat & Barang -->
-            <section class="flex max-w-full flex-col gap-4 rounded-xl bg-[#FFFFFF] p-4 shadow-md">
-                <h2 class="text-lg font-medium">Statistik Penggunaan Alat & Barang</h2>
+                <!-- ANCHOR Filtering by lab dan tanggal -->
+                <section class="flex items-center justify-between">
+                    <div>
+                        <div x-data="{ isOpen: false }" class="relative inline-block text-left">
+                            <div>
+                                <button type="button" @click="isOpen = !isOpen"
+                                    class="inline-flex w-full justify-center gap-x-1.5 rounded-lg border bg-white px-3 py-1 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    id="menu-button" aria-expanded="true" aria-haspopup="true">
+                                    Lab A
+                                    <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                        aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+
+
+                            <div x-show="isOpen" @click.outside="isOpen = false"
+                                x-transition:enter="transition ease-out duration-100 transform"
+                                x-transition:enter-start="opacity-0 scale-95"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75 transform"
+                                x-transition:leave-start="opacity-100 scale-100"
+                                x-transition:leave-end="opacity-0 scale-95"
+                                class="absolute left-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                                tabindex="-1">
+                                <div class="py-1" role="none">
+                                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                                        tabindex="-1" id="menu-item-0">Lab A</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                                        tabindex="-1" id="menu-item-1">Lab B</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                                        tabindex="-1" id="menu-item-2">Lab C</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ANCHOR Table -->
+                <section class="flex h-full flex-col gap-5 overflow-y-scroll">
+                    <div
+                        class="sticky top-0 z-10 grid grid-cols-[4%_48%_48%] items-center rounded-md border-b border-gray-400 bg-[#2D3648] text-sm text-white shadow">
+                        <p
+                            class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                            No</p>
+                        <p
+                            class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                            Nama Peminjam</p>
+                        <p class="flex h-full items-center justify-center px-2 py-2 text-center">
+                            Nama Alat</p>
+
+                    </div>
+                    @if ($transaksiPeminjaman)
+                        @foreach ($transaksiPeminjaman as $peminjaman)
+                            <div
+                                class="calendar-button grid w-full grid-cols-[4%_48%_48%] items-center rounded-md border border-gray-400 text-sm shadow">
+                                <span class="border-r border-gray-400 p-2">{{ $loop->iteration }}</span>
+                                <span class="border-r border-gray-400 p-2">{{ $peminjaman->relasiUser->name }}</span>
+                                <span class="p-2">{{ $peminjaman->relasiUnit->unit->nama_alat }}
+                                </span>
+                            </div>
+                        @endforeach
+                    @else
+                        <div
+                            class="grid grid-cols-[4%_48%_48%] rounded-md border border-gray-500 p-1 text-center text-sm">
+                            <p class="col-span-3 text-gray-500">Tidak ada transaksi peminjaman yang sedang berlangsung.
+                            </p>
+                        </div>
+                    @endif
+                </section>
             </section>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi untuk mengubah jumlah item berdasarkan tinggi layar
-            function updateScheduleLimit() {
-                var rows = document.querySelectorAll('.schedule-row');
-                var screenHeight = window.innerHeight;
-
-                // Tentukan limit berdasarkan tinggi layar
-                var limit = screenHeight < 1024 ? 4 : rows.length;
-
-                // Sembunyikan atau tampilkan baris berdasarkan limit
-                rows.forEach(function(row, index) {
-                    if (index < limit) {
-                        row.style.display = ''; // Tampilkan baris
-                    } else {
-                        row.style.display = 'none'; // Sembunyikan baris
-                    }
-                });
-            }
-
-            // Jalankan fungsi saat halaman pertama kali dimuat
-            updateScheduleLimit();
-
-            // Tambahkan listener untuk perubahan ukuran layar
-            window.addEventListener('resize', updateScheduleLimit);
-        });
-    </script>
 </x-layout>
