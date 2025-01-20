@@ -27,9 +27,8 @@ class ProfileController extends Controller
 
     public function profileMahasiswa()
     {
-        $dataUser = User::where('id', $this->user_id)->get();
+        $dataUser = User::where('id', $this->user_id)->first();
         Log::info('data user' . $dataUser);
-
         return view('mahasiswa.profile', [
             'title' => $this->title,
             'role' => $this->role,
@@ -40,7 +39,7 @@ class ProfileController extends Controller
 
     public function updateProfileMhs(Request $request, $id)
     {
-        $validateRequest = $request->validate([
+        $request->validate([
             'email' => 'nullable',
             'phone_number' => 'nullable|string'
         ]);
@@ -61,6 +60,24 @@ class ProfileController extends Controller
         } catch (\Exception $e) {
             Log::error('Error saat melakukan pembaharuan profile: ' . $e->getMessage());
             return redirect()->route('profile.mhs')->with('error', 'Profile gagal diperbaharui');
+        }
+    }
+
+
+    public function updatePassword(Request $request, $nim)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+
+        try {
+            $newPassword = $request->input('password');
+            $user = User::where('username', $nim)->firstOrFail();
+            $user->updatePassword(['password' => $newPassword]);
+            return redirect()->route('profile.mhs')->with('success', 'Password berhasil diperbaharui');
+        } catch (\Exception $e) {
+            Log::error('Error saat melakukan update password: ' . $e->getMessage());
         }
     }
 }
