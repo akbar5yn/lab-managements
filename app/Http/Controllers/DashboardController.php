@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -80,7 +81,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function indexMahasiswa()
+    public function indexMahasiswa(Request $request)
     {
         $getUnit = InventarisAlat::withCount([
             'alat' => function ($query) {
@@ -88,15 +89,45 @@ class DashboardController extends Controller
             }
         ])->get();
 
+        $cekTanggalRequest = $request->input('cek_tanggal', now()->toDateString());
 
-        $ruanganTersedia = Ruangan::all();
+        // Mencari alat yang tersedia pada tanggal yang diminta
+        $alatTersedia = InventarisAlat::whereHas('alat', function ($query) use ($cekTanggalRequest) {
+            $query->where('kondisi', '!=', 'Rusak') // Hanya unit yang tidak rusak
+                ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
+                    // Menghindari status tertentu
+                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                        ->where(function ($q) use ($cekTanggalRequest) {
+                            // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
+                            $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest]) // Cek apakah peminjaman dimulai pada tanggal yang diminta
+                                ->orWhereBetween('tanggal_kembali', [$cekTanggalRequest, $cekTanggalRequest]) // Cek apakah peminjaman selesai pada tanggal yang diminta
+                                ->orWhereRaw('? BETWEEN tanggal_pinjam AND tanggal_kembali OR ? BETWEEN tanggal_pinjam AND tanggal_kembali', [$cekTanggalRequest, $cekTanggalRequest]); // Cek apakah tanggal yang diminta ada dalam rentang peminjaman
+                        });
+                });
+        })->withCount(['alat' => function ($query) use ($cekTanggalRequest) {
+            $query->where('kondisi', '!=', 'Rusak')
+                ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
+                    // Menghindari status tertentu
+                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                        ->where(function ($q) use ($cekTanggalRequest) {
+                            // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
+                            $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest])
+                                ->orWhereBetween('tanggal_kembali', [$cekTanggalRequest, $cekTanggalRequest])
+                                ->orWhereRaw('? BETWEEN tanggal_pinjam AND tanggal_kembali OR ? BETWEEN tanggal_pinjam AND tanggal_kembali', [$cekTanggalRequest, $cekTanggalRequest]);
+                        });
+                });
+        }])
+            ->get();
+
+
+
         return view('mahasiswa.dashboard', [
             'title' => $this->title,
             'name' => $this->user->name,
             'role' => $this->user->role,
             'prodi' => $this->user->prodi,
             'getUnit' => $getUnit,
-            'ruanganTersedia' => $ruanganTersedia
+            'unitTersedia' => $alatTersedia
         ]);
     }
 }
