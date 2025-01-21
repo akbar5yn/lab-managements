@@ -46,7 +46,6 @@ class Unit extends Model
             // Buat unit baru
             Unit::create([
                 'no_unit' => $no_unit,
-                'status' => 'Tersedia',
                 'kondisi' => 'Normal',
                 'id_alat' => $id_alat,
             ]);
