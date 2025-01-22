@@ -96,7 +96,7 @@ class DashboardController extends Controller
             $query->where('kondisi', '!=', 'Rusak') // Hanya unit yang tidak rusak
                 ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
                     // Menghindari status tertentu
-                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                    $query->whereNotIn('status', ['expire', 'dibatalkan', 'dikembalikan'])
                         ->where(function ($q) use ($cekTanggalRequest) {
                             // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
                             $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest]) // Cek apakah peminjaman dimulai pada tanggal yang diminta
@@ -108,7 +108,7 @@ class DashboardController extends Controller
             $query->where('kondisi', '!=', 'Rusak')
                 ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
                     // Menghindari status tertentu
-                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                    $query->whereNotIn('status', ['expire', 'dibatalkan', 'dikembalikan'])
                         ->where(function ($q) use ($cekTanggalRequest) {
                             // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
                             $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest])
@@ -119,6 +119,13 @@ class DashboardController extends Controller
         }])
             ->get();
 
+        $totalBarangPinjam = TransaksiPeminjamanAlat::where('status', 'dipinjam') // Filter status
+            ->where('id_user', $this->user->id) // Filter user
+            ->count();
+
+        $totalBarangDiajukan = TransaksiPeminjamanAlat::where('status', 'pending') // Filter status
+            ->where('id_user', $this->user->id) // Filter user
+            ->count();
 
 
         return view('mahasiswa.dashboard', [
@@ -127,7 +134,9 @@ class DashboardController extends Controller
             'role' => $this->user->role,
             'prodi' => $this->user->prodi,
             'getUnit' => $getUnit,
-            'unitTersedia' => $alatTersedia
+            'unitTersedia' => $alatTersedia,
+            'totalBarangPinjam' => $totalBarangPinjam,
+            'totalBarangDiajukan' => $totalBarangDiajukan
         ]);
     }
 }
