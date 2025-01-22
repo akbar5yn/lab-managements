@@ -116,8 +116,8 @@
                         <div class="border-r border-gray-400">
                             <input
                                 :class="{
-                                    'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
-                                    'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
+                                    'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2 capitalize': isEdit,
+                                    'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none capitalize':
                                         !isEdit
                                 }"
                                 x-bind:value="'{{ $mahasiswa['prodi'] }}'" :disabled="!isEdit"
@@ -169,7 +169,7 @@
                         </div>
                         <div>
                             <h4 class="text-sm font-medium">Program Studi</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <p class="text-light text-[12px] capitalize text-gray-500">
                                 {{ $mahasiswa['prodi'] }}</p>
                         </div>
                         <div>
