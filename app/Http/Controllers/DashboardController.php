@@ -119,6 +119,13 @@ class DashboardController extends Controller
         }])
             ->get();
 
+        $totalBarangPinjam = TransaksiPeminjamanAlat::where('status', 'dipinjam') // Filter status
+            ->where('id_user', $this->user->id) // Filter user
+            ->count();
+
+        $totalBarangDiajukan = TransaksiPeminjamanAlat::where('status', 'pending') // Filter status
+            ->where('id_user', $this->user->id) // Filter user
+            ->count();
 
 
         return view('mahasiswa.dashboard', [
@@ -127,7 +134,9 @@ class DashboardController extends Controller
             'role' => $this->user->role,
             'prodi' => $this->user->prodi,
             'getUnit' => $getUnit,
-            'unitTersedia' => $alatTersedia
+            'unitTersedia' => $alatTersedia,
+            'totalBarangPinjam' => $totalBarangPinjam,
+            'totalBarangDiajukan' => $totalBarangDiajukan
         ]);
     }
 }
