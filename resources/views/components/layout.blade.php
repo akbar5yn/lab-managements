@@ -89,7 +89,7 @@
                 height: calc(100% - 76px);
             }
 
-            @media (max-width: 1024px) {
+            @media (max-width: 1280px) {
                 .main-content {
                     left: 0px;
                     width: calc(100%);
@@ -98,7 +98,7 @@
         </style>
     </head>
 
-    <body class="flex h-full gap-10 bg-[#F7F9FC] p-10">
+    <body x-data="{ isSidebarOpen: false }" class="flex h-full gap-10 bg-[#F7F9FC] p-4 xl:p-10">
         <x-sidebar :getRole="$role" :getName="$name"></x-sidebar>
         <main class="main-content flex flex-col gap-4 font-poppins">
             @if (isset($subtitle) && isset($subtitle))
