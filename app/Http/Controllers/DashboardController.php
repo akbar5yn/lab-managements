@@ -96,7 +96,7 @@ class DashboardController extends Controller
             $query->where('kondisi', '!=', 'Rusak') // Hanya unit yang tidak rusak
                 ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
                     // Menghindari status tertentu
-                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                    $query->whereNotIn('status', ['expire', 'dibatalkan', 'dikembalikan'])
                         ->where(function ($q) use ($cekTanggalRequest) {
                             // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
                             $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest]) // Cek apakah peminjaman dimulai pada tanggal yang diminta
@@ -108,7 +108,7 @@ class DashboardController extends Controller
             $query->where('kondisi', '!=', 'Rusak')
                 ->whereDoesntHave('relasiTransaksi', function ($query) use ($cekTanggalRequest) {
                     // Menghindari status tertentu
-                    $query->whereNotIn('status', ['expire', 'dipinjam', 'dibatalkan', 'dikembalikan'])
+                    $query->whereNotIn('status', ['expire', 'dibatalkan', 'dikembalikan'])
                         ->where(function ($q) use ($cekTanggalRequest) {
                             // Mengecek apakah tanggal yang diminta berada dalam rentang peminjaman
                             $q->whereBetween('tanggal_pinjam', [$cekTanggalRequest, $cekTanggalRequest])
