@@ -53,9 +53,9 @@
                         <x-nav-link href="{{ route('inventaris-alat') }}" :active="request()->is('laboran/inventaris-alat*')">
                             <span class="w-6"></span>
                             Alat & Barang</x-nav-link>
-                        <x-nav-link href="{{ route('inventaris-ruangan') }}" :active="request()->is('laboran/inventaris-ruangan*')">
+                        {{-- <x-nav-link href="{{ route('inventaris-ruangan') }}" :active="request()->is('laboran/inventaris-ruangan*')">
                             <span class="w-6"></span>
-                            Ruangan</x-nav-link>
+                            Ruangan</x-nav-link> --}}
                     </div>
 
                 </li>
@@ -77,16 +77,16 @@
                                 class="w-6"></span>
                             Alat &
                             Barang</x-nav-link>
-                        <x-nav-link href="/peminjaman-ruangan" :active="request()->is('peminjaman-ruangan')"> <span class="w-6"></span>
-                            Ruangan</x-nav-link>
+                        {{-- <x-nav-link href="/peminjaman-ruangan" :active="request()->is('peminjaman-ruangan')"> <span class="w-6"></span>
+                            Ruangan</x-nav-link> --}}
                     </div>
                 </li>
-                <li>
+                {{-- <li>
                     <x-nav-link href="/jadwal-ruangan" :active="request()->is('jadwal-ruangan')">
                         <x-heroicon-c-calendar-date-range
                             class="{{ request()->is('jadwal-ruangan') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Jadwal Ruangan</x-nav-link>
-                </li>
+                </li> --}}
                 <li>
                     <x-nav-link href="{{ route('data.mahasiswa') }}" :active="request()->is('laboran/data-mahasiswa')">
                         <x-heroicon-s-academic-cap
@@ -112,13 +112,13 @@
                         Peminjaman Alat
                     </x-nav-link>
                 </li>
-                <li class="relative">
+                {{-- <li class="relative">
                     <x-nav-link href="{{ route('peminjaman.ruangan') }}" :active="request()->is('mahasiswa/peminjaman-ruangan')" :src="'img/dashboard-icon.svg'">
                         <x-heroicon-c-building-storefront
                             class="{{ request()->is('mahasiswa/peminjaman-ruangan') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Peminjaman Ruangan
                     </x-nav-link>
-                </li>
+                </li> --}}
             </ul>
         @endif
     </section>
