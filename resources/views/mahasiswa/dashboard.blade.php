@@ -30,10 +30,20 @@
                 <div
                     class="border-1 flex w-full snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200">
                     <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
+                        <x-heroicon-s-archive-box-arrow-down class="size-8" />
+                    </div>
+                    <div>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalBarangDiajukan }}</p>
+                        <p class="text-sm text-gray-600">Total barang yand diajukan</p>
+                    </div>
+                </div>
+                <div
+                    class="border-1 flex w-full snap-start items-center gap-5 rounded-xl border border-[#559f86] bg-[#d0f1e673] px-5 py-2 backdrop-brightness-200">
+                    <div class="min-h-fit rounded-md border border-[#559f86] bg-[#d0f1e6] p-3">
                         <x-heroicon-s-inbox-arrow-down class="size-8" />
                     </div>
                     <div>
-                        <p class="font-semi-bold text-xl font-semibold">10</p>
+                        <p class="font-semi-bold text-xl font-semibold">{{ $totalBarangPinjam }}</p>
                         <p class="text-sm text-gray-600">Total barang yand dipinjam</p>
                     </div>
                 </div>
