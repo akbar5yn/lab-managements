@@ -1,5 +1,5 @@
 <div x-bind:class="{ '': !isSidebarOpen, 'block ': isSidebarOpen }"
-    class="absolute right-0 top-[62px] z-50 h-screen w-full rounded-md shadow transition-all xl:hidden">
+    class="absolute right-0 top-[62px] z-50 w-full rounded-md shadow transition-all xl:hidden">
     <div class="fixed inset-0 z-40 bg-[#0000003d]" x-show="isSidebarOpen"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-300"
