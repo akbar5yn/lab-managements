@@ -31,76 +31,87 @@
         <section class="content-of-inventaris h-full w-full overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="p-4">
                 <div
-                    class="sticky top-0 z-50 grid grid-cols-[15%_20%_20%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow">
-                    <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Nomor
+                    class="sticky top-0 z-40 grid grid-cols-[13%_21%_21%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow xl:grid-cols-[15%_20%_20%_25%_auto]">
+                    <p
+                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
+                        Nomor
                         Unit</p>
-                    <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Tanggal
+                    <p
+                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
+                        Tanggal
                         Pinjam
                     </p>
-                    <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Tanggal
+                    <p
+                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
+                        Tanggal
                         Kembali
                     </p>
-                    <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                    <p
+                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         Keperluan
                     </p>
-                    <p class="flex items-center justify-center px-2 py-2 text-center">Aksi</p>
+                    <p class="flex items-center justify-center px-2 py-2 text-center text-xs xl:text-base">Aksi</p>
                 </div>
 
 
                 @foreach ($allUnits as $index => $unit)
                     <form action="{{ route('pinjam.alat', [$alat->slug, $unit->id]) }}"
-                        class="pinjam-form grid grid-cols-[15%_20%_20%_25%_auto] rounded-md" method="POST">
+                        class="pinjam-form grid grid-cols-[13%_21%_21%_25%_auto] rounded-md xl:grid-cols-[15%_20%_20%_25%_auto]"
+                        method="POST">
                         @csrf
                         @method('POST')
                         <input type="text" name="id_user" id="id_user" value="{{ $user_id }}" class="hidden">
                         <input type="hidden" name="id_unit" value="{{ $unit->id }}">
                         <div
                             class="flex flex-col gap-2 border-b border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <p name="no_unit" id="no_unit" class="border-none p-0 px-2 py-2 normal-case">
+                            <p name="no_unit" id="no_unit"
+                                class="border-none p-0 px-2 py-2 text-[11px] normal-case xl:text-base">
                                 {{ $unit->no_unit }}
                             </p>
                         </div>
                         <div
                             class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                             <input type="date" name="tanggal_pinjam"id="tanggal_pinjam_{{ $index }}" required
-                                class="border-none p-0 px-2 py-2 normal-case focus:outline-none focus:ring-0"
+                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
                                 placeholder="Masukan tanggal">
                         </div>
                         <div
                             class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                             <input type="date" name="tanggal_kembali" id="tanggal_kembali_{{ $index }}"
-                                required class="border-none p-0 px-2 py-2 normal-case focus:outline-none focus:ring-0"
+                                required
+                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
                                 placeholder="Masukan tanggal">
                         </div>
                         <div
                             class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                             <input type="text" name="keperluan" id="keperluan" required
-                                class="border-none p-0 px-2 py-2 normal-case focus:outline-none focus:ring-0"
+                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
                                 placeholder="Masukan keperluan anda">
                         </div>
                         <div
-                            class="flex w-full items-center justify-center gap-2 border-b-2 border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+                            class="flex w-full items-center justify-center gap-2 border-b-2 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                             <button type="submit"
-                                class="pinjam-alat rounded-md bg-[#08835a] px-3 py-2 text-sm text-white">Pinjam
+                                class="pinjam-alat rounded-md bg-[#08835a] px-1 py-1 text-[11px] text-white xl:px-3 xl:py-2 xl:text-sm">Pinjam
                                 Alat</button>
                         </div>
                     </form>
                 @endforeach
             </div>
         </section>
-        <div class="animate-fade-in absolute bottom-4 right-4 flex h-fit w-[20%] flex-col gap-3 rounded-xl border bg-white p-4 opacity-0 shadow-xl transition-opacity"
+        <div class="animate-fade-in absolute bottom-2 right-2 flex h-fit w-[70%] flex-col gap-3 rounded-xl border bg-white p-4 opacity-0 shadow-xl transition-opacity xl:bottom-4 xl:right-4 xl:w-[30%]"
             id="modal">
             <div class="flex justify-between">
-                <h1 class="text-lg font-medium">Informasi Alat dan Barang</h1>
+                <h1 class="text-sm font-medium xl:text-lg">Informasi Alat dan Barang</h1>
                 <button id="closeButton">X</button>
             </div>
             <div>
-                <p>Nama Alat</p>
-                <p class="text-slate-600">{{ $namaAlat }}</p>
+                <p class="text-sm xl:text-base">Nama Alat</p>
+                <p class="text-sm text-slate-600 xl:text-base">{{ $namaAlat }}</p>
             </div>
             <div>
-                <p>Note</p>
-                <p class="text-slate-600">Silahkan masukan tanggal peminjaman pada salah satu unit yang akan anda pinjam
+                <p class="text-sm xl:text-base">Note</p>
+                <p class="text-sm text-slate-600 xl:text-base">Silahkan masukan tanggal peminjaman pada salah satu unit
+                    yang akan anda pinjam
                     jika tersedia</p>
             </div>
         </div>
