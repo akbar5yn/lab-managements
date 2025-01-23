@@ -12,7 +12,7 @@
             === 'Tambah Unit',
             'rounded-md bg-blue-400 px-2 text-white shadow-md': '{{ $button }}'
             === 'Verifikasi Pengembalian',
-            'w-fit rounded-lg bg-[#2D3648] px-2 py-1 text-lg font-medium text-white shadow-sm': '{{ $button }}'
+            'w-fit rounded-lg bg-[#2D3648] px-2 py-1 text-sm xl:text-lg font-medium text-white shadow-sm': '{{ $button }}'
             === 'Ubah Password',
         
         }">
@@ -26,11 +26,11 @@
             x-transition:enter-start="scale-75 opacity-0" x-transition:enter-end="scale-100 opacity-100"
             x-transition:leave="transition transform duration-300" x-transition:leave-start="scale-100 opacity-100"
             x-transition:leave-end="scale-75 opacity-0"
-            class="flex w-1/3 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg">
+            class="flex flex-col gap-4 rounded-lg bg-white p-6 shadow-lg xl:w-1/3">
             <section class="flex items-center justify-between rounded-lg border-b bg-[#d0f1e6] p-4">
-                <h2 class="text-lg font-semibold">{{ $title }}</h2>
+                <h2 class="text-sm font-semibold xl:text-lg">{{ $title }}</h2>
                 <button @click="open = false; clearInputs()" class="text-red-400"><x-heroicon-m-x-mark
-                        class="w-8" /></button>
+                        class="size-5 xl:w-8" /></button>
             </section>
             <section class="">
                 {{ $slot }}
