@@ -4,22 +4,26 @@
     <x-slot:role>{{ $role }}</x-slot:role>
 
     <main class="flex h-full flex-col gap-4">
-        <section class="flex max-w-full gap-4 rounded-xl bg-white p-4 shadow-md">
+        <section class="flex max-w-full gap-2 rounded-xl bg-white p-4 shadow-md">
             <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
         </section>
         <section class="h-full overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="">
                 <div
-                    class="sticky top-0 z-10 grid grid-cols-[4%_25%_25%_25%_auto] items-center border-b border-gray-400 bg-[#2D3648] text-white shadow">
-                    <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                    class="sticky top-0 z-10 grid grid-cols-[8%_25%_25%_25%_17%] items-center border-b border-gray-400 bg-[#2D3648] text-white shadow xl:grid-cols-[4%_25%_25%_25%_auto]">
+                    <p
+                        class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         No</p>
-                    <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                    <p
+                        class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         Nama Peminjam</p>
-                    <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                    <p
+                        class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         Nomor Transaksi</p>
-                    <p class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center">
+                    <p
+                        class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         Status Peminjaman</p>
-                    <p class="flex h-full items-center justify-center px-2 py-2 text-center">
+                    <p class="flex h-full items-center justify-center px-2 py-2 text-center text-xs xl:text-base">
                         Detail</p>
                 </div>
 
@@ -123,14 +127,18 @@
                     @foreach ($sortedTransaction as $riwayat)
                         <div x-data="{ isOpen: false }">
 
-                            <div class="grid grid-cols-[4%_25%_25%_25%_auto] border-b border-gray-400">
-                                <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
-                                <p class="border-r border-gray-400 px-2 py-2">
+                            <div
+                                class="grid grid-cols-[8%_25%_25%_25%_17%] border-b border-gray-400 xl:grid-cols-[4%_25%_25%_25%_auto]">
+                                <p class="border-r border-gray-400 px-2 py-2 text-center text-[11px] xl:text-base">
+                                    {{ $loop->iteration }}</p>
+                                <p class="border-r border-gray-400 px-2 py-2 text-[11px] xl:text-base">
                                     {{ $riwayat->relasiTransaksiAlat->relasiUser->name ?? 'User tidak ditemukan' }}</p>
-                                <p class="border-r border-gray-400 px-2 py-2">{{ $riwayat->no_transaksi }}</p>
+                                <p class="break-words border-r border-gray-400 px-2 py-2 text-[11px] xl:text-base">
+                                    {{ $riwayat->no_transaksi }}
+                                </p>
                                 <div class="border-r border-gray-400 px-2 py-2 text-center">
                                     <p
-                                        class="{{ $riwayat->relasiTransaksiAlat->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600' }} rounded">
+                                        class="{{ $riwayat->relasiTransaksiAlat->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600' }} rounded text-[11px] xl:text-base">
                                         @php
                                             $statusLabels = [
                                                 'dikembalikan' => 'Dikembalikan',
@@ -142,9 +150,10 @@
                                     </p>
                                 </div>
                                 <div class="flex items-center justify-center gap-5">
-                                    <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isOpen = !isOpen">
+                                    <button class="rounded bg-[#2D3648] px-2 text-white xl:px-5 xl:py-1"
+                                        @click="isOpen = !isOpen">
                                         <x-heroicon-c-chevron-down
-                                            class="h-4 w-4 transform transition-transform duration-300"
+                                            class="size-4 transform transition-transform duration-300 xl:h-4 xl:w-4"
                                             x-bind:class="isOpen ? '-rotate-180' : ''" />
                                     </button>
                                 </div>
@@ -155,50 +164,50 @@
                                 x-transition:leave="transition ease-in duration-100 transform"
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-95"
-                                class="glow-left grid grid-cols-[4%_25%_25%_25%_auto] border-l-4 border-l-emerald-400 p-2">
+                                class="glow-left grid grid-cols-[0%_35%_25%_43%_30%] overflow-x-scroll border-l-4 border-l-emerald-400 p-2 xl:grid-cols-[4%_25%_25%_25%_auto]">
                                 <div class=""></div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Keperluan</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Keperluan</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->keperluan }}</p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">No Handphone</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">No Handphone</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->relasiUser->phone_number }}</p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Email</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Email</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->relasiUser->email }}</p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Kondisi Alat</h4>
-                                    <p class="text-light text-[12px] capitalize text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Kondisi Alat</h4>
+                                    <p class="text-light text-[10px] capitalize text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->kondisi_alat }}</p>
                                 </div>
                                 <hr class="col-span-5 my-2 border">
                                 <div></div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Nama Alat - No Unit</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Nama Alat - No Unit</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }} -
                                         {{ $riwayat->relasiTransaksiAlat->relasiUnit->no_unit }}
                                     </p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Tanggal Pinjam</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Tanggal Pinjam</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->tanggal_pinjam }}</p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Tanggal Kembali</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Tanggal Kembali</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->relasiTransaksiAlat->tanggal_kembali }}</p>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium">Tanggal Dikembalikan</h4>
-                                    <p class="text-light text-[12px] text-gray-500">
+                                    <h4 class="text-[10px] font-medium xl:text-sm">Tanggal Dikembalikan</h4>
+                                    <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                         {{ $riwayat->tanggal_pengembalian ?? '-' }}</p>
                                 </div>
 
