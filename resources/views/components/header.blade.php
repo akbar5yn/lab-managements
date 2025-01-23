@@ -2,11 +2,11 @@
     <div
         class="header sticky top-0 z-[100] flex h-[60px] items-center justify-between rounded-xl bg-[#FFFFFF] px-4 py-5 shadow-md">
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-col gap-2 xl:flex xl:flex-row xl:items-center">
             @if (isset($subtitle) && isset($subtitle))
-                <h1 class="text-xl font-medium">{{ $title }}</h1>
-                <x-heroicon-m-chevron-right class="w-5" />
-                <h2 class="text-xl font-normal">{{ $subtitle }}</h2>
+                <h1 class="text-base font-medium xl:text-xl">{{ $title }}</h1>
+                <x-heroicon-m-chevron-right class="hidden w-5 xl:block" />
+                <h2 class="hidden text-xl font-normal xl:block">{{ $subtitle }}</h2>
             @else
                 <h1 class="text-base font-medium xl:text-xl">{{ $title }}</h1>
             @endif
