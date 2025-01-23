@@ -23,6 +23,13 @@
                     Peminjaman Alat
                 </a>
             </li>
+            <li>
+                <a
+                    href="{{ route('profile.mhs') }}"class="{{ request()->is('mahasiswa/profile') || request()->is('mahasiswa/peminjaman-alat*') ? 'bg-[#d0f1e673] rounded-sm' : 'bg-white' }} flex items-center gap-3 rounded-sm border p-2">
+                    <x-heroicon-c-user class="h-4 w-4" />
+                    Profile
+                </a>
+            </li>
         </ul>
     </div>
 </div>
