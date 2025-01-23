@@ -51,32 +51,35 @@
         </section>
         <section class="flex h-full max-w-full flex-col overflow-y-scroll rounded-xl bg-[#FFFFFF] shadow-md">
             <div
-                class="sticky top-0 z-10 grid grid-cols-[4%_25%_30%_20%_auto] items-center border-b border-gray-400 bg-[#2D3648] text-center text-white shadow">
-                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">No</p>
-                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
+                class="sticky top-0 z-10 grid grid-cols-[8%_25%_25%_25%_17%] items-center border-b border-gray-400 bg-[#2D3648] text-center text-white shadow xl:grid-cols-[4%_25%_30%_20%_auto]">
+                <p class="h-full border-r border-gray-400 px-2 py-2 text-xs font-medium xl:text-base">No</p>
+                <p class="h-full border-r border-gray-400 px-2 py-2 text-xs font-medium xl:text-base">
                     No Transaksi</p>
-                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-r border-gray-400 px-2 py-2 text-xs font-medium xl:text-base">
                     Nama Alat</p>
 
-                <p class="h-full border-r border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-r border-gray-400 px-2 py-2 text-xs font-medium xl:text-base">
                     Status Peminjaman</p>
-                <p class="h-full border-gray-400 px-2 py-2 font-medium">
+                <p class="h-full border-gray-400 px-2 py-2 text-xs font-medium xl:text-base">
                     Detail</p>
             </div>
 
             @foreach ($getTransactions as $transaction)
                 <div x-data="{ isOpen: false }">
 
-                    <div class="grid grid-cols-[4%_25%_30%_20%_auto] rounded-md border-b border-gray-400">
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
-                        <p class="break-words border-r border-gray-400 px-2 py-2">{{ $transaction['no_transaksi'] }}</p>
-                        <p class="border-r border-gray-400 px-2 py-2">
+                    <div
+                        class="grid grid-cols-[8%_25%_25%_25%_17%] rounded-md border-b border-gray-400 xl:grid-cols-[4%_25%_30%_20%_auto]">
+                        <p class="border-r border-gray-400 px-2 py-2 text-center text-[11px] xl:text-base">
+                            {{ $loop->iteration }}</p>
+                        <p class="break-words border-r border-gray-400 px-2 py-2 text-[11px] xl:text-base">
+                            {{ $transaction['no_transaksi'] }}</p>
+                        <p class="border-r border-gray-400 px-2 py-2 text-[11px] xl:text-base">
                             {{ $transaction['relasi_unit']['unit']['nama_alat'] }}
                         </p>
 
                         <div class="border-r border-gray-400 px-2 py-2 text-center capitalize">
                             <p
-                                class="{{ $transaction['status'] == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction['status'] == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction['status'] == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1">
+                                class="{{ $transaction['status'] == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction['status'] == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction['status'] == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} rounded px-2 py-1 text-[11px] xl:text-base">
                                 @php
                                     $statusLabels = [
                                         'belum_dikembalikan' => 'Belum Dikembalikan',
@@ -89,8 +92,10 @@
                             </p>
                         </div>
                         <div class="flex w-full items-center justify-center">
-                            <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isOpen = !isOpen">
-                                <x-heroicon-c-chevron-down class="h-4 w-4 transform transition-transform duration-300"
+                            <button class="rounded bg-[#2D3648] px-2 text-white xl:px-5 xl:py-1"
+                                @click="isOpen = !isOpen">
+                                <x-heroicon-c-chevron-down
+                                    class="size-4 transform transition-transform duration-300 xl:h-4 xl:w-4"
                                     x-bind:class="isOpen ? '-rotate-180' : ''" />
                             </button>
                         </div>
@@ -99,54 +104,54 @@
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         x-transition:leave="transition ease-in duration-100 transform"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                        class="glow-left grid grid-cols-[4%_25%_30%_20%_auto] border-l-4 border-l-emerald-400 p-2">
+                        class="glow-left grid w-full grid-cols-[0%_34%_28%_48%_30%] overflow-x-scroll border-l-4 border-l-emerald-400 p-2 xl:grid-cols-[4%_25%_30%_20%_auto]">
                         <div class=""></div>
                         <div>
-                            <h4 class="text-sm font-medium">Nama Alat - No Unit</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Nama Alat - No Unit</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['relasi_unit']['unit']['nama_alat'] }} -
                                 {{ $transaction['relasi_unit']['no_unit'] }}
                             </p>
 
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">Keperluan</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Keperluan</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['keperluan'] }}</p>
 
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">Tanggal Pinjam</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Tanggal Pinjam</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['tanggal_pinjam'] }}</p>
 
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">Tanggal Kembali</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Tanggal Kembali</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['tanggal_kembali'] }}</p>
                         </div>
                         <hr class="col-span-5 my-2 border">
                         <div></div>
                         <div>
-                            <h4 class="text-sm font-medium">Nama Peminjam</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Nama Peminjam</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['relasi_user']['name'] }}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">No Handphone</h4>
-                            <p class="text-light text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">No Handphone</h4>
+                            <p class="text-light text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['relasi_user']['phone_number'] }}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">Email</h4>
-                            <p class="text-light break-words text-[12px] text-gray-500">
+                            <h4 class="text-[10px] font-medium xl:text-sm">Email</h4>
+                            <p class="text-light break-words text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['relasi_user']['email'] }}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium">Waktu Kadaluwarsa</h4>
+                            <h4 class="text-[10px] font-medium xl:text-sm">Waktu Kadaluwarsa</h4>
                             <p id="countdown-{{ $transaction['no_transaksi'] }}"
-                                class="text-light break-words text-[12px] text-gray-500">
+                                class="text-light break-words text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['waktu_kadaluwarsa'] }}</p>
                         </div>
                     </div>
