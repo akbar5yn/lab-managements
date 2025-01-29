@@ -9,13 +9,13 @@
 
 @if (Auth::check() && Auth::user()->role == 'mahasiswa')
     <a href="{{ route('informasi.alat') }}"
-        class="{{ request()->is('mahasiswa/informasi-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-2 py-1 text-lg font-medium shadow-sm">
+        class="{{ request()->is('mahasiswa/informasi-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg px-1 py-1 text-[12px] font-medium shadow-sm xl:text-lg">
         Informasi Alat
     </a>
     <a href="{{ route('aktivitas.peminjaman') }}"
-        class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas*') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg border px-2 py-1 text-lg font-medium shadow-sm">
+        class="{{ request()->is('mahasiswa/peminjaman-alat/aktifitas*') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} w-fit rounded-lg border px-1 py-1 text-[12px] font-medium shadow-sm xl:text-lg">
         Aktivitas Peminjaman
     </a>
     <a href="{{ route('riwayat.peminjaman.alat') }}"
-        class="{{ request()->is('riwayat-peminjaman-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-2 py-1 text-lg font-medium">Riwayat</a>
+        class="{{ request()->is('riwayat-peminjaman-alat') ? 'bg-[#2D3648] text-white' : 'border-[2px] border-[#2D3648] text-[#2D3648]' }} rounded-lg px-1 py-1 text-[12px] font-medium xl:text-lg">Riwayat</a>
 @endif

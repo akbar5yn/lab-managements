@@ -61,7 +61,7 @@ class DashboardController extends Controller
         $totalMhs = User::where('role', 'mahasiswa')->count();
         $unitRusak = Unit::where('kondisi', 'Rusak')->count();
         $totalPengajuan = TransaksiPeminjamanAlat::where('status', 'pending')->count();
-        $totalPeminjaman = TransaksiPeminjamanAlat::where('status', 'dipinjam')->count();
+        $totalPeminjaman = TransaksiPeminjamanAlat::whereIn('status', ['dipinjam', 'terlambat_dikembalikan'])->count();
 
         $transaksiPengajuanPeminjaman = $this->getPengajuanPeminjaman();
         $transaksiPeminjaman = $this->getTransaksiPeminjaman();
@@ -119,7 +119,7 @@ class DashboardController extends Controller
         }])
             ->get();
 
-        $totalBarangPinjam = TransaksiPeminjamanAlat::where('status', 'dipinjam') // Filter status
+        $totalBarangPinjam = TransaksiPeminjamanAlat::whereIn('status', ['dipinjam', 'terlambat_dikembalikan']) // Filter status
             ->where('id_user', $this->user->id) // Filter user
             ->count();
 

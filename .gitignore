@@ -18,6 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
-package-lock.json
-composer.lock
 Lab-Management From Vcode.session.sql

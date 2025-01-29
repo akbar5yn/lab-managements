@@ -34,7 +34,7 @@
 
         <!-- SECTION Show Alat-->
         <!-- ANCHOR Button Navigation and filtering-->
-        <section class="flex justify-between gap-2 rounded-xl bg-white p-4 shadow-md">
+        <section class="flex flex-col justify-between gap-2 rounded-xl bg-white p-4 shadow-md xl:flex-row">
             <div class="flex gap-2">
                 <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
 
@@ -42,21 +42,21 @@
             <div class="flex items-center gap-2">
                 <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
                     <label for="search" class="text-gray-400"><x-heroicon-m-magnifying-glass class="w-4" /></label>
-                    <input type="search" id="search" x-model="search" placeholder="Cari Alat"
-                        class="auto w-full border-none bg-transparent p-1 focus:ring-0">
+                    <input type="search" id="search-alat" name="search-alat" placeholder="Cari Alat"
+                        class="auto w-full border-none bg-transparent p-1 text-sm focus:ring-0 xl:text-base">
                 </div>
             </div>
         </section>
 
-        <section class="grid grid-cols-3 gap-3 overflow-y-scroll">
+        <section class="grid grid-cols-2 gap-3 overflow-y-scroll xl:grid-cols-3">
             @foreach ($getUnit as $unit)
                 <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
                     <div class="flex h-full flex-col justify-between gap-4 p-4">
                         <div class="flex flex-col gap-4">
-                            <h5 class="text-lg font-medium">
+                            <h5 class="text-sm font-medium xl:text-lg">
                                 {{ $unit->nama_alat }}
                             </h5>
-                            <p class="flex-wrap text-sm font-light leading-normal text-slate-600">
+                            <p class="flex-wrap text-[11px] font-light leading-normal text-slate-600 xl:text-sm">
                                 <span class="rounded-md bg-yellow-200 px-2">Fungsi :</span>
                                 {{ $unit->fungsi }}
                             </p>
@@ -64,17 +64,17 @@
                         <div class="flex w-full flex-col gap-2">
                             <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
                                 <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                    <p class="text-xs font-semibold text-gray-500">Jumlah Unit</p>
-                                    <p class="text-xs text-gray-500">{{ $unit->alat_count }}</p>
+                                    <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Jumlah Unit</p>
+                                    <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->alat_count }}</p>
                                 </div>
-                                <div class="flex gap-2 rounded bg-neutral-200 px-2 py-1">
-                                    <p class="text-xs font-semibold text-gray-500">Lokasi</p>
-                                    <p class="text-xs text-gray-500">{{ $unit->lokasi }}</p>
+                                <div class="flex flex-col gap-x-2 rounded bg-neutral-200 px-2 py-1 xl:flex-row">
+                                    <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Lokasi</p>
+                                    <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->lokasi }}</p>
                                 </div>
                             </div>
                             <div class="flex justify-start">
                                 <a href="{{ route('detail.alat', $unit->slug) }}"
-                                    class="rounded-md bg-[#2D3648] px-3 py-2 text-sm text-white">Detail
+                                    class="rounded-md bg-[#2D3648] px-2 py-1 text-xs text-white xl:px-3 xl:py-2 xl:text-sm">Detail
                                     Alat</a>
                             </div>
                         </div>

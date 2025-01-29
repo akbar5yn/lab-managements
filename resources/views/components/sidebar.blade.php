@@ -7,7 +7,7 @@
 
     $finalName = $limitedName . ' ' . $thirdSentence;
 @endphp
-<main class="relative hidden flex-col items-center rounded-xl bg-[#2D3648] lg:flex lg:w-[250px]">
+<main class="relative hidden flex-col items-center rounded-xl bg-[#2D3648] xl:flex xl:w-[250px]">
     <!-- ANCHOR PROFILE -->
     <section class="flex h-[300px] flex-col items-center justify-center gap-4 px-10 py-4 font-poppins text-white">
         <div class="rounded-full border-2 border-white p-1">
@@ -29,7 +29,7 @@
             <!-- ANCHOR Menu Laboran-->
             <ul class="relative w-full space-y-4 font-poppins text-white">
                 <li class="relative">
-                    <x-nav-link href="{{ route('laboran') }}" :active="request()->is('laboran/dashboard')" :src="'img/dashboard-icon.svg'">
+                    <x-nav-link href="{{ route('laboran') }}" :active="request()->is('laboran/dashboard')">
                         <x-heroicon-s-home
                             class="{{ request()->is('laboran/dashboard') ? 'text-[#265166]' : 'text-white' }} h-4 w-4" />
                         Beranda
