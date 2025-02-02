@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
+    server: {
+        host: process.env.APP_URL,
+    },
 
     plugins: [
         laravel({
@@ -12,4 +15,6 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+
+    base: '/'
 });
