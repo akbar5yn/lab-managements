@@ -67,9 +67,9 @@
                                     <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Jumlah Unit</p>
                                     <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->alat_count }}</p>
                                 </div>
-                                <div class="flex flex-col gap-x-2 rounded bg-neutral-200 px-2 py-1 xl:flex-row">
+                                <div class="flex flex-row gap-x-2 rounded bg-neutral-200 px-2 py-1">
                                     <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Lokasi</p>
-                                    <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->lokasi }}</p>
+                                    <p class="break-words text-[10px] text-gray-500 xl:text-xs">{{ $unit->lokasi }}</p>
                                 </div>
                             </div>
                             <div class="flex justify-start">
