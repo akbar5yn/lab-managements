@@ -30,6 +30,12 @@
                     Profile
                 </a>
             </li>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="flex w-full items-center gap-3 rounded-sm border bg-white p-2">
+                    <x-heroicon-m-arrow-left-start-on-rectangle class="h-4 w-4 text-black" />
+                    Logout</button>
+            </form>
         </ul>
     </div>
 </div>
