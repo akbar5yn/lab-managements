@@ -164,20 +164,28 @@
                             <span
                                 class="rounded-sm bg-emerald-400 p-[0.5px] text-[11px] text-black">{{ $transaction['no_transaksi'] }}</span>
                         </header>
-                        <article class="grid grid-cols-2 p-2 text-[11px]">
-                            <p class="text-gray-500">No Unit :</p>
+                        <article class="grid grid-cols-[40%_2%_50%] p-2 text-[11px]">
+                            <p class="text-gray-500">No Unit</p>
+                            <p>:</p>
                             <p>{{ $transaction['relasi_unit']['no_unit'] }}</p>
-                            <p class="text-gray-500">Keperluan :</p>
-                            <p> {{ $transaction['keperluan'] }}</p>
-                            <p class="text-gray-500">Tanggal Pinjam :</p>
+                            <p class="text-gray-500">Keperluan</p>
+                            <p>:</p>
+                            <p class="break-words"> {{ $transaction['keperluan'] }}
+                                1234567890098765432109876543210987654321
+                            </p>
+                            <p class="text-gray-500">Tanggal Pinjam</p>
+                            <p>:</p>
                             <p>{{ $transaction['tanggal_pinjam'] }}</p>
-                            <p class="text-gray-500">Tanggal Kembali :</p>
+                            <p class="text-gray-500">Tanggal Kembali</p>
+                            <p>:</p>
                             <p>{{ $transaction['tanggal_kembali'] }}</p>
-                            <p class="text-gray-500">Waktu Kadaluwarsa :</p>
+                            <p class="text-gray-500">Waktu Kadaluwarsa</p>
+                            <p>:</p>
                             <p id="countdown-mobile-{{ $transaction['no_transaksi'] }}"
                                 class="text-light break-words text-[10px] text-gray-500 xl:text-[12px]">
                                 {{ $transaction['waktu_kadaluwarsa'] }}</p>
-                            <p class="text-gray-500">Status Peminjaman :</p>
+                            <p class="text-gray-500">Status Peminjaman</p>
+                            <p>:</p>
                             <p
                                 class="{{ $transaction['status'] == 'pending' ? 'bg-gray-200 text-gray-600' : ($transaction['status'] == 'dipinjam' ? 'bg-green-100 text-green-600' : ($transaction['status'] == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} w-fit rounded text-[11px]">
                                 @php
@@ -198,7 +206,7 @@
         </section>
 
         <!-- SECTION button scan -->
-        <div class="flex w-full justify-end text-xs xl:text-base">
+        <div class="sticky bottom-2 flex w-full justify-end text-xs xl:text-base">
             <a href="{{ route('scan.aktivitas.peminjaman') }}"
                 class="rounded-md bg-green-500 px-2 py-1 text-white">Scan Peminjaman</a>
         </div>
