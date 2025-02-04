@@ -24,6 +24,9 @@ jobs:
     - run: npm install
     - run: npm run build
 
+    - name: Rename .gitignore (Agar semua file di-upload)
+      run: mv .gitignore .gitignore.bak
+
     - name: Upload via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -33,3 +36,6 @@ jobs:
         port: ${{ secrets.FTP_PORT }}
         local-dir: ./
         server-dir: /
+
+    - name: Restore .gitignore
+      run: mv .gitignore.bak .gitignore
