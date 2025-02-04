@@ -4,13 +4,16 @@
     <x-slot:role>{{ $role }}</x-slot:role>
 
     <main class="flex h-full flex-col gap-4">
-        <section class="flex max-w-full gap-2 rounded-xl bg-white p-4 shadow-md">
-            <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
+        <section class="flex flex-col justify-between gap-2 xl:flex-row xl:rounded-xl xl:bg-white xl:p-4 xl:shadow-md">
+            <!-- ANCHOR Button Navigation-->
+            <div class="flex justify-center gap-2">
+                <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
+            </div>
         </section>
-        <section class="h-full overflow-y-scroll rounded-xl bg-white shadow-md">
-            <div class="">
+        <section class="h-full overflow-y-scroll xl:rounded-xl xl:bg-white xl:shadow-md">
+            <div class="flex flex-col xl:gap-0">
                 <div
-                    class="sticky top-0 z-10 grid grid-cols-[8%_25%_25%_25%_17%] items-center border-b border-gray-400 bg-[#2D3648] text-white shadow xl:grid-cols-[4%_25%_25%_25%_auto]">
+                    class="sticky top-0 z-10 hidden items-center border-b border-gray-400 bg-[#2D3648] text-white shadow xl:grid xl:grid-cols-[4%_25%_25%_25%_auto]">
                     <p
                         class="flex h-full items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         No</p>
@@ -127,8 +130,7 @@
                     @foreach ($sortedTransaction as $riwayat)
                         <div x-data="{ isOpen: false }">
 
-                            <div
-                                class="grid grid-cols-[8%_25%_25%_25%_17%] border-b border-gray-400 xl:grid-cols-[4%_25%_25%_25%_auto]">
+                            <div class="hidden border-b border-gray-400 xl:grid xl:grid-cols-[4%_25%_25%_25%_auto]">
                                 <p class="border-r border-gray-400 px-2 py-2 text-center text-[11px] xl:text-base">
                                     {{ $loop->iteration }}</p>
                                 <p class="border-r border-gray-400 px-2 py-2 text-[11px] xl:text-base">
@@ -164,7 +166,7 @@
                                 x-transition:leave="transition ease-in duration-100 transform"
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-95"
-                                class="glow-left grid grid-cols-[0%_35%_25%_43%_30%] overflow-x-scroll border-l-4 border-l-emerald-400 p-2 xl:grid-cols-[4%_25%_25%_25%_auto]">
+                                class="glow-left hidden overflow-x-scroll border-l-4 border-l-emerald-400 p-2 xl:grid xl:grid-cols-[4%_25%_25%_25%_auto]">
                                 <div class=""></div>
                                 <div>
                                     <h4 class="text-[10px] font-medium xl:text-sm">Keperluan</h4>
@@ -213,6 +215,53 @@
 
                             </div>
                         </div>
+
+                        <!-- ANCHOR Mobile View -->
+                        <section class="mb-4 rounded-md bg-white shadow-md xl:hidden">
+                            <header class="rounded-t-md bg-[#2D3648] p-2 text-white">
+                                <h1 class="text-xs font-semibold">
+                                    {{ $riwayat->relasiTransaksiAlat->relasiUnit->unit->nama_alat }}
+                                </h1>
+                                <span class="rounded-sm bg-emerald-400 p-[0.5px] text-[11px] text-black">
+                                    {{ $riwayat->no_transaksi }}</span>
+                            </header>
+                            <article class="grid grid-cols-[40%_2%_50%] p-2 text-[11px]">
+                                <p class="text-gray-500">No Unit</p>
+                                <p>:</p>
+                                <p>{{ $riwayat->relasiTransaksiAlat->relasiUnit->no_unit }}</p>
+                                <p class="text-gray-500">Keperluan</p>
+                                <p>:</p>
+                                <p class="break-words"> {{ $riwayat->relasiTransaksiAlat->keperluan }}</p>
+                                <p class="text-gray-500">Tanggal Pinjam</p>
+                                <p>:</p>
+                                <p>{{ $riwayat->relasiTransaksiAlat->tanggal_pinjam }}</p>
+                                <p class="text-gray-500">Tanggal Kembali</p>
+                                <p>:</p>
+                                <p>{{ $riwayat->relasiTransaksiAlat->tanggal_kembali }}</p>
+                                <p class="text-gray-500">Tanggal Dikembalikan</p>
+                                <p>:</p>
+                                <p class="text-light break-words text-[10px] text-gray-500 xl:text-[12px]">
+                                    {{ $riwayat->tanggal_pengembalian ?? '-' }}</p>
+                                <p class="text-gray-500">Kondisi Alat</p>
+                                <p>:</p>
+                                <p>
+                                    {{ $riwayat->kondisi_alat }}</p>
+                                <p class="text-gray-500">Status Peminjaman</p>
+                                <p>:</p>
+                                <p
+                                    class="{{ $riwayat->relasiTransaksiAlat->status == 'pending' ? 'bg-gray-200 text-gray-600' : ($riwayat->relasiTransaksiAlat->status == 'dipinjam' ? 'bg-green-100 text-green-600' : ($riwayat->relasiTransaksiAlat->status == 'dikembalikan' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600')) }} w-fit rounded px-1 text-[11px]">
+                                    @php
+                                        $statusLabels = [
+                                            'belum_dikembalikan' => 'Belum Dikembalikan',
+                                            'dipinjam' => 'Dipinjam',
+                                            'dikembalikan' => 'Dikembalikan',
+                                            'terlambat_dikembalikan' => 'Terlambat Dikembalikan',
+                                        ];
+                                    @endphp
+                                    {{ $statusLabels[$riwayat->relasiTransaksiAlat->status] ?? ucfirst($riwayat->relasiTransaksiAlat->status) }}
+                                </p>
+                            </article>
+                        </section>
                     @endforeach
                 @endif
             </div>

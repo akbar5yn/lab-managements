@@ -43,9 +43,9 @@
             </script>
         @endif
         <!-- SECTION Show Alat-->
-        <section class="flex justify-between gap-2 xl:rounded-xl xl:bg-white xl:p-4 xl:shadow-md">
+        <section class="flex flex-col justify-between gap-2 xl:flex-row xl:rounded-xl xl:bg-white xl:p-4 xl:shadow-md">
             <!-- ANCHOR Button Navigation-->
-            <div class="flex gap-2">
+            <div class="flex justify-center gap-2">
                 <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
             </div>
         </section>
@@ -170,9 +170,7 @@
                             <p>{{ $transaction['relasi_unit']['no_unit'] }}</p>
                             <p class="text-gray-500">Keperluan</p>
                             <p>:</p>
-                            <p class="break-words"> {{ $transaction['keperluan'] }}
-                                1234567890098765432109876543210987654321
-                            </p>
+                            <p class="break-words"> {{ $transaction['keperluan'] }}</p>
                             <p class="text-gray-500">Tanggal Pinjam</p>
                             <p>:</p>
                             <p>{{ $transaction['tanggal_pinjam'] }}</p>
