@@ -29,4 +29,4 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: ${{ secrets.FTP_PORT }}
         local-dir: ./
-        server-dir: ${{ secrets.FTP_TARGET_DIR }}/
+        server-dir: public_html/fisika-uad/
