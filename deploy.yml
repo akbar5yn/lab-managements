@@ -1,0 +1,32 @@
+name: Deploy to Hostinger via FTP
+
+on:
+  push:
+    branches:
+      - main  # Deploy setiap kali ada push ke branch 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install Node.js & Dependencies
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - run: npm install
+    - run: npm run build
+
+    - name: Upload via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: ${{ secrets.FTP_PORT }}
+        local-dir: ./public/build/  # Folder hasil build
+        server-dir: ${{ secrets.FTP_TARGET_DIR }}
