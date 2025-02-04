@@ -28,5 +28,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: ${{ secrets.FTP_PORT }}
-        local-dir: ./public/build/  # Folder hasil build
+        local-dir: ./
         server-dir: ${{ secrets.FTP_TARGET_DIR }}/
