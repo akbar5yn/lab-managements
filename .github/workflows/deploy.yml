@@ -24,9 +24,6 @@ jobs:
     - run: npm install
     - run: npm run build
 
-    - name: Rename .gitignore (Agar semua file di-upload)
-      run: mv .gitignore .gitignore.bak
-
     - name: Upload via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -37,5 +34,11 @@ jobs:
         local-dir: ./
         server-dir: /
 
-    - name: Restore .gitignore
-      run: mv .gitignore.bak .gitignore
+    - name: Run `npm install` via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          npm install
