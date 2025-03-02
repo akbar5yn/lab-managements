@@ -28,7 +28,8 @@
                 };
             </script>
         @endif
-        <section class="content-of-inventaris h-full w-full overflow-y-scroll rounded-xl bg-white shadow-md">
+        <section
+            class="content-of-inventaris flex h-full w-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="p-4">
                 <div
                     class="sticky top-0 z-40 grid grid-cols-[13%_21%_21%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow xl:grid-cols-[15%_20%_20%_25%_auto]">
@@ -96,6 +97,9 @@
                         </div>
                     </form>
                 @endforeach
+            </div>
+            <div class="px-4 pb-4">
+                {{ $allUnits->links() }}
             </div>
         </section>
         <div class="animate-fade-in absolute bottom-2 right-2 flex h-fit w-[70%] flex-col gap-3 rounded-xl border bg-white p-4 opacity-0 shadow-xl transition-opacity xl:bottom-4 xl:right-4 xl:w-[30%]"

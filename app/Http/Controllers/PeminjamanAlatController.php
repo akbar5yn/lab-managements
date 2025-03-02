@@ -150,7 +150,7 @@ class PeminjamanAlatController extends Controller
             ->where('kondisi', ['Normal'])
             ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
-            }])->get();
+            }])->paginate(15);
 
         if ($this->currentTime->lessThan($this->startOfDay)) {
             $minDate = $this->startOfDay->toDateString();
