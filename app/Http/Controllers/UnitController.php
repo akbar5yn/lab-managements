@@ -32,7 +32,7 @@ class UnitController extends Controller
         $allUnits = Unit::where('id_alat', $this->alat->id)
             ->with(['relasiTransaksi' => function ($query) {
                 $query->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
-            }])->get();
+            }])->paginate(15);
 
         $unitTersedia = Unit::where('id_alat', $this->alat->id)
             ->where('kondisi', '!=', 'Rusak')

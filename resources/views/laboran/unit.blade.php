@@ -19,8 +19,10 @@
                 };
             </script>
         @endif
-        <section class="content-of-inventaris h-full w-[75%] overflow-y-scroll rounded-xl bg-white shadow-md">
-            <div class="p-4">
+        <section
+            class="content-of-inventaris flex h-full w-[75%] flex-col space-y-5 overflow-y-scroll rounded-xl bg-white p-4 shadow-md">
+
+            <div class="">
                 <div
                     class="sticky top-0 z-50 grid grid-cols-[4%_25%_20%_20%_auto] border-b border-gray-400 bg-[#e4e4e4] shadow">
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">No</p>
@@ -36,7 +38,8 @@
 
                 @foreach ($allUnits as $unit)
                     <div class="grid grid-cols-[4%_25%_20%_20%_auto] border-b border-gray-400">
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
+                        <p class="border-r border-gray-400 px-2 py-2 text-center">
+                            {{ $allUnits->firstItem() + $loop->index }}</p>
                         <p class="border-r border-gray-400 px-2 py-2">{{ $unit['no_unit'] }}</p>
                         <p class="border-r border-gray-400 px-2 py-2 text-center">
                             @if ($unit->kondisi == 'Rusak')
@@ -130,6 +133,7 @@
                     </div>
                 @endforeach
             </div>
+            {{ $allUnits->links() }}
 
 
         </section>
