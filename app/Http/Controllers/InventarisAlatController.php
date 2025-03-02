@@ -34,7 +34,7 @@ class InventarisAlatController extends Controller
             $query->where('nama_alat', 'like', '%' . $search . '%');
         }
 
-        $getSortedTools = $query->orderBy('created_at', 'desc')->get();
+        $getSortedTools = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
         $getLokasi = InventarisAlat::select('lokasi')->distinct()->get();
 
         return view('laboran.inventaris-alat', compact('title', 'name', 'role', 'lokasi', 'getLokasi', 'getSortedTools'));

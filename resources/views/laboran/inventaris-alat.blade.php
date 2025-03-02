@@ -120,7 +120,8 @@
         </section>
 
         <!-- SECTION Table of Content-->
-        <section class="content-of-inventaris h-full overflow-y-scroll rounded-xl bg-white shadow-md">
+        <section
+            class="content-of-inventaris flex h-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
             <div class="">
                 <div
                     class="sticky top-0 z-10 grid grid-cols-[4%_20%_17%_10%_25%_auto] items-center border-b border-gray-400 bg-[#2D3648] text-white shadow">
@@ -276,6 +277,9 @@
                         </div>
                     @endforeach
                 @endif
+            </div>
+            <div class="px-4 pb-4">
+                {{ $getSortedTools->links() }}
             </div>
         </section>
     </main>
