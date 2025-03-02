@@ -33,12 +33,3 @@ jobs:
         port: ${{ secrets.FTP_PORT }}
         local-dir: ./
         server-dir: /
-
-    - name: Run `npm install` via SSH
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        password: ${{ secrets.SSH_PASSWORD }}
-        script: |
-          npm install
