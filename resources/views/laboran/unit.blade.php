@@ -20,11 +20,11 @@
             </script>
         @endif
         <section
-            class="content-of-inventaris flex h-full w-[75%] flex-col space-y-5 overflow-y-scroll rounded-xl bg-white p-4 shadow-md">
+            class="content-of-inventaris flex h-full w-[75%] flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
 
             <div class="">
                 <div
-                    class="sticky top-0 z-50 grid grid-cols-[4%_25%_20%_20%_auto] border-b border-gray-400 bg-[#e4e4e4] shadow">
+                    class="sticky top-0 z-50 grid grid-cols-[4%_25%_20%_20%_auto] border-b border-gray-400 bg-[#2D3648] text-white shadow">
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">No</p>
                     <p class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center">Nomor
                         Unit</p>
@@ -133,7 +133,9 @@
                     </div>
                 @endforeach
             </div>
-            {{ $allUnits->links() }}
+            <div class="px-4 pb-4">
+                {{ $allUnits->links() }}
+            </div>
 
 
         </section>
