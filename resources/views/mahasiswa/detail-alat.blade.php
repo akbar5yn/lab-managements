@@ -30,9 +30,9 @@
         @endif
         <section
             class="content-of-inventaris flex h-full w-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
-            <div class="p-4">
+            <div class="">
                 <div
-                    class="sticky top-0 z-40 grid grid-cols-[13%_21%_21%_25%_auto] border-b border-gray-400 bg-[#F6F8FB] shadow xl:grid-cols-[15%_20%_20%_25%_auto]">
+                    class="sticky top-0 z-40 grid grid-cols-[13%_21%_21%_25%_auto] border-b border-gray-400 bg-[#2D3648] text-white shadow xl:grid-cols-[15%_20%_20%_25%_auto]">
                     <p
                         class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
                         Nomor
