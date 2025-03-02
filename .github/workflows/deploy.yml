@@ -12,21 +12,33 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Ambil seluruh commit history
+        submodules: true
 
     - name: Install Node.js & Dependencies
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
 
     - run: npm install
     - run: npm run build
 
     - name: Upload via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: ${{ secrets.FTP_PORT }}
-        local-dir: ./public/build/  # Folder hasil build
-        server-dir: ${{ secrets.FTP_TARGET_DIR }}
+        local-dir: ./
+        server-dir: /
+
+    - name: Run `npm install` via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          npm install
