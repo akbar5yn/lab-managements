@@ -4,7 +4,7 @@ FROM php:8.4-fpm-alpine
 RUN apk add --no-cache \
     git \
     curl \
-    postgresql-dev \
+    mariadb-dev \
     ...
 
 # Install PHP extensions
