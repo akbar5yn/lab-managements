@@ -1,23 +1,16 @@
-# Use a separate stage to install Composer dependencies. This keeps the final image size down.
+# Stage 1: Build dependencies
 FROM composer:2 AS composer_stage
 
-# Set the working directory for Composer.
 WORKDIR /app
-
-# Copy the Composer files first to leverage Docker's caching.
 COPY composer.json composer.lock ./
 
-# Install Composer dependencies, ignoring platform requirements like PHP extensions.
-# The `--ignore-platform-reqs` flag is crucial to prevent the build from failing due to missing extensions.
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs --no-scripts
 
 # ---
 
-# This is the final image, built from the PHP FPM base image.
+# Stage 2: Final image (web server)
 FROM php:8.4-fpm-alpine
 
-# Install system dependencies.
-# The `gd-dev` library is the system dependency for the `gd` PHP extension.
 RUN apk add --no-cache \
     git \
     curl \
@@ -26,24 +19,22 @@ RUN apk add --no-cache \
     libzip-dev \
     gd-dev
 
-# Install PHP extensions required by your application.
-# `pdo_mysql` is for MySQL, `zip` is for many Composer packages, and `gd` is for QR codes.
+# Instal ekstensi PHP.
 RUN docker-php-ext-install \
     pdo_mysql \
     zip \
     gd
 
-# Set the working directory inside the container for your application code.
 WORKDIR /var/www/html
 
-# Copy the entire application codebase.
+# Salin seluruh kode aplikasi dari host.
 COPY . .
 
-# Copy the installed Composer dependencies from the first stage.
+# Salin vendor yang sudah diinstal dari stage pertama.
 COPY --from=composer_stage /app/vendor /var/www/html/vendor
 
-# Expose the PHP-FPM port.
+RUN composer dump-autoload --optimize && php artisan package:discover --ansi
+
 EXPOSE 9000
 
-# Start the PHP-FPM process when the container runs.
 CMD ["php-fpm"]
