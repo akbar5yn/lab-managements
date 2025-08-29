@@ -18,7 +18,7 @@ services:
             XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
             IGNITION_LOCAL_SITES_PATH: "${PWD}"
         volumes:
-            - ".:/var/www/html"
+            - ".:/app" # Perbaikan utama: Mengubah /var/www/html menjadi /app
         networks:
             - sail
         depends_on:
