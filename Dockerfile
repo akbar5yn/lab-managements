@@ -1,7 +1,9 @@
+# Tahap 1: Build - Mempersiapkan aplikasi Laravel
 FROM php:8.4-fpm-alpine AS builder
 
 WORKDIR /app
 
+# Install dependensi PHP
 RUN apk add --no-cache \
     git \
     curl \
@@ -19,20 +21,22 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 COPY composer.json composer.lock ./
 
-COPY . .
+
 
 RUN composer install --no-dev --no-interaction --optimize-autoloader
 
-FROM nginx:alpine
+FROM php:8.4-fpm-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache nginx
 
 COPY --from=builder /app /var/www/html
+
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
 RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
 
 WORKDIR /var/www/html
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD sh -c "php-fpm && nginx -g 'daemon off;'"
