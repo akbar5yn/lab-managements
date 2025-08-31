@@ -15,7 +15,8 @@ RUN apk add --no-cache \
     oniguruma-dev \
     libxml2-dev \
     mysql-client \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath zip gd
+    php8-pdo_mysql \
+    && docker-php-ext-install pdo mbstring exif pcntl bcmath zip gd
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
