@@ -19,9 +19,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --no-interaction --optimize-autoloader
-
 COPY . .
+
+RUN composer install --no-dev --no-interaction --optimize-autoloader
 
 FROM nginx:alpine
 
