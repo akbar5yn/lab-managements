@@ -29,7 +29,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
 
 WORKDIR /var/www/html
 
