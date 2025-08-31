@@ -1,40 +1,17 @@
-# Tahap 1: Build - Mempersiapkan aplikasi Laravel
-FROM php:8.4-fpm-alpine AS builder
-
-WORKDIR /app
-
-# Install dependensi PHP
-RUN apk add --no-cache \
-    git \
-    curl \
-    openssl \
-    libzip-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    oniguruma-dev \
-    libxml2-dev \
-    mysql-client \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath zip gd
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-COPY . .
-
-RUN composer install --no-dev --no-interaction --optimize-autoloader
-
-FROM php:8.4-fpm-alpine
-
-RUN apk add --no-cache nginx
-
-COPY --from=builder /app /var/www/html
-
-COPY nginx.conf /etc/nginx/http.d/default.conf
-
-RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
+FROM serversideup/php:8.2-fpm-nginx
 
 WORKDIR /var/www/html
 
-EXPOSE 3000
+USER root
 
-CMD sh -c "php-fpm && nginx -g 'daemon off;'"
+# Install the GD extension and its dependencies
+# The backslashes allow the command to span multiple lines for readability
+RUN apt-get update && apt-get install -y libwebp-dev libjpeg-dev libpng-dev \
+    && docker-php-ext-configure gd --with-webp --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
+
+USER www-data
+
+COPY --chown=www-data:www-data . .
+
+RUN composer install --no-dev --optimize-autoloader
