@@ -1,5 +1,4 @@
-# Tahap 1: Build - Mempersiapkan aplikasi Laravel
-FROM php:8.4-fpm-alpine as builder
+FROM php:8.4-fpm-alpine AS builder
 
 WORKDIR /app
 
