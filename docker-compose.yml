@@ -12,47 +12,44 @@ services:
             - "5173:5173"
         networks:
             - sail
-        # depends_on:
-        #     mysql:
-        #         condition: service_healthy
+        depends_on:
+            mysql:
+                condition: service_healthy
     nginx: # Ini adalah kontainer Nginx yang terpisah
-        # image: nginx:1.25-alpine
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
+        image: nginx:1.25-alpine
         container_name: lab-managements-nginx
         restart: unless-stopped
         ports:
             - "9000:80"
         volumes:
             - .:/var/www/html
-            # - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - app
         networks:
             - sail
-    # mysql:
-    #     image: "mysql/mysql-server:8.0"
-    #     ports:
-    #         - "${FORWARD_DB_PORT:-3306}:3306"
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-    #         MYSQL_DATABASE: "${DB_DATABASE}"
-    #         MYSQL_USER: "${DB_USERNAME}"
-    #         MYSQL_PASSWORD: "${DB_PASSWORD}"
-    #     volumes:
-    #         - "sail-mysql:/var/lib/mysql"
-    #         - "./vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh"
-    #     networks:
-    #         - sail
-    #     healthcheck:
-    #         test:
-    #             - CMD
-    #             - mysqladmin
-    #             - ping
-    #             - "-p${DB_PASSWORD}"
-    #         retries: 3
-    #         timeout: 5s
+    mysql:
+        image: "mysql/mysql-server:8.0"
+        ports:
+            - "${FORWARD_DB_PORT:-3306}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_USER: "${DB_USERNAME}"
+            MYSQL_PASSWORD: "${DB_PASSWORD}"
+        volumes:
+            - "sail-mysql:/var/lib/mysql"
+            - "./vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh"
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - "-p${DB_PASSWORD}"
+            retries: 3
+            timeout: 5s
     redis:
         image: "redis:alpine"
         ports:
