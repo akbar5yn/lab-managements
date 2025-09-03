@@ -1,17 +1,50 @@
-FROM serversideup/php:8.2-fpm-nginx
+FROM node:22 AS node_build
 
 WORKDIR /var/www/html
 
-USER root
+# Copy dan instal dependensi Node.js
+COPY package.json package-lock.json ./
+RUN npm install
 
-# Install the GD extension and its dependencies
-# The backslashes allow the command to span multiple lines for readability
-RUN apt-get update && apt-get install -y libwebp-dev libjpeg-dev libpng-dev \
-    && docker-php-ext-configure gd --with-webp --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+# Copy kode aplikasi dan jalankan build
+COPY . .
+RUN npm run build
 
-USER www-data
+FROM php:8.2-fpm
 
-COPY --chown=www-data:www-data . .
+WORKDIR /var/www/html
 
+# Update dan instal paket sistem
+RUN apt-get update && apt-get install -y \
+    libwebp-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libonig-dev \
+    libzip-dev \
+    libpq-dev \
+    unzip \
+    git \
+    libcurl4-openssl-dev \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instal dan konfigurasikan ekstensi PHP
+RUN docker-php-ext-configure gd --with-webp --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql mbstring zip curl
+
+# Copy Composer dari image resmi
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Ubah UID user
+RUN usermod -u 1000 www-data
+
+# Copy kode aplikasi
+COPY . .
+
+# Pastikan direktori storage memiliki izin yang benar
+RUN chown -R www-data:www-data /var/www/html \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+# Jalankan instalasi Composer
 RUN composer install --no-dev --optimize-autoloader

@@ -6,7 +6,8 @@ dotenv.config();
 
 export default defineConfig({
     server: {
-        host: process.env.APP_URL,
+        // host: process.env.APP_URL,
+        host: '0.0.0.0',
     },
 
     plugins: [
