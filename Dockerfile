@@ -56,7 +56,7 @@ COPY --from=builder /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 # Salin konfigurasi Nginx
-COPY .docker/nginx/nginx.conf /etc/nginx/sites-available/default
+COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
 # Hapus salinan file supervisord.conf
 
 # Ekspos port
