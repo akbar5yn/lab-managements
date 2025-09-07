@@ -1,22 +1,21 @@
 # ===============================================
 # STAGE 1: Build Image (untuk instalasi dependensi)
 # ===============================================
-FROM php:8.3-fpm-alpine AS builder
+FROM php:8.3-fpm AS builder
 
-# Instal dependensi sistem yang dibutuhkan untuk build
-RUN apk add --no-cache \
+# Instal dependensi sistem dan ekstensi PHP
+RUN apt-get update && apt-get install -y \
     git \
     npm \
     libzip-dev \
     libpng-dev \
-    libjpeg-turbo-dev \
-    oniguruma-dev \
+    libjpeg-dev \
+    libonig-dev \
+    libicu-dev \
     libpq-dev \
-    icu-dev \
-    build-base
-
-# Instal ekstensi PHP yang dibutuhkan
-RUN docker-php-ext-install pdo_mysql opcache gd intl zip exif
+    build-essential \
+    zlib1g-dev \
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif
 
 # Atur working directory dan salin Composer
 WORKDIR /var/www/html
@@ -25,8 +24,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Salin kode aplikasi
 COPY . .
 
-
-# Instal dependensi PHP (prod) dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
 RUN npm ci
 RUN npm run build
@@ -34,10 +31,10 @@ RUN npm run build
 # ===============================================
 # STAGE 2: Production Image (lebih ringan)
 # ===============================================
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm
 
 # Instal dependensi runtime dan Nginx
-RUN apk add --no-cache nginx supervisor
+RUN apt-get update && apt-get install -y nginx supervisor
 
 # Atur working directory
 WORKDIR /var/www/html
@@ -49,7 +46,7 @@ COPY --from=builder /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 # Salin konfigurasi Nginx dan Supervisor
-COPY .docker/nginx/nginx.conf /etc/nginx/http.d/default.conf
+COPY .docker/nginx/nginx.conf /etc/nginx/sites-available/default
 COPY .docker/supervisord/supervisord.conf /etc/supervisord.conf
 
 # Ekspos port
