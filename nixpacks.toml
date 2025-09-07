@@ -7,4 +7,4 @@ build_cmd = "npm run build"
 
 [start]
 # Perintah start untuk menjalankan server di produksi
-start_cmd = "/usr/bin/supervisord -c /etc/supervisor/supervisord.conf"
+start_cmd = "php artisan serve --host 0.0.0.0 --port 8000"
