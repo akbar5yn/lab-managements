@@ -1,0 +1,43 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: my-laravel-app:v1.0
+        container_name: my-laravel-app
+        restart: always
+        ports:
+            - "80:80"
+        environment:
+            - APP_ENV=production
+            - DB_CONNECTION=mysql
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - REDIS_HOST=redis
+        depends_on:
+            - db
+            - redis
+
+    db:
+        image: mysql:8.0
+        container_name: my-laravel-db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db-data:/var/lib/mysql
+
+    redis:
+        image: redis:alpine
+        container_name: my-laravel-redis
+        restart: always
+
+volumes:
+    db-data:
+        driver: local
