@@ -36,12 +36,18 @@ RUN npm run build
 # ===============================================
 FROM php:8.3-fpm
 
-# Instal dependensi runtime, Nginx, dan ekstensi PHP yang dibutuhkan
+# Instal dependensi runtime, Nginx, dan EKSTENSI PHP yang DIBUTUHKAN
 RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     libmariadb-dev \
-    && docker-php-ext-install pdo_mysql
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libonig-dev \
+    libicu-dev \
+    zlib1g-dev \
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif
 
 # Atur working directory
 WORKDIR /var/www/html
