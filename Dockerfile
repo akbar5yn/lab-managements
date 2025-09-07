@@ -6,13 +6,12 @@ FROM php:8.3-fpm AS builder
 # Instal dependensi sistem dan ekstensi PHP
 RUN apt-get update && apt-get install -y \
     git \
-    npm \
+    nodejs \
     libzip-dev \
     libpng-dev \
     libjpeg-dev \
     libonig-dev \
     libicu-dev \
-    libpq-dev \
     libmariadb-dev \
     build-essential \
     zlib1g-dev \
@@ -25,6 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Salin kode aplikasi
 COPY . .
 
+# Instal dependensi PHP dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
 RUN npm ci
 RUN npm run build
