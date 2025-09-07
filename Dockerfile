@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libicu-dev \
     libpq-dev \
+    libmysqlclient-dev \
     build-essential \
     zlib1g-dev \
     && docker-php-ext-install pdo_mysql opcache gd intl zip exif
