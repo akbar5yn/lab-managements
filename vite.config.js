@@ -16,5 +16,5 @@ export default defineConfig({
         }),
     ],
 
-    base: '/'
+    base: process.env.VITE_APP_URL ? process.env.VITE_APP_URL : '/'
 });
