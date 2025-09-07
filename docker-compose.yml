@@ -1,3 +1,5 @@
+version: "3.7"
+
 services:
     app:
         build:
@@ -33,9 +35,21 @@ services:
             - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
             - ./public:/var/www/html/public
             - ./ssl:/etc/nginx/ssl
+            - ./data/certbot/conf:/etc/letsencrypt # Volume untuk menyimpan sertifikat SSL
+            - ./data/certbot/www:/var/www/certbot # Tempat penyimpanan webroot untuk verifikasi Certbot
         depends_on:
             - app
         command: ["nginx", "-g", "daemon off;"]
+
+    certbot:
+        image: certbot/certbot
+        container_name: certbot
+        volumes:
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; certbot renew; sleep 12h & wait'" # Pembaruan otomatis sertifikat
+        depends_on:
+            - nginx
 
     db:
         image: mysql:8.0

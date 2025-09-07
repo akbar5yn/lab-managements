@@ -46,6 +46,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libicu-dev \
     zlib1g-dev \
+    openssl \
+    ca-certificates \
     && docker-php-ext-install pdo_mysql opcache gd intl zip exif
 
 # Atur working directory dan salin aplikasi
