@@ -26,8 +26,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Salin kode aplikasi
 COPY . .
 
-COPY ./.env .env
-
 # Instal dependensi PHP dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
 RUN npm ci

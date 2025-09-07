@@ -9,6 +9,7 @@ services:
         expose:
             - 9000
         environment:
+            - APP_KEY=${APP_KEY}
             - APP_ENV=production
             - DB_CONNECTION=mysql
             - DB_HOST=db
