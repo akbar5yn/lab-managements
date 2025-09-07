@@ -25,9 +25,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Salin kode aplikasi
 COPY . .
 
+RUN rm -rf node_modules package-lock.json
+
 # Instal dependensi PHP (prod) dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 # ===============================================
@@ -36,7 +38,7 @@ RUN npm run build
 FROM php:8.3-fpm-alpine
 
 # Instal dependensi runtime dan Nginx
-RUN apk add --no-cache nginx
+RUN apk add --no-cache nginx supervisor
 
 # Atur working directory
 WORKDIR /var/www/html
