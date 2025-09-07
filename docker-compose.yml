@@ -23,7 +23,7 @@ services:
             - redis
 
     nginx:
-        image: nginx:alpine
+        image: nginx:latest
         container_name: my-laravel-nginx
         restart: always
         ports:
