@@ -63,4 +63,4 @@ COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
 EXPOSE 80 9000
 
 # Ganti perintah CMD menjadi "none" untuk Dockerfile
-CMD ["/bin/bash"]
+CMD ["php-fpm"]
