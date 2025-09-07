@@ -25,7 +25,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Salin kode aplikasi
 COPY . .
 
-RUN rm -rf node_modules package-lock.json
+# Hapus baris ini! npm ci membutuhkan package-lock.json
+# RUN rm -rf node_modules package-lock.json
 
 # Instal dependensi PHP (prod) dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
