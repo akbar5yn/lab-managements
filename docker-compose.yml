@@ -39,6 +39,20 @@ services:
             - app
         command: ["nginx", "-g", "daemon off;"]
 
+    worker:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: my-laravel-worker
+        restart: always
+        command: php artisan queue:work --verbose --tries=3 --timeout=90
+        depends_on:
+            - app
+            - redis
+            - db
+        volumes:
+            - .:/var/www/html
+
     db:
         image: mysql:8.0
         container_name: my-laravel-db

@@ -41,7 +41,6 @@ FROM php:8.3-fpm
 # Instal dependensi runtime, Nginx, dan ekstensi PHP
 RUN apt-get update && apt-get install -y \
     nginx \
-    supervisor \
     libmariadb-dev \
     libzip-dev \
     libpng-dev \
