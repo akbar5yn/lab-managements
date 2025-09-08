@@ -16,7 +16,9 @@ RUN apt-get update && apt-get install -y \
     libmariadb-dev \
     build-essential \
     zlib1g-dev \
-    && docker-php-ext-install pdo_mysql opcache gd intl zip exif
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 
 # Atur working directory dan salin Composer
@@ -48,7 +50,9 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     openssl \
     ca-certificates \
-    && docker-php-ext-install pdo_mysql opcache gd intl zip exif
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Atur working directory dan salin aplikasi
 WORKDIR /var/www/html
