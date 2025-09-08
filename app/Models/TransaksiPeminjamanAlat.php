@@ -61,11 +61,11 @@ class TransaksiPeminjamanAlat extends Model
             return false;
         }
 
-        $this->update(['status' => $status]);
+        return $this->update(['status' => $status]);
     }
 
     public function batalkanTransaksi($status)
     {
-        $this->update(['status' => $status]);
+        return $this->update(['status' => $status]);
     }
 }
