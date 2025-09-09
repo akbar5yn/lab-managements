@@ -1,50 +1,72 @@
-FROM node:22 AS node_build
+# ===============================================
+# STAGE 1: Build Image (untuk instalasi dependensi)
+# ===============================================
+FROM php:8.3-fpm AS builder
 
-WORKDIR /var/www/html
-
-# Copy dan instal dependensi Node.js
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copy kode aplikasi dan jalankan build
-COPY . .
-RUN npm run build
-
-FROM php:8.2-fpm
-
-WORKDIR /var/www/html
-
-# Update dan instal paket sistem
+# Instal dependensi sistem dan ekstensi PHP
 RUN apt-get update && apt-get install -y \
-    libwebp-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libonig-dev \
-    libzip-dev \
-    libpq-dev \
-    unzip \
     git \
-    libcurl4-openssl-dev \
     nodejs \
     npm \
-    && rm -rf /var/lib/apt/lists/*
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libonig-dev \
+    libicu-dev \
+    libmariadb-dev \
+    build-essential \
+    zlib1g-dev \
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
-# Instal dan konfigurasikan ekstensi PHP
-RUN docker-php-ext-configure gd --with-webp --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql mbstring zip curl
 
-# Copy Composer dari image resmi
+# Atur working directory dan salin Composer
+WORKDIR /var/www/html
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Ubah UID user
-RUN usermod -u 1000 www-data
-
-# Copy kode aplikasi
+# Salin kode aplikasi
 COPY . .
 
-# Pastikan direktori storage memiliki izin yang benar
-RUN chown -R www-data:www-data /var/www/html \
-    && chown -R www-data:www-data storage bootstrap/cache
-
-# Jalankan instalasi Composer
+# Instal dependensi PHP dan JavaScript
 RUN composer install --no-dev --optimize-autoloader
+RUN npm ci
+RUN npm run build
+
+# ===============================================
+# STAGE 2: Production Image (lebih ringan)
+# ===============================================
+FROM php:8.3-fpm
+
+# Instal dependensi runtime, Nginx, dan ekstensi PHP
+RUN apt-get update && apt-get install -y \
+    nginx \
+    libmariadb-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libonig-dev \
+    libicu-dev \
+    zlib1g-dev \
+    openssl \
+    ca-certificates \
+    && docker-php-ext-install pdo_mysql opcache gd intl zip exif \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+# Atur working directory dan salin aplikasi
+WORKDIR /var/www/html
+COPY --from=builder /var/www/html /var/www/html
+
+# Atur izin file
+RUN chown -R www-data:www-data /var/www/html
+
+# Salin konfigurasi Nginx
+COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
+# Hapus salinan file supervisord.conf
+
+# Ekspos port
+EXPOSE 80 9000
+
+# Ganti perintah CMD menjadi "none" untuk Dockerfile
+CMD ["php-fpm"]

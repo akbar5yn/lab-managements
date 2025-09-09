@@ -183,7 +183,7 @@ class PeminjamanAlatController extends Controller
     {
 
         if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
-            return $this->startOfDay->addMinute(45);
+            return $this->startOfDay->addMinutes(45);
         } elseif ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
             return $this->currentTime->addMinutes(45);
         } else {
