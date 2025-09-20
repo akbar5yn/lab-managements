@@ -185,7 +185,7 @@ class PeminjamanAlatController extends Controller
         if ($tanggalPinjam->isToday() && $this->currentTime->lessThan($this->startOfDay)) {
             return $this->startOfDay->addMinutes(45);
         } elseif ($tanggalPinjam->isToday() && $this->currentTime->greaterThan($this->startOfDay)) {
-            return $this->currentTime->addMinutes(1);
+            return $this->currentTime->addMinutes(45);
         } else {
             return $tanggalPinjam->setTime(9, 45)->addMinute();
         }
@@ -265,7 +265,7 @@ class PeminjamanAlatController extends Controller
             CancelExpiredTransaction::dispatch($transaksi->id)->delay($waktuKedaluwarsa);
 
             // NOTE Checking waktu pengembalian
-            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'])->setTime(12, 30, 0); // note sedang di testing default jam 15
+            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'])->setTime(15, 0, 0);
             $delay = $this->checkReturnedLate($tanggalKembali);
             if ($delay > 0) {
                 // Jika belum lewat batas waktu, jalankan job dengan delay

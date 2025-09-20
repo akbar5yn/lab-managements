@@ -160,32 +160,32 @@
 </style>
 
 <script>
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     @foreach ($allUnits as $index => $unit)
-    //         flatpickr('#tanggal_pinjam_{{ $index }}', {
-    //             minDate: "{{ $minDate }}",
-    //             maxDate: "{{ $maxDate }}",
-    //             dateFormat: "Y-m-d",
-    //             onChange: function(selectedDates, dateStr, instance) {
-    //                 const nextDay = new Date(selectedDates[0]);
-    //                 nextDay.setDate(nextDay.getDate() + 1);
+    document.addEventListener('DOMContentLoaded', function() {
+        @foreach ($allUnits as $index => $unit)
+            flatpickr('#tanggal_pinjam_{{ $index }}', {
+                minDate: "{{ $minDate }}",
+                maxDate: "{{ $maxDate }}",
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    const nextDay = new Date(selectedDates[0]);
+                    nextDay.setDate(nextDay.getDate() + 1);
 
-    //                 const tanggalKembaliInput = document.getElementById(
-    //                     'tanggal_kembali_{{ $index }}');
-    //                 flatpickr(tanggalKembaliInput, {
-    //                     minDate: nextDay,
-    //                     dateFormat: "Y-m-d"
-    //                 });
-    //             }
-    //         });
+                    const tanggalKembaliInput = document.getElementById(
+                        'tanggal_kembali_{{ $index }}');
+                    flatpickr(tanggalKembaliInput, {
+                        minDate: nextDay,
+                        dateFormat: "Y-m-d"
+                    });
+                }
+            });
 
-    //         flatpickr('#tanggal_kembali_{{ $index }}', {
-    //             minDate: "{{ $minReturnDate }}",
-    //             maxDate: "{{ $maxDate }}",
-    //             dateFormat: "Y-m-d"
-    //         });
-    //     @endforeach
-    // });
+            flatpickr('#tanggal_kembali_{{ $index }}', {
+                minDate: "{{ $minReturnDate }}",
+                maxDate: "{{ $maxDate }}",
+                dateFormat: "Y-m-d"
+            });
+        @endforeach
+    });
 
 
     function showModal() {
