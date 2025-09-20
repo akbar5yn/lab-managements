@@ -38,6 +38,10 @@ RUN npm run build
 # ===============================================
 FROM php:8.3-fpm
 
+ENV TZ=Asia/Jakarta
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
 # Instal dependensi runtime, Nginx, dan ekstensi PHP
 RUN apt-get update && apt-get install -y \
     nginx \
