@@ -117,16 +117,24 @@ class PeminjamanAlatController extends Controller
 
     // SECTION [Mahasiswa]
     // ANCHOR informasi alat
-    public function informasiAlat()
+    public function informasiAlat(Request $request)
     {
         $subtitle = 'Informasi Alat';
 
-        $getUnit = InventarisAlat::withCount([
-            'alat' => function ($query) {
+        $search = $request->input('search-alat');
+
+        $query = InventarisAlat::withCount([
+            'alat as normal_count' => function ($query) {
                 $query->where('kondisi', 'Normal');
             }
-        ])->get();
+        ]);
 
+        if ($search) {
+            $query->where('nama_alat', 'like', '%' . $search . '%');
+        }
+        $hasilPencarian = $query->get();
+
+        Log::info('request', [$request->all()]);
 
         return view('mahasiswa.informasi-alat', [
             'name' => $this->name,
@@ -134,7 +142,7 @@ class PeminjamanAlatController extends Controller
             'subtitle' => $subtitle,
             'role' => $this->role,
             'user_id' => $this->user_id,
-            'getUnit' => $getUnit,
+            'hasilPencarian' => $hasilPencarian,
         ]);
     }
 

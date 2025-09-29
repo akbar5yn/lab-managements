@@ -39,50 +39,61 @@
                 <x-navigasi-peminjaman-alat></x-navigasi-peminjaman-alat>
 
             </div>
-            <div class="flex w-full gap-2 xl:w-auto xl:items-center">
+            <form method="GET" action="" class="flex w-full gap-2 xl:w-auto xl:items-center">
                 <div class="flex w-full items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2 xl:w-[400px]">
-                    <label for="search" class="text-gray-400"><x-heroicon-m-magnifying-glass class="w-4" /></label>
                     <input type="search" id="search-alat" name="search-alat" placeholder="Cari Alat"
+                        value="{{ request('search-alat') }}"
                         class="auto w-full border-none bg-transparent p-1 text-sm focus:ring-0 xl:text-base">
+                    <button for="search-alat" class="text-gray-400"><x-heroicon-m-magnifying-glass
+                            class="w-4" /></button>
+
                 </div>
-            </div>
+            </form>
         </section>
 
-        <section class="grid grid-cols-1 gap-3 overflow-y-scroll pb-4 xl:grid-cols-3 xl:pb-0">
-            @foreach ($getUnit as $unit)
-                <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-md">
-                    <div class="flex h-full flex-col justify-between gap-4 p-4">
-                        <div class="flex flex-col gap-4">
-                            <h5 class="text-sm font-medium xl:text-lg">
-                                {{ $unit->nama_alat }}
-                            </h5>
-                            <p class="flex-wrap text-[11px] font-light leading-normal text-slate-600 xl:text-sm">
-                                <span class="rounded-md bg-yellow-200 px-2">Fungsi :</span>
-                                {{ $unit->fungsi }}
-                            </p>
-                        </div>
-                        <div class="flex w-full flex-col gap-2">
-                            <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
-                                <div class="flex w-fit gap-2 rounded bg-neutral-200 px-2 py-1">
-                                    <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Jumlah Unit</p>
-                                    <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->alat_count }}</p>
-                                </div>
-                                <div class="flex w-fit flex-row gap-x-2 rounded bg-neutral-200 px-2 py-1">
-                                    <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Lokasi</p>
-                                    <p class="break-words text-[10px] text-gray-500 xl:text-xs">{{ $unit->lokasi }}</p>
-                                </div>
+        @if ($hasilPencarian->isEmpty())
+            <div class="flex h-[50%] flex-col items-center justify-center">
+                <h1 class="text-xl font-medium text-gray-400">Alat dan barang yang anda cari tidak tersedia
+                </h1>
+                <h1 class="text-xl font-medium text-gray-400">dan pastikan nama alat yang anda cari sesuai</h1>
+            </div>
+        @elseif ($hasilPencarian->isNotEmpty())
+            <section class="grid grid-cols-1 gap-3 overflow-y-scroll pb-4 xl:grid-cols-3 xl:pb-0">
+
+                @foreach ($hasilPencarian as $unit)
+                    <div class="relative flex min-w-fit flex-col rounded-lg border border-slate-200 bg-white shadow-md">
+                        <div class="flex h-full flex-col justify-between gap-4 p-4">
+                            <div class="flex flex-col gap-4">
+                                <h5 class="text-sm font-medium xl:text-lg">
+                                    {{ $unit->nama_alat }}
+                                </h5>
+                                <p class="flex-wrap text-[11px] font-light leading-normal text-slate-600 xl:text-sm">
+                                    <span class="rounded-md bg-yellow-200 px-2">Fungsi :</span>
+                                    {{ $unit->fungsi }}
+                                </p>
                             </div>
-                            <div class="flex justify-start">
-                                <a href="{{ route('detail.alat', $unit->slug) }}"
-                                    class="rounded-md bg-[#2D3648] px-2 py-1 text-xs text-white xl:px-3 xl:py-2 xl:text-sm">Detail
-                                    Alat</a>
+                            <div class="flex w-full flex-col gap-2">
+                                <div class="flex flex-col gap-2 border-b border-gray-700 py-1 lg:flex lg:flex-row">
+                                    <div class="flex w-fit gap-2 rounded bg-neutral-200 px-2 py-1">
+                                        <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Jumlah Unit</p>
+                                        <p class="text-[10px] text-gray-500 xl:text-xs">{{ $unit->normal_count }}</p>
+                                    </div>
+                                    <div class="flex w-fit flex-row gap-x-2 rounded bg-neutral-200 px-2 py-1">
+                                        <p class="text-[10px] font-semibold text-gray-500 xl:text-xs">Lokasi</p>
+                                        <p class="break-words text-[10px] text-gray-500 xl:text-xs">{{ $unit->lokasi }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-start">
+                                    <a href="{{ route('detail.alat', $unit->slug) }}"
+                                        class="rounded-md bg-[#2D3648] px-2 py-1 text-xs text-white xl:px-3 xl:py-2 xl:text-sm">Detail
+                                        Alat</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-
-        </section>
-
+                @endforeach
+            </section>
+        @endif
     </main>
 </x-layout>
