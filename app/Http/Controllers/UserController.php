@@ -24,14 +24,37 @@ class UserController extends Controller
         $this->role = $user->role;
     }
 
-    public function storeMhs()
+    public function storeMhs(Request $request)
     {
-        $dataMhs = User::where('role', 'mahasiswa')->get()->toArray();
+        $prodi = $request->input('prodi');
+        $search = $request->input('search');
+        Log::info('Request masuk ke storeMhs', $request->all());
+
+        $query = User::query();
+
+        if ($prodi) {
+            $query->where('prodi', $prodi);
+        }
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $getSortedMhs = $query->orderBy('created_at', 'desc')
+            ->where('role', 'mahasiswa')->paginate(15)->withQueryString();
+        $getMhsByProdi = User::select('prodi')
+            ->distinct()
+            ->whereNotNull('prodi')
+            ->where('prodi', '!=', '')
+            ->get();
+
         return view('laboran.data-mahasiswa', [
             'name' => $this->name,
             'role' => $this->role,
             'title' => $this->title,
-            'dataMhs' => $dataMhs
+            'serachMhsByProdi' => $getMhsByProdi,
+            'getSortedMhs' => $getSortedMhs,
+            'prodi' => $prodi,
         ]);
     }
 

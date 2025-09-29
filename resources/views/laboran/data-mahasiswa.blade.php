@@ -29,20 +29,30 @@
                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                         <div class="py-1" role="none">
                             <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                                tabindex="-1" id="menu-item-0">Lab A</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                                tabindex="-1" id="menu-item-1">Lab B</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                                tabindex="-1" id="menu-item-2">Lab C</a>
+                            <form action="" method="GET">
+                                <button class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-200"
+                                    role="menuitem" tabindex="-1" name="prodi" id="menu-item-0">
+                                    Tampilkan Semua
+                                </button>
+                                @foreach ($serachMhsByProdi as $getMhs)
+                                    <button
+                                        class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-200"
+                                        role="menuitem" tabindex="-1" name="prodi" value="{{ $getMhs->prodi }}"
+                                        id="menu-item-0">{{ $getMhs->prodi }}
+                                    </button>
+                                @endforeach
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
-                    <label for="search" class="text-gray-400"><x-heroicon-m-magnifying-glass class="w-4" /></label>
-                    <input type="search" id="search" x-model="search"
-                        class="auto w-full border-none bg-transparent p-1 focus:ring-0">
-                </div>
+                <form action="" method="GET" class="flex items-center">
+                    <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
+                        <input type="search" id="search" name="search" value="{{ request('search') }}"
+                            class="auto w-full border-none bg-transparent p-1 focus:ring-0">
+                        <button for="search" class="text-gray-400"><x-heroicon-m-magnifying-glass
+                                class="w-4" /></button>
+                    </div>
+                </form>
             </div>
             <x-modal attributeTitle="Form Data Mahasiswa" attributeButton="Tambah Mahasiswa">
                 <form action="{{ route('create.mahasiswa') }}" method="POST">
@@ -94,104 +104,220 @@
             </div>
             <!-- SECTION Form update-->
 
-            @foreach ($dataMhs as $mahasiswa)
-                <form action="{{ route('update.mahasiswa', $mahasiswa['id']) }}"
-                    id="update-mahasiswa-{{ $mahasiswa['id'] }}" method="POST">
-                    @method('PUT')
-                    @csrf
-                </form>
-                <div x-data="{ isOpen: false }">
-                    <div x-data="{ isEdit: false }"
-                        class="grid grid-cols-[4%_25%_25%_25%_auto] border-b border-gray-400 text-sm">
-                        <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
-                        <div class="border-r border-gray-400">
-                            <input x-bind:value="'{{ $mahasiswa['name'] }}'" :disabled="!isEdit"
-                                :class="{
-                                    'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
-                                    'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
-                                        !isEdit
-                                }"
-                                form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="name">
-                        </div>
-                        <div class="border-r border-gray-400">
-                            <input
-                                :class="{
-                                    'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2 capitalize': isEdit,
-                                    'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none capitalize':
-                                        !isEdit
-                                }"
-                                x-bind:value="'{{ $mahasiswa['prodi'] }}'" :disabled="!isEdit"
-                                form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="prodi">
-                        </div>
-                        <div class="border-r border-gray-400">
-                            <input
-                                :class="{
-                                    'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
-                                    'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
-                                        !isEdit
-                                }"
-                                x-bind:value="'{{ $mahasiswa['username'] }}'" :disabled="!isEdit"
-                                form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="username">
-                        </div>
-
-
-                        <div class="flex items-center justify-center gap-5">
-
-                            <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isEdit = !isEdit">
-                                <x-heroicon-m-pencil-square
-                                    class="h-4 w-4 transform transition-transform duration-300" />
-                            </button>
-                            <button type="submit" id="update-mahasiswa"
-                                form="update-mahasiswa-{{ $mahasiswa['id'] }}"
-                                :class="{
-                                    'rounded bg-[#2D3648] px-5 py-[2px] text-white transition-all duration-300 ease-in-out': isEdit,
-                                    'rounded bg-gray-400 cursor-default px-5 py-[2px] text-white transition-all duration-300 ease-in-out':
-                                        !isEdit
-                                }">
-                                Simpan
-                            </button>
-                            <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isOpen = !isOpen">
-                                <x-heroicon-c-chevron-down class="h-4 w-4 transform transition-transform duration-300"
-                                    x-bind:class="isOpen ? '-rotate-180' : ''" />
-                            </button>
-                        </div>
-                    </div>
-                    <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-100 transform"
-                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                        class="glow-left grid grid-cols-[4%_25%_25%_25%_auto] border-l-4 border-l-emerald-400 p-2">
-                        <div class=""></div>
-                        <div>
-                            <h4 class="text-sm font-medium">Nama </h4>
-                            <p class="text-light text-[12px] text-gray-500">
-                                {{ $mahasiswa['name'] }}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium">Program Studi</h4>
-                            <p class="text-light text-[12px] capitalize text-gray-500">
-                                {{ $mahasiswa['prodi'] }}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium">NIM</h4>
-                            <p class="text-light text-[12px] text-gray-500">
-                                {{ $mahasiswa['username'] }}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium">Email</h4>
-                            <p class="text-light break-words text-[12px] text-gray-500">
-                                {{ $mahasiswa['email'] ? $mahasiswa['email'] : 'Belum ditambahkan' }}</p>
-                        </div>
-                        <hr class="col-span-5 my-2 border">
-                        <div class=""></div>
-                        <div>
-                            <h4 class="text-sm font-medium">No Handphone</h4>
-                            <p class="text-light break-words text-[12px] text-gray-500">
-                                {{ $mahasiswa['phone_number'] ? $mahasiswa['phone_number'] : 'Belum ditambahkan' }}</p>
-                        </div>
-                    </div>
+            @if ($getSortedMhs->isEmpty())
+                <div class="flex h-[50%] flex-col items-center justify-center">
+                    <h1 class="text-xl font-medium text-gray-400">Alat dan barang tidak tersedia di Database
+                    </h1>
+                    <h1 class="text-xl font-medium text-gray-400">Tambahkan alat dan barang</h1>
                 </div>
-            @endforeach
+            @elseif ($prodi)
+                @foreach ($getSortedMhs as $mahasiswa)
+                    <form action="{{ route('update.mahasiswa', $mahasiswa['id']) }}"
+                        id="update-mahasiswa-{{ $mahasiswa['id'] }}" method="POST">
+                        @method('PUT')
+                        @csrf
+                    </form>
+                    <div x-data="{ isOpen: false }">
+                        <div x-data="{ isEdit: false }"
+                            class="grid grid-cols-[4%_25%_25%_25%_auto] border-b border-gray-400 text-sm">
+                            <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
+                            <div class="border-r border-gray-400">
+                                <input x-bind:value="'{{ $mahasiswa['name'] }}'" :disabled="!isEdit"
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
+                                            !isEdit
+                                    }"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="name">
+                            </div>
+                            <div class="border-r border-gray-400">
+                                <input
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2 capitalize': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none capitalize':
+                                            !isEdit
+                                    }"
+                                    x-bind:value="'{{ $mahasiswa['prodi'] }}'" :disabled="!isEdit"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="prodi">
+                            </div>
+                            <div class="border-r border-gray-400">
+                                <input
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
+                                            !isEdit
+                                    }"
+                                    x-bind:value="'{{ $mahasiswa['username'] }}'" :disabled="!isEdit"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="username">
+                            </div>
+
+
+                            <div class="flex items-center justify-center gap-5">
+
+                                <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isEdit = !isEdit">
+                                    <x-heroicon-m-pencil-square
+                                        class="h-4 w-4 transform transition-transform duration-300" />
+                                </button>
+                                <button type="submit" id="update-mahasiswa"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}"
+                                    :class="{
+                                        'rounded bg-[#2D3648] px-5 py-[2px] text-white transition-all duration-300 ease-in-out': isEdit,
+                                        'rounded bg-gray-400 cursor-default px-5 py-[2px] text-white transition-all duration-300 ease-in-out':
+                                            !isEdit
+                                    }">
+                                    Simpan
+                                </button>
+                                <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isOpen = !isOpen">
+                                    <x-heroicon-c-chevron-down
+                                        class="h-4 w-4 transform transition-transform duration-300"
+                                        x-bind:class="isOpen ? '-rotate-180' : ''" />
+                                </button>
+                            </div>
+                        </div>
+                        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-100 transform"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="glow-left grid grid-cols-[4%_25%_25%_25%_auto] border-l-4 border-l-emerald-400 p-2">
+                            <div class=""></div>
+                            <div>
+                                <h4 class="text-sm font-medium">Nama </h4>
+                                <p class="text-light text-[12px] text-gray-500">
+                                    {{ $mahasiswa['name'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">Program Studi</h4>
+                                <p class="text-light text-[12px] capitalize text-gray-500">
+                                    {{ $mahasiswa['prodi'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">NIM</h4>
+                                <p class="text-light text-[12px] text-gray-500">
+                                    {{ $mahasiswa['username'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">Email</h4>
+                                <p class="text-light break-words text-[12px] text-gray-500">
+                                    {{ $mahasiswa['email'] ? $mahasiswa['email'] : 'Belum ditambahkan' }}</p>
+                            </div>
+                            <hr class="col-span-5 my-2 border">
+                            <div class=""></div>
+                            <div>
+                                <h4 class="text-sm font-medium">No Handphone</h4>
+                                <p class="text-light break-words text-[12px] text-gray-500">
+                                    {{ $mahasiswa['phone_number'] ? $mahasiswa['phone_number'] : 'Belum ditambahkan' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                @foreach ($getSortedMhs as $mahasiswa)
+                    <form action="{{ route('update.mahasiswa', $mahasiswa['id']) }}"
+                        id="update-mahasiswa-{{ $mahasiswa['id'] }}" method="POST">
+                        @method('PUT')
+                        @csrf
+                    </form>
+                    <div x-data="{ isOpen: false }">
+                        <div x-data="{ isEdit: false }"
+                            class="grid grid-cols-[4%_25%_25%_25%_auto] border-b border-gray-400 text-sm">
+                            <p class="border-r border-gray-400 px-2 py-2 text-center">{{ $loop->iteration }}</p>
+                            <div class="border-r border-gray-400">
+                                <input x-bind:value="'{{ $mahasiswa['name'] }}'" :disabled="!isEdit"
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
+                                            !isEdit
+                                    }"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="name">
+                            </div>
+                            <div class="border-r border-gray-400">
+                                <input
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2 capitalize': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none capitalize':
+                                            !isEdit
+                                    }"
+                                    x-bind:value="'{{ $mahasiswa['prodi'] }}'" :disabled="!isEdit"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="prodi">
+                            </div>
+                            <div class="border-r border-gray-400">
+                                <input
+                                    :class="{
+                                        'bg-white cursor-text w-full transition-all duration-300 ease-in-out border-0 ring-inset ring-2 focus:ring-inset focus:ring-2': isEdit,
+                                        'bg-gray-100 cursor-not-allowed w-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 border-none':
+                                            !isEdit
+                                    }"
+                                    x-bind:value="'{{ $mahasiswa['username'] }}'" :disabled="!isEdit"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}" name="username">
+                            </div>
+
+
+                            <div class="flex items-center justify-center gap-5">
+
+                                <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isEdit = !isEdit">
+                                    <x-heroicon-m-pencil-square
+                                        class="h-4 w-4 transform transition-transform duration-300" />
+                                </button>
+                                <button type="submit" id="update-mahasiswa"
+                                    form="update-mahasiswa-{{ $mahasiswa['id'] }}"
+                                    :class="{
+                                        'rounded bg-[#2D3648] px-5 py-[2px] text-white transition-all duration-300 ease-in-out': isEdit,
+                                        'rounded bg-gray-400 cursor-default px-5 py-[2px] text-white transition-all duration-300 ease-in-out':
+                                            !isEdit
+                                    }">
+                                    Simpan
+                                </button>
+                                <button class="rounded bg-[#2D3648] px-5 py-1 text-white" @click="isOpen = !isOpen">
+                                    <x-heroicon-c-chevron-down
+                                        class="h-4 w-4 transform transition-transform duration-300"
+                                        x-bind:class="isOpen ? '-rotate-180' : ''" />
+                                </button>
+                            </div>
+                        </div>
+                        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-100 transform"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="glow-left grid grid-cols-[4%_25%_25%_25%_auto] border-l-4 border-l-emerald-400 p-2">
+                            <div class=""></div>
+                            <div>
+                                <h4 class="text-sm font-medium">Nama </h4>
+                                <p class="text-light text-[12px] text-gray-500">
+                                    {{ $mahasiswa['name'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">Program Studi</h4>
+                                <p class="text-light text-[12px] capitalize text-gray-500">
+                                    {{ $mahasiswa['prodi'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">NIM</h4>
+                                <p class="text-light text-[12px] text-gray-500">
+                                    {{ $mahasiswa['username'] }}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium">Email</h4>
+                                <p class="text-light break-words text-[12px] text-gray-500">
+                                    {{ $mahasiswa['email'] ? $mahasiswa['email'] : 'Belum ditambahkan' }}</p>
+                            </div>
+                            <hr class="col-span-5 my-2 border">
+                            <div class=""></div>
+                            <div>
+                                <h4 class="text-sm font-medium">No Handphone</h4>
+                                <p class="text-light break-words text-[12px] text-gray-500">
+                                    {{ $mahasiswa['phone_number'] ? $mahasiswa['phone_number'] : 'Belum ditambahkan' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
         </section>
     </main>
     <style>
