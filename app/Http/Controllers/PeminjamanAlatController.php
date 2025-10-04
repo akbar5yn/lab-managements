@@ -45,12 +45,25 @@ class PeminjamanAlatController extends Controller
 
     // SECTION Laboran
     // ANCHOR pengajuan peminjaman
-    public function pengajuanPeminjaman()
+    public function pengajuanPeminjaman(Request $request)
     {
-        $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
+        $search = $request->input('search');
+
+        $query = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
             ->withCount('relasiUnit')
-            ->where('status', 'pending')
-            ->get();
+            ->where('status', 'pending');
+
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('no_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('relasiUser', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $transaksiPengajuanPeminjaman = $query->get();
 
         return view('laboran.pengajuan-peminjaman-alat', [
             'title' => $this->title,
@@ -62,12 +75,24 @@ class PeminjamanAlatController extends Controller
 
 
     // ANCHOR peminjaman berlangsung
-    public function peminjamanBerlangsung()
+    public function peminjamanBerlangsung(Request $request)
     {
-        $transaksiPeminjaman = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
+        $search = $request->input('search');
+
+        $query = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
             ->withCount('relasiUnit')
-            ->whereIn('status', ['dipinjam', 'terlambat_dikembalikan'])
-            ->get();
+            ->whereIn('status', ['dipinjam', 'terlambat_dikembalikan']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('no_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('relasiUser', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $transaksiPeminjaman = $query->get();
 
         return view('laboran.peminjaman-alat', [
             'title' => $this->title,

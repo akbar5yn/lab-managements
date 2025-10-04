@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-                <form action="" method="GET" class="flex items-center">
+                <form action="" method="GET" class="flex items-center" id="searchForm">
                     <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
                         <input type="search" id="search" name="search" value="{{ request('search') }}"
                             class="auto w-full border-none bg-transparent p-1 focus:ring-0">
@@ -105,7 +105,7 @@
             <!-- SECTION Form update-->
 
             @if ($getSortedMhs->isEmpty())
-                <div class="flex h-[50%] flex-col items-center justify-center">
+                <div class="flex h-[94%] flex-col items-center justify-center">
                     <h1 class="text-xl font-medium text-gray-400">Alat dan barang tidak tersedia di Database
                     </h1>
                     <h1 class="text-xl font-medium text-gray-400">Tambahkan alat dan barang</h1>
@@ -330,3 +330,25 @@
         }
     </style>
 </x-layout>
+
+<script>
+    const searchInput = document.getElementById('search');
+    const searchForm = document.getElementById('searchForm');
+    let typingTimer;
+
+    searchInput.addEventListener('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            searchForm.submit(); // otomatis submit setelah berhenti ngetik
+        }, 500); // delay 0.5 detik
+    });
+
+    window.addEventListener('load', () => {
+        const input = document.getElementById('search');
+        if (input && input.value) {
+            input.focus();
+            const length = input.value.length;
+            input.setSelectionRange(length, length); // cursor ke akhir
+        }
+    });
+</script>

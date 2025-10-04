@@ -63,7 +63,7 @@
                     </div>
 
                 </div>
-                <form action="" method="GET" class="flex items-center">
+                <form action="" method="GET" class="flex items-center" id="searchForm">
                     <div class="flex w-[400px] items-center gap-2 rounded-lg border-[2px] p-[0.7px] px-2">
 
                         <input type="search" id="search" name="search" value="{{ request('search') }}"
@@ -122,7 +122,7 @@
         <!-- SECTION Table of Content-->
         <section
             class="content-of-inventaris flex h-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
-            <div class="">
+            <div class="h-full">
                 <div
                     class="sticky top-0 z-10 grid grid-cols-[4%_20%_17%_10%_25%_auto] items-center border-b border-gray-400 bg-[#2D3648] text-white shadow">
                     <p
@@ -140,7 +140,7 @@
                 </div>
 
                 @if ($getSortedTools->isEmpty())
-                    <div class="flex h-[50%] flex-col items-center justify-center">
+                    <div class="flex h-[94%] flex-col items-center justify-center">
                         <h1 class="text-xl font-medium text-gray-400">Alat dan barang tidak tersedia di Database
                         </h1>
                         <h1 class="text-xl font-medium text-gray-400">Tambahkan alat dan barang</h1>
@@ -284,3 +284,25 @@
         </section>
     </main>
 </x-layout>
+
+<script>
+    const searchInput = document.getElementById('search');
+    const searchForm = document.getElementById('searchForm');
+    let typingTimer;
+
+    searchInput.addEventListener('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            searchForm.submit(); // otomatis submit setelah berhenti ngetik
+        }, 500); // delay 0.5 detik
+    });
+
+    window.addEventListener('load', () => {
+        const input = document.getElementById('search');
+        if (input && input.value) {
+            input.focus();
+            const length = input.value.length;
+            input.setSelectionRange(length, length); // cursor ke akhir
+        }
+    });
+</script>

@@ -24,13 +24,26 @@ class RiwayatTransaksiAlatController extends Controller
         $this->role = $user->role;
     }
 
-    public function riwayatPeminjamanAlat()
+    public function riwayatPeminjamanAlat(Request $request)
     {
         $data = null;
         $riwayatMahasiswa = null;
 
         if (Auth::user()->role == 'laboran') {
-            $data = RiwayatTransaksiAlat::all();
+            $search = $request->input('search');
+
+            $query = RiwayatTransaksiAlat::query();
+
+            if ($search) {
+                $query->whereHas('relasiTransaksiAlat.relasiUser', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                    ->orWhereHas('relasiTransaksiAlat', function ($q) use ($search) {
+                        $q->where('no_transaksi', 'like', "%{$search}%");
+                    });
+            }
+
+            $data = $query->with(['relasiTransaksiAlat.relasiUser'])->get();
         }
 
         if (Auth::user()->role == 'mahasiswa') {
