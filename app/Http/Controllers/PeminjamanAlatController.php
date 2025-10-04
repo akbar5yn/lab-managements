@@ -48,22 +48,7 @@ class PeminjamanAlatController extends Controller
     public function pengajuanPeminjaman(Request $request)
     {
         $search = $request->input('search');
-
-        $query = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
-            ->withCount('relasiUnit')
-            ->where('status', 'pending');
-
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('no_transaksi', 'like', '%' . $search . '%')
-                    ->orWhereHas('relasiUser', function ($userQuery) use ($search) {
-                        $userQuery->where('name', 'like', '%' . $search . '%');
-                    });
-            });
-        }
-
-        $transaksiPengajuanPeminjaman = $query->get();
+        $transaksiPengajuanPeminjaman = TransaksiPeminjamanAlat::pending($search)->get();
 
         return view('laboran.pengajuan-peminjaman-alat', [
             'title' => $this->title,

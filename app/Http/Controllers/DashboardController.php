@@ -32,26 +32,18 @@ class DashboardController extends Controller
 
     private function getPengajuanPeminjaman()
     {
-        $peminjamanAlatController = new PeminjamanAlatController();
-        $pengajuanPeminjaman = $peminjamanAlatController->pengajuanPeminjaman();
-
-        if ($pengajuanPeminjaman->transaksiPengajuanPeminjaman->isEmpty()) {
-            return null;
-        }
-
-        return $pengajuanPeminjaman->transaksiPengajuanPeminjaman->all();
+        $pengajuan = TransaksiPeminjamanAlat::pending()->get();
+        return $pengajuan->isEmpty() ? null : $pengajuan;
     }
 
     private function getTransaksiPeminjaman()
     {
-        $peminjamanAlatController = new PeminjamanAlatController();
-        $peminjamanBerlangsung = $peminjamanAlatController->peminjamanBerlangsung();
+        $transaksi = TransaksiPeminjamanAlat::with(['relasiUser', 'relasiUnit'])
+            ->withCount('relasiUnit')
+            ->whereIn('status', ['dipinjam', 'terlambat_dikembalikan'])
+            ->get();
 
-        if ($peminjamanBerlangsung->transaksiPeminjaman->isEmpty()) {
-            return null;
-        }
-
-        return $peminjamanBerlangsung->transaksiPeminjaman->all();
+        return $transaksi->isEmpty() ? null : $transaksi;
     }
 
     public function indexLaboran()

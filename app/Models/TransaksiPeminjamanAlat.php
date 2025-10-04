@@ -68,4 +68,22 @@ class TransaksiPeminjamanAlat extends Model
     {
         return $this->update(['status' => $status]);
     }
+
+    public function scopePending($query, $search = null)
+    {
+        $query->with(['relasiUser', 'relasiUnit'])
+            ->withCount('relasiUnit')
+            ->where('status', 'pending');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('no_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('relasiUser', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        return $query;
+    }
 }
