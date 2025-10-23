@@ -44,7 +44,7 @@
                 </header>
 
                 <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form class="space-y-6" action="{{ route('authenticate') }}" method="POST">
+                    <form class="space-y-6" action="{{ route('authenticate') }}" method="POST" id="sign-in">
                         @csrf
                         <div>
                             <label id="username" for="username"
@@ -64,7 +64,8 @@
                                     class="block text-xs font-medium leading-6 text-[#f6fafd] sm:text-sm">Password</label>
                                 <div>
                                     <x-modal attributeTitle="Lupa Kata Sandi" attributeButton="Forgot Password">
-                                        <form action="{{ route('forgot.password') }}" method="POST">
+                                        <form action="{{ route('forgot.password') }}" method="POST"
+                                            id="forgot-password">
                                             <div class="flex flex-col gap-2">
                                                 <span class="text-[13px] font-poppins fw-light">Silahkan masukan email
                                                     anda
@@ -78,7 +79,7 @@
                                             </div>
 
                                             <button class="mt-3 bg-[#265166] text-white py-1 px-4 rounded-md text-sm"
-                                                type="submit">Kirim ulang
+                                                type="submit" form="forgot-password">Kirim ulang
                                                 kata
                                                 sandi</button>
                                         </form>
@@ -93,7 +94,7 @@
                         </div>
 
                         <div>
-                            <button type="submit"
+                            <button type="submit" form="sign-in"
                                 class="flex w-full justify-center rounded-md bg-[#d0f1e6] px-3 py-[5px] text-xs font-semibold leading-6 text-[#265166] shadow-sm transition duration-300 ease-in-out hover:bg-[#b5f9e2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:py-1.5 sm:text-sm">Sign
                                 in</button>
                         </div>
