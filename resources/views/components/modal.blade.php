@@ -1,6 +1,6 @@
 <div x-data="{ open: false, isMounted: false }" class="" x-init="open = false">
     <!-- Trigger Button -->
-    <button @click="open = true;"
+    <button type="button" @click="open = true;"
         x-bind:class="{
             'border-[#559f86] border bg-[#d0f1e6] px-5 py-2 rounded-lg': '{{ $button }}'
             === 'Tambah Alat' || '{{ $button }}'
@@ -14,6 +14,8 @@
             === 'Verifikasi Pengembalian',
             'w-fit rounded-lg bg-[#2D3648] px-2 py-1 text-sm xl:text-lg font-medium text-white shadow-sm': '{{ $button }}'
             === 'Ubah Password',
+            'text-xs font-semibold text-[#b5f9e2] transition duration-300 ease-in-out hover:text-[#70ffcf] sm:text-sm': '{{ $button }}'
+            === 'Forgot Password'
         
         }">
         {{ $button }}
@@ -29,7 +31,7 @@
             class="flex flex-col gap-4 rounded-lg bg-white p-6 shadow-lg xl:w-1/3">
             <section class="flex items-center justify-between rounded-lg border-b bg-[#d0f1e6] p-4">
                 <h2 class="text-sm font-semibold xl:text-lg">{{ $title }}</h2>
-                <button @click="open = false; clearInputs()" class="text-red-400"><x-heroicon-m-x-mark
+                <button type="button" @click="open = false; clearInputs()" class="text-red-400"><x-heroicon-m-x-mark
                         class="size-5 xl:w-8" /></button>
             </section>
             <section class="">

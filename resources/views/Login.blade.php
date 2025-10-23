@@ -62,10 +62,27 @@
                             <div class="flex items-center justify-between">
                                 <label for="password"
                                     class="block text-xs font-medium leading-6 text-[#f6fafd] sm:text-sm">Password</label>
-                                <div class="text-sm">
-                                    <a href="#"
-                                        class="text-xs font-semibold text-[#b5f9e2] transition duration-300 ease-in-out hover:text-[#70ffcf] sm:text-sm">Forgot
-                                        password?</a>
+                                <div>
+                                    <x-modal attributeTitle="Lupa Kata Sandi" attributeButton="Forgot Password">
+                                        <form action="{{ route('forgot.password') }}" method="POST">
+                                            <div class="flex flex-col gap-2">
+                                                <span class="text-[13px] font-poppins fw-light">Silahkan masukan email
+                                                    anda
+                                                    untuk
+                                                    mendapatkan
+                                                    email reset
+                                                    password</span>
+
+                                                <input id="email" name="email" type="text"
+                                                    class="block w-full rounded-md border-0 text-xs text-[#265166] shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#ffbd97] sm:py-1.5 sm:text-sm sm:leading-6">
+                                            </div>
+
+                                            <button class="mt-3 bg-[#265166] text-white py-1 px-4 rounded-md text-sm"
+                                                type="submit">Kirim ulang
+                                                kata
+                                                sandi</button>
+                                        </form>
+                                    </x-modal>
                                 </div>
                             </div>
                             <div class="relative mt-2">
@@ -94,6 +111,8 @@
             };
         </script>
     @endif
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 
 </html>

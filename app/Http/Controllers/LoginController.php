@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Pastikan ini diimpor
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -50,6 +52,27 @@ class LoginController extends Controller
         } else {
             return redirect()->route('login')->with('failed', 'Username atau password salah');
         }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => "required|email"
+        ]);
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        // 3. Tangani Status
+        if ($status === Password::RESET_LINK_SENT) {
+            // Berhasil: Email berhasil terkirim
+            return back()->with('status', 'Tautan reset kata sandi telah kami kirimkan ke email Anda.');
+        }
+
+        // Gagal: Biasanya karena email tidak terdaftar
+        throw ValidationException::withMessages([
+            'email' => [trans($status)],
+        ])->redirectTo(route('login'));
     }
 
     public function logout(Request $request)
