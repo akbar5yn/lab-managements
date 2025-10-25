@@ -20,15 +20,8 @@ services:
             - DB_USERNAME=${DB_USERNAME}
             - DB_PASSWORD=${DB_PASSWORD}
             - REDIS_HOST=redis
-
-            - MAIL_MAILER=${MAIL_MAILER}
-            - MAIL_HOST=${MAIL_HOST}
-            - MAIL_PORT=${MAIL_PORT}
-            - MAIL_USERNAME=${MAIL_USERNAME}
-            - MAIL_PASSWORD=${MAIL_PASSWORD}
-            - MAIL_ENCRYPTION=${MAIL_ENCRYPTION}
-            - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
-            - MAIL_FROM_NAME="${MAIL_FROM_NAME}"
+        env_file:
+            - .env
         depends_on:
             - db
             - redis
