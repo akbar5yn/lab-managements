@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Pastikan ini diimpor
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -25,19 +27,16 @@ class LoginController extends Controller
             }
         }
 
-        // Jika belum login, tampilkan halaman login
         return view('Login');
     }
 
     public function authenticate(Request $request)
     {
-        // Validasi input berdasarkan tabel users
         $request->validate([
             'username' => ['required'],
             'password' => ['required'],
         ]);
 
-        // Tentukan kredensial berdasarkan role
         $credentials =  $request->only('username', 'password');
 
 
@@ -56,23 +55,29 @@ class LoginController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $request->validate([
-            'email' => "required|email"
+        $request->validate(['email' => 'required|email|exists:users,email'], [
+            'email.exists' => 'Kami tidak dapat menemukan pengguna dengan alamat email tersebut.'
         ]);
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
 
-        // 3. Tangani Status
-        if ($status === Password::RESET_LINK_SENT) {
-            // Berhasil: Email berhasil terkirim
-            return back()->with('status', 'Tautan reset kata sandi telah kami kirimkan ke email Anda.');
-        }
+        $user = User::where('email', $request->email)->first();
 
-        // Gagal: Biasanya karena email tidak terdaftar
-        throw ValidationException::withMessages([
-            'email' => [trans($status)],
-        ])->redirectTo(route('login'));
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        $token = Str::random(60);
+
+        DB::table('password_reset_tokens')->insert([
+            'email' => $request->email,
+            'token' => Hash::make($token),
+            'created_at' => now()
+        ]);
+
+        $resetUrl = route('password.reset', ['token' => $token, 'email' => $request->email]);
+
+        Mail::send('emails.reset-password', ['url' => $resetUrl, 'user' => $user], function ($message) use ($user) {
+            $message->to($user->email)->subject('Reset Kata Sandi Anda');
+        });
+
+        return back()->with('status', 'Tautan reset telah dikirim ke email Anda.');
     }
 
     public function logout(Request $request)

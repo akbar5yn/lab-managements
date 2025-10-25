@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisAlatController;
 use App\Http\Controllers\InventarisRuanganController;
@@ -13,7 +14,9 @@ use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::get('/forgot-password', [LoginController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('/reset', [LoginController::class, 'forgotPassword'])->name('forgot.password');
+Route::get('password/reset/{email}/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 Route::post('/', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

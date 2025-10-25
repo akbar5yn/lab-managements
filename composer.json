@@ -9,6 +9,7 @@
         "blade-ui-kit/blade-heroicons": "^2.4",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "laravel/ui": "^4.6",
         "predis/predis": "^2.3",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },

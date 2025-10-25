@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable; // Import the correct base class
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class User extends Authenticatable // Extend the Authenticatable class
+class User extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable, HasFactory;
 
     protected $fillable = [
         'name',
@@ -24,7 +25,9 @@ class User extends Authenticatable // Extend the Authenticatable class
 
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = bcrypt($password);
+        if (!empty($password)) {
+            $this->attributes['password'] = Hash::make($password);
+        }
     }
 
     public function updateProfile($email, $phone_number)
@@ -56,5 +59,9 @@ class User extends Authenticatable // Extend the Authenticatable class
     public function updatePassword($data)
     {
         $this->update($data);
+    }
+    public function username(): string
+    {
+        return 'username';
     }
 }
