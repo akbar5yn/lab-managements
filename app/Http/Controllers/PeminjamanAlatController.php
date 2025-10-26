@@ -164,10 +164,15 @@ class PeminjamanAlatController extends Controller
         $alat = InventarisAlat::with('alat')->where('slug', $slug)->firstOrFail();
         $namaAlat = $alat->nama_alat;
 
+        $today = $this->currentTime->copy()->startOfDay();
         $allUnits = Unit::where('id_alat', $alat->id)
             ->where('kondisi', ['Normal'])
-            ->with(['relasiTransaksi' => function ($query) {
-                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan']);
+            ->with(['relasiTransaksi' => function ($query) use ($today) {
+                $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
+                    ->where(function ($q) use ($today) {
+                        $q->whereDate('tanggal_pinjam', '<=', $today)
+                            ->whereDate('tanggal_kembali', '>=', $today);
+                    });
             }])->paginate(15);
 
         if ($this->currentTime->lessThan($this->startOfDay)) {

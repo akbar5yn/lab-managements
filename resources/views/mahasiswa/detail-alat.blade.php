@@ -5,6 +5,8 @@
     <x-slot:role>{{ $role }}</x-slot:role>
 
     <main class="relative flex h-full w-full gap-4">
+
+        {{-- SECTION: Session Alerts --}}
         @if (Session::has('success'))
             <script>
                 window.onload = function() {
@@ -28,81 +30,87 @@
                 };
             </script>
         @endif
+        {{-- END SECTION: Session Alerts --}}
+
         <section
             class="content-of-inventaris flex h-full w-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
-            <div class="">
-                <div
-                    class="sticky top-0 z-40 grid grid-cols-[13%_21%_21%_25%_auto] border-b border-gray-400 bg-[#2D3648] text-white shadow xl:grid-cols-[15%_20%_20%_25%_auto]">
-                    <p
-                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
-                        Nomor
-                        Unit</p>
-                    <p
-                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
-                        Tanggal
-                        Pinjam
-                    </p>
-                    <p
-                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
-                        Tanggal
-                        Kembali
-                    </p>
-                    <p
-                        class="flex items-center justify-center border-r border-gray-400 px-2 py-2 text-center text-xs xl:text-base">
-                        Keperluan
-                    </p>
-                    <p class="flex items-center justify-center px-2 py-2 text-center text-xs xl:text-base">Aksi</p>
-                </div>
 
-
+            <div class="space-y-4 p-4">
                 @foreach ($allUnits as $index => $unit)
                     <form action="{{ route('pinjam.alat', [$alat->slug, $unit->id]) }}"
-                        class="pinjam-form grid grid-cols-[13%_21%_21%_25%_auto] rounded-md xl:grid-cols-[15%_20%_20%_25%_auto]"
+                        class="pinjam-form flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md transition hover:shadow-lg"
                         method="POST">
                         @csrf
                         @method('POST')
                         <input type="text" name="id_user" id="id_user" value="{{ $user_id }}" class="hidden">
                         <input type="hidden" name="id_unit" value="{{ $unit->id }}">
-                        <div
-                            class="flex flex-col gap-2 border-b border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <p name="no_unit" id="no_unit"
-                                class="border-none p-0 px-2 py-2 text-[11px] normal-case xl:text-base">
-                                {{ $unit->no_unit }}
-                            </p>
+
+                        <div class="flex items-center justify-between border-b border-[#2D3648] pb-2">
+                            <h3 class="text-base font-bold text-[#2D3648] xl:text-lg">Unit: {{ $unit->no_unit }}</h3>
+                            <div class="flex items-center gap-2 justify-between py-1">
+
+                                @php
+                                    // Jika relasiTransaksi yang sudah di-filter di Controller TIDAK KOSONG,
+                                    // berarti ada status aktif ('pending', 'dipinjam', atau 'terlambat_dikembalikan').
+                                    $hasActiveTransaction = $unit->relasiTransaksi->isNotEmpty();
+
+                                    $statusText = $hasActiveTransaction ? 'Dipinjam' : 'Tersedia';
+                                    $statusColor = $hasActiveTransaction
+                                        ? 'bg-red-100 text-red-800'
+                                        : 'bg-green-100 text-green-800';
+                                    $buttonText = $hasActiveTransaction ? 'Tidak Tersedia' : 'Pinjam Alat';
+                                @endphp
+                                <span
+                                    class="inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium {{ $statusColor }}">
+                                    {{ $statusText }}
+                                </span>
+                            </div>
                         </div>
-                        <div
-                            class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <input type="date" name="tanggal_pinjam"id="tanggal_pinjam_{{ $index }}" required
-                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
-                                placeholder="Masukan tanggal">
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
+                            <div class="flex flex-col space-y-1">
+                                <label for="tanggal_pinjam_{{ $index }}"
+                                    class="text-xs font-medium text-gray-700 xl:text-sm">Tanggal Pinjam</label>
+                                <input type="date" name="tanggal_pinjam" id="tanggal_pinjam_{{ $index }}"
+                                    required
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0">
+                            </div>
+
+                            <div class="flex flex-col space-y-1">
+                                <label for="tanggal_kembali_{{ $index }}"
+                                    class="text-xs font-medium text-gray-700 xl:text-sm">Tanggal Kembali</label>
+                                <input type="date" name="tanggal_kembali" id="tanggal_kembali_{{ $index }}"
+                                    required
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0">
+                            </div>
                         </div>
-                        <div
-                            class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <input type="date" name="tanggal_kembali" id="tanggal_kembali_{{ $index }}"
-                                required
-                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
-                                placeholder="Masukan tanggal">
-                        </div>
-                        <div
-                            class="flex flex-col gap-2 border-b border-l border-r border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
-                            <input type="text" name="keperluan" id="keperluan" required
-                                class="border-none p-0 px-2 py-2 text-[11px] normal-case focus:outline-none focus:ring-0 xl:text-base"
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="keperluan_{{ $index }}"
+                                class="text-xs font-medium text-gray-700 xl:text-sm">Keperluan Peminjaman</label>
+                            <input type="text" name="keperluan" id="keperluan_{{ $index }}" required
+                                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0"
                                 placeholder="Masukan keperluan anda">
                         </div>
-                        <div
-                            class="flex w-full items-center justify-center gap-2 border-b-2 focus-within:border-[#559f86] focus:border-[#8af8d4]">
+
+                        <div class="flex justify-end pt-2">
                             <button type="submit"
-                                class="pinjam-alat rounded-md bg-[#08835a] px-1 py-1 text-[11px] text-white xl:px-3 xl:py-2 xl:text-sm">Pinjam
-                                Alat</button>
+                                class="pinjam-alat rounded-md bg-[#08835a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#066a47]">
+                                Pinjam Alat
+                            </button>
                         </div>
                     </form>
                 @endforeach
             </div>
+
             <div class="px-4 pb-4">
                 {{ $allUnits->links() }}
             </div>
         </section>
-        <div class="animate-fade-in absolute bottom-2 right-2 flex h-fit w-[70%] flex-col gap-3 rounded-xl border bg-white p-4 opacity-0 shadow-xl transition-opacity xl:bottom-4 xl:right-4 xl:w-[30%]"
+
+        {{-- SECTION: Floating Info Modal --}}
+        <div class="animate-fade-in absolute bottom-4 right-4 flex h-fit w-[90%] flex-col gap-3 rounded-xl border bg-white p-4 opacity-0 shadow-xl transition-opacity md:w-[70%] lg:w-[30%]"
             id="modal">
             <div class="flex justify-between">
                 <h1 class="text-sm font-medium xl:text-lg">Informasi Alat dan Barang</h1>
@@ -119,13 +127,14 @@
                     jika tersedia</p>
             </div>
         </div>
-
+        {{-- END SECTION: Floating Info Modal --}}
 
     </main>
 
 </x-layout>
 
 <style>
+    /* Styling Animasi tetap sama */
     @keyframes fadeIn {
         0% {
             opacity: 0;
@@ -156,11 +165,16 @@
 
     #modal {
         transition: opacity 0.3s ease-in-out;
+        /* Tambahkan posisi absolute/fixed untuk floating modal */
+        position: absolute;
+        /* Tetap absolute di dalam main relative */
+        /* Sesuaikan W/H agar lebih responsif */
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Logika Flatpickr (Wajib ada)
         @foreach ($allUnits as $index => $unit)
             flatpickr('#tanggal_pinjam_{{ $index }}', {
                 minDate: "{{ $minDate }}",
@@ -185,23 +199,24 @@
                 dateFormat: "Y-m-d"
             });
         @endforeach
+
+        // Logika Modal Info
+        function showModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('opacity-0');
+            modal.classList.remove('hidden');
+            modal.classList.add('animate-fade-in');
+        }
+
+        document.getElementById('closeButton').addEventListener('click', function() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('animate-fade-in');
+            modal.classList.add('animate-fade-out');
+
+            setTimeout(() => {
+                modal.classList.add('hidden'); // Sembunyikan elemen setelah fade out
+            }, 300);
+        });
+        showModal();
     });
-
-
-    function showModal() {
-        const modal = document.getElementById('modal');
-        modal.classList.remove('hidden');
-        modal.classList.add('animate-fade-in');
-    }
-
-    document.getElementById('closeButton').addEventListener('click', function() {
-        const modal = document.getElementById('modal');
-        modal.classList.remove('animate-fade-in');
-        modal.classList.add('animate-fade-out');
-
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 300);
-    });
-    showModal();
 </script>
