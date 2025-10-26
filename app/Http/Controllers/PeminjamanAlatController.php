@@ -157,23 +157,28 @@ class PeminjamanAlatController extends Controller
     }
 
     // ANCHOR detail alat
-    public function detailAlat($slug)
+    public function detailAlat($slug, Request $request)
     {
         $subtitle = 'Pinjam Alat';
 
         $alat = InventarisAlat::with('alat')->where('slug', $slug)->firstOrFail();
         $namaAlat = $alat->nama_alat;
 
-        $today = $this->currentTime->copy()->startOfDay();
+        // ANCHOR: Ambil tanggal dari request, jika tidak ada, gunakan hari ini
+        $cekTanggalString = $request->input('cek_tanggal', now()->toDateString());
+        $cekTanggal = \Carbon\Carbon::parse($cekTanggalString)->startOfDay();
+
         $allUnits = Unit::where('id_alat', $alat->id)
             ->where('kondisi', ['Normal'])
-            ->with(['relasiTransaksi' => function ($query) use ($today) {
+            ->with(['relasiTransaksi' => function ($query) use ($cekTanggal) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
-                    ->where(function ($q) use ($today) {
-                        $q->whereDate('tanggal_pinjam', '<=', $today)
-                            ->whereDate('tanggal_kembali', '>=', $today);
+                    ->where(function ($q) use ($cekTanggal) {
+                        $q->whereDate('tanggal_pinjam', '<=', $cekTanggal)
+                            ->whereDate('tanggal_kembali', '>=', $cekTanggal);
                     });
-            }])->paginate(15);
+            }])
+            ->paginate(15)
+            ->appends($request->query());;
 
         if ($this->currentTime->lessThan($this->startOfDay)) {
             $minDate = $this->startOfDay->toDateString();
@@ -193,6 +198,7 @@ class PeminjamanAlatController extends Controller
             'role' => $this->role,
             'user_id' => $this->user_id,
             'allUnits' => $allUnits,
+            'cekTanggal' => $cekTanggalString,
             'namaAlat' => $namaAlat,
             'maxDate' => $maxDate,
             'minDate' => $minDate,

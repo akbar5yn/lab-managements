@@ -34,11 +34,41 @@
 
         <section
             class="content-of-inventaris flex h-full w-full flex-col space-y-5 overflow-y-scroll rounded-xl bg-white shadow-md">
+            <section class="w-full rounded-xl bg-white p-4">
+                <form method="GET" action="{{ url()->current() }}" class="flex flex-col md:flex-row gap-4 items-end">
 
-            <div class="space-y-4 p-4">
+                    <div class="flex-1 w-full">
+                        <label for="cek_tanggal" class="block text-sm font-semibold text-gray-700">Cek Ketersediaan Pada
+                            Tanggal:</label>
+                        <input type="date" name="cek_tanggal" id="cek_tanggal_filter_input" required
+                            value="{{ $cekTanggal ?? \Carbon\Carbon::now()->toDateString() }}"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#265166] focus:ring-0">
+                    </div>
+
+                    <div class="w-full md:w-auto">
+                        <button type="submit"
+                            class="w-full rounded-md bg-[#265166] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1a3845]">
+                            Tampilkan Status
+                        </button>
+                    </div>
+                </form>
+
+                <p class="text-xs text-gray-600 mt-2">Status unit ditampilkan untuk tanggal: <span
+                        class="font-bold">{{ \Carbon\Carbon::parse($cekTanggal)->translatedFormat('d F Y') }}</span></p>
+            </section>
+            <div class="px-4 grid md:grid-cols-2 gap-2">
                 @foreach ($allUnits as $index => $unit)
+                    @php
+                        $hasActiveTransaction = $unit->relasiTransaksi->isNotEmpty();
+                        $statusText = $hasActiveTransaction ? 'Dipinjam' : 'Tersedia';
+                        $statusColor = $hasActiveTransaction
+                            ? 'bg-red-300 text-red-900'
+                            : 'bg-green-100 text-green-800';
+                        $buttonText = $hasActiveTransaction ? 'Tidak Tersedia' : 'Pinjam Alat';
+                    @endphp
                     <form action="{{ route('pinjam.alat', [$alat->slug, $unit->id]) }}"
-                        class="pinjam-form flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md transition hover:shadow-lg"
+                        class="pinjam-form flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-md transition hover:shadow-lg
+                        {{ $hasActiveTransaction ? 'bg-gray-100 opacity-80 pointer-events-none' : 'bg-white hover:shadow-xl' }}"
                         method="POST">
                         @csrf
                         @method('POST')
@@ -48,18 +78,6 @@
                         <div class="flex items-center justify-between border-b border-[#2D3648] pb-2">
                             <h3 class="text-base font-bold text-[#2D3648] xl:text-lg">Unit: {{ $unit->no_unit }}</h3>
                             <div class="flex items-center gap-2 justify-between py-1">
-
-                                @php
-                                    // Jika relasiTransaksi yang sudah di-filter di Controller TIDAK KOSONG,
-                                    // berarti ada status aktif ('pending', 'dipinjam', atau 'terlambat_dikembalikan').
-                                    $hasActiveTransaction = $unit->relasiTransaksi->isNotEmpty();
-
-                                    $statusText = $hasActiveTransaction ? 'Dipinjam' : 'Tersedia';
-                                    $statusColor = $hasActiveTransaction
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-green-100 text-green-800';
-                                    $buttonText = $hasActiveTransaction ? 'Tidak Tersedia' : 'Pinjam Alat';
-                                @endphp
                                 <span
                                     class="inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium {{ $statusColor }}">
                                     {{ $statusText }}
@@ -74,7 +92,8 @@
                                     class="text-xs font-medium text-gray-700 xl:text-sm">Tanggal Pinjam</label>
                                 <input type="date" name="tanggal_pinjam" id="tanggal_pinjam_{{ $index }}"
                                     required
-                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0">
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0 {{ $hasActiveTransaction ? 'bg-gray-200' : '' }}"
+                                    {{ $hasActiveTransaction ? 'disabled' : '' }}>
                             </div>
 
                             <div class="flex flex-col space-y-1">
@@ -82,7 +101,8 @@
                                     class="text-xs font-medium text-gray-700 xl:text-sm">Tanggal Kembali</label>
                                 <input type="date" name="tanggal_kembali" id="tanggal_kembali_{{ $index }}"
                                     required
-                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0">
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0 {{ $hasActiveTransaction ? 'bg-gray-200' : '' }}"
+                                    {{ $hasActiveTransaction ? 'disabled' : '' }}>
                             </div>
                         </div>
 
@@ -90,14 +110,15 @@
                             <label for="keperluan_{{ $index }}"
                                 class="text-xs font-medium text-gray-700 xl:text-sm">Keperluan Peminjaman</label>
                             <input type="text" name="keperluan" id="keperluan_{{ $index }}" required
-                                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0"
-                                placeholder="Masukan keperluan anda">
+                                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#559f86] focus:ring-0 {{ $hasActiveTransaction ? 'bg-gray-200' : '' }}"
+                                placeholder="Masukan keperluan anda" {{ $hasActiveTransaction ? 'disabled' : '' }}>
                         </div>
 
                         <div class="flex justify-end pt-2">
                             <button type="submit"
-                                class="pinjam-alat rounded-md bg-[#08835a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#066a47]">
-                                Pinjam Alat
+                                class="pinjam-alat rounded-md px-4 py-2 text-sm font-semibold text-white transition
+                                {{ $hasActiveTransaction ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#08835a] hover:bg-[#066a47]' }}"
+                                {{ $hasActiveTransaction ? 'disabled' : '' }}> {{ $buttonText }}
                             </button>
                         </div>
                     </form>
@@ -180,6 +201,8 @@
                 minDate: "{{ $minDate }}",
                 maxDate: "{{ $maxDate }}",
                 dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d-m-Y",
                 onChange: function(selectedDates, dateStr, instance) {
                     const nextDay = new Date(selectedDates[0]);
                     nextDay.setDate(nextDay.getDate() + 1);
@@ -188,7 +211,9 @@
                         'tanggal_kembali_{{ $index }}');
                     flatpickr(tanggalKembaliInput, {
                         minDate: nextDay,
-                        dateFormat: "Y-m-d"
+                        dateFormat: "Y-m-d",
+                        altInput: true,
+                        altFormat: "d-m-Y"
                     });
                 }
             });
@@ -199,6 +224,12 @@
                 dateFormat: "Y-m-d"
             });
         @endforeach
+
+        flatpickr('#cek_tanggal_filter_input', { // Target ID input filter
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d-m-Y",
+        });
 
         // Logika Modal Info
         function showModal() {
