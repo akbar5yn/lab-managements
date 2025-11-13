@@ -42,9 +42,8 @@ ENV TZ=Asia/Jakarta
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-# Instal dependensi runtime, Nginx, dan ekstensi PHP
+# Instal dependensi runtime dan ekstensi PHP (HAPUS NGINX)
 RUN apt-get update && apt-get install -y \
-    nginx \
     libmariadb-dev \
     libzip-dev \
     libpng-dev \
@@ -65,12 +64,10 @@ COPY --from=builder /var/www/html /var/www/html
 # Atur izin file
 RUN chown -R www-data:www-data /var/www/html
 
-# Salin konfigurasi Nginx
-COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
-# Hapus salinan file supervisord.conf
+# Konfigurasi Nginx dan port dihapus
 
-# Ekspos port
-EXPOSE 80 9000
+# Ekspos port hanya untuk PHP-FPM
+EXPOSE 9000
 
-# Ganti perintah CMD menjadi "none" untuk Dockerfile
+# Perintah CMD
 CMD ["php-fpm"]
