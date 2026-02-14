@@ -41,6 +41,8 @@ services:
             - db
         volumes:
             - .:/var/www/html
+        env_file:
+            - .env
 
     db:
         image: mysql:8.0
