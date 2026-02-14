@@ -39,8 +39,8 @@ services:
             - app
             - redis
             - db
-        volumes:
-            - .:/var/www/html
+        # volumes:
+        #     - .:/var/www/html
         env_file:
             - .env
 
