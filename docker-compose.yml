@@ -29,7 +29,9 @@ services:
             - redis
 
     worker:
-        image: my-laravel-app:v1.0
+        build:
+            context: .
+            dockerfile: Dockerfile
         container_name: my-laravel-worker
         restart: always
         command: php artisan queue:work --verbose --tries=3 --timeout=90
