@@ -36,7 +36,16 @@ document.querySelectorAll('.delete-form').forEach(form => {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Tidak, batalkan!'
+            cancelButtonText: 'Tidak, batalkan!',
+            didOpen: () => {
+                // Menyesuaikan body SweetAlert setelah elemen dirender ke DOM
+                const swalBody = document.querySelector('body.swal2-height-auto');
+                if (swalBody) {
+                    swalBody.style.minHeight = '100vh';
+                    swalBody.style.maxHeight = '100vh';
+                    swalBody.style.overflowY = 'auto';
+                }
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
@@ -59,7 +68,16 @@ document.querySelectorAll('.delete-unit').forEach(form => {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Tidak, batalkan!'
+            cancelButtonText: 'Tidak, batalkan!',
+            didOpen: () => {
+                // Menyesuaikan body SweetAlert setelah elemen dirender ke DOM
+                const swalBody = document.querySelector('body.swal2-height-auto');
+                if (swalBody) {
+                    swalBody.style.minHeight = '100vh';
+                    swalBody.style.maxHeight = '100vh';
+                    swalBody.style.overflowY = 'auto';
+                }
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
@@ -105,7 +123,16 @@ document.querySelectorAll('.update-form').forEach(form => {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, Simpan',
-            cancelButtonText: 'Tidak, batalkan!'
+            cancelButtonText: 'Tidak, batalkan!',
+            didOpen: () => {
+                // Menyesuaikan body SweetAlert setelah elemen dirender ke DOM
+                const swalBody = document.querySelector('body.swal2-height-auto');
+                if (swalBody) {
+                    swalBody.style.minHeight = '100vh';
+                    swalBody.style.maxHeight = '100vh';
+                    swalBody.style.overflowY = 'auto';
+                }
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 formElement.submit(); // Mengirim form jika pengguna mengkonfirmasi
