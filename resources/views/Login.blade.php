@@ -57,7 +57,7 @@
                 </header>
 
                 <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form class="space-y-6" action="{{ route('authenticate') }}" method="POST" id="sign-in">
+                    <form class="space-y-6" id="sign-in">
                         @csrf
                         <div>
                             <label id="username" for="username"
@@ -91,7 +91,7 @@
                         </div>
 
                         <div>
-                            <button type="submit" form="sign-in"
+                            <button type="submit"
                                 class="flex w-full justify-center rounded-md bg-[#d0f1e6] px-3 py-[5px] text-xs font-semibold leading-6 text-[#265166] shadow-sm transition duration-300 ease-in-out hover:bg-[#b5f9e2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:py-1.5 sm:text-sm">Sign
                                 in</button>
                         </div>
@@ -168,3 +168,27 @@
 </body>
 
 </html>
+
+<script>
+    document.getElementById('sign-in').onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        const res = await fetch("{{ route('authenticate') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Accept": "application/json"
+            },
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            location.href = data.route;
+        } else {
+            showAlert("Error", data.message || "Login gagal", "error");
+        }
+    }
+</script>

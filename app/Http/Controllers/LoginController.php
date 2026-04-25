@@ -12,18 +12,20 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
+    private function getRedirectByRole($user)
+    {
+        return match ($user->role) {
+            'laboran' => route('laboran'),
+            'mahasiswa' => route('mahasiswa'),
+            default => route('unauthorized'),
+        };
+    }
+
     public function index()
     {
         if (Auth::check()) {
-            $user = Auth::user();
-
-            // Redirect berdasarkan role
-            if ($user->role === 'laboran') {
-                return redirect()->route('laboran');
-            } elseif ($user->role === 'mahasiswa') {
-                return redirect()->route('mahasiswa');
-            } else {
-                return redirect()->route('unauthorized')->with('failed', 'Role tidak dikenali.');
+            if (Auth::check()) {
+                return redirect($this->getRedirectByRole(Auth::user()));
             }
         }
 
@@ -37,20 +39,32 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        $credentials =  $request->only('username', 'password');
-
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
             $user = Auth::user();
-            // Redirect berdasarkan role
-            if ($user->role === 'laboran') {
-                return redirect()->route('laboran');
-            } elseif ($user->role === 'mahasiswa') {
-                return redirect()->route('mahasiswa');
+
+            $redirect = $this->getRedirectByRole(Auth::user());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Login berhasil',
+                    'route' => $redirect
+                ]);
             }
-        } else {
-            return redirect()->route('login')->with('failed', 'Username atau password salah');
+
+            return redirect()->intended($redirect);
         }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Username atau password salah'
+            ], 401);
+        }
+
+        return redirect()->route('login')
+            ->with('failed', 'Username atau password salah');
     }
 
     public function forgotPassword(Request $request)
