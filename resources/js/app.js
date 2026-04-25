@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { Html5Qrcode } from "html5-qrcode";
+import Alpine from 'alpinejs'
 
 function showAlert(title, text, icon) {
     Swal.fire({
@@ -178,3 +179,5 @@ document.querySelectorAll('.delete-transaksi').forEach(form => {
 
 window.Html5Qrcode = Html5Qrcode;
 window.showAlert = showAlert;
+window.Alpine = Alpine
+Alpine.start()
