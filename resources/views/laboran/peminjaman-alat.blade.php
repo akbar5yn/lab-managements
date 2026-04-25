@@ -60,7 +60,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform"
+                            <div x-cloak x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform"
                                 x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
                                 x-transition:leave="transition ease-in duration-100 transform"
@@ -142,7 +142,7 @@
                                                     </div>
 
                                                     <!-- Dropdown -->
-                                                    <div x-show="isOpen" @click.outside="isOpen = false"
+                                                    <div x-cloak x-show="isOpen" @click.outside="isOpen = false"
                                                         x-transition:enter="transition ease-out duration-100 transform"
                                                         x-transition:enter-start="opacity-0 scale-95"
                                                         x-transition:enter-end="opacity-100 scale-100"
