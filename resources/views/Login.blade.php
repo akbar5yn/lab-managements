@@ -11,6 +11,12 @@
         rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Layanan Lab Fisika UAD</title>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
 @if (session('status'))
     <div x-data="{ showStatus: true }" x-show="showStatus" x-init="setTimeout(() => { showStatus = false }, 5000)" x-transition.duration.500ms
@@ -93,7 +99,7 @@
                 </div>
             </section>
         </div>
-        <div x-show="forgotPasswordModal" x-transition:enter="transition ease-out duration-100 transform"
+        <div x-show="forgotPasswordModal" x-cloak x-transition:enter="transition ease-out duration-100 transform"
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="transition ease-in duration-75 transform"
             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
