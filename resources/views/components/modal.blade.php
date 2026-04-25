@@ -23,7 +23,7 @@
 
 
     <!-- Modal -->
-    <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div x-cloak x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <main x-show="open" x-transition:enter="transition transform duration-300"
             x-transition:enter-start="scale-75 opacity-0" x-transition:enter-end="scale-100 opacity-100"
             x-transition:leave="transition transform duration-300" x-transition:leave-start="scale-100 opacity-100"
