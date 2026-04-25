@@ -46,7 +46,7 @@
                             class="absolute right-10 h-4 w-4 transform transition-transform duration-300"
                             x-bind:class="isOpen ? '' : '-rotate-90'" />
                     </button>
-                    <div x-show="isOpen" x-transition:enter="transition ease-out duration-200 transform"
+                    <div x-show="isOpen" x-cloak x-transition:enter="transition ease-out duration-200 transform"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         x-transition:leave="transition ease-in duration-75 transform"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
@@ -69,7 +69,7 @@
                             class="absolute right-10 h-4 w-4 transform transition-transform duration-300"
                             x-bind:class="isOpen ? '' : '-rotate-90'" />
                     </button>
-                    <div x-show="isOpen" x-transition:enter="transition ease-out duration-200 transform"
+                    <div x-show="isOpen" x-cloak x-transition:enter="transition ease-out duration-200 transform"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         x-transition:leave="transition ease-in duration-75 transform"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">

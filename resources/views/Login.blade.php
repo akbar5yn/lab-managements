@@ -11,12 +11,6 @@
         rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Layanan Lab Fisika UAD</title>
-
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
 </head>
 @if (session('status'))
     <div x-data="{ showStatus: true }" x-show="showStatus" x-init="setTimeout(() => { showStatus = false }, 5000)" x-transition.duration.500ms
