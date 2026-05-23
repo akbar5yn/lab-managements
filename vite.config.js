@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default defineConfig({
     server: {
-        host: process.env.APP_URL || '0.0.0.0',  // menggunakan APP_URL dari .env jika ada
+        host: '0.0.0.0',
+        port: 5173,
     },
 
     plugins: [

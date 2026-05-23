@@ -10,7 +10,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
-        "predis/predis": "^2.3",
+        "predis/predis": "^3.4",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {
