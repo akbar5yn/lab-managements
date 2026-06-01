@@ -294,14 +294,17 @@ class PeminjamanAlatController extends Controller
             CancelExpiredTransaction::dispatch($transaksi->id)->delay($waktuKedaluwarsa);
 
             // NOTE Checking waktu pengembalian
-            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'])->setTime(15, 0, 0);
-            $delay = $this->checkReturnedLate($tanggalKembali);
-            if ($delay > 0) {
+            $tanggalKembali = Carbon::parse($validatedTransaksi['tanggal_kembali'], 'Asia/Jakarta')->setTime(15, 0, 0);
+            $this->checkReturnedLate($tanggalKembali);
+            if ($tanggalKembali-> isFuture()) {
                 // Jika belum lewat batas waktu, jalankan job dengan delay
-                ReturnedLateTransaction::dispatch($transaksi->id)->delay($delay);
+                ReturnedLateTransaction::dispatch($transaksi->id)->delay($tanggalKembali);
             } else {
                 // Jika sudah terlambat, langsung proses
-                ReturnedLateTransaction::dispatch($transaksi->id);
+                Log::warning('Tanggal kembali sudah lewat saat transaksi dibuat, job tidak dijadwalkan', [
+                    'transaksi_id' => $transaksi->id,
+                    'tanggal_kembali' => $tanggalKembali,
+                ]);
             }
 
             return redirect()->route('aktivitas.peminjaman')->with('success', 'Peminjaman Anda berhasil dibuat. Tolong lakukan scan di lab untuk melanjutkan peminjaman pada tanggal peminjaman.');
