@@ -169,7 +169,7 @@ class PeminjamanAlatController extends Controller
         $cekTanggal = \Carbon\Carbon::parse($cekTanggalString)->startOfDay();
 
         $allUnits = Unit::where('id_alat', $alat->id)
-            ->where('kondisi', ['Normal'])
+            ->where('kondisi', 'Normal')
             ->with(['relasiTransaksi' => function ($query) use ($cekTanggal) {
                 $query->whereIn('status', ['pending', 'dipinjam', 'terlambat_dikembalikan'])
                     ->where(function ($q) use ($cekTanggal) {
@@ -260,7 +260,11 @@ class PeminjamanAlatController extends Controller
                     $query->where('tanggal_kembali', '>=', $validatedTransaksi['tanggal_pinjam']) // Tidak di luar di kiri
                         ->where('tanggal_pinjam', '<=', $validatedTransaksi['tanggal_kembali']); // Tidak di luar di kanan
                 })
-                ->whereNotIn('status', ['dikembalikan', 'expire', 'dibatalkan']) // Abaikan pengajuan yang ditolak
+                ->whereIn('status', [
+                    'pending',
+                    'dipinjam',
+                    'terlambat_dikembalikan',
+                ]) // Abaikan pengajuan yang ditolak
                 ->get(['tanggal_pinjam', 'tanggal_kembali']);
 
             // Jika ada pengajuan lain pada tanggal tersebut
