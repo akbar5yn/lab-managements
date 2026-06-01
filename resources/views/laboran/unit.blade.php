@@ -174,9 +174,9 @@
                         <div
                             class="flex flex-col gap-2 border-b-2 border-gray-300 focus-within:border-[#559f86] focus:border-[#8af8d4]">
                             <label class="font-semibold" for="jumlah">Jumlah Alat</label>
-                            <input type="text" name="jumlah" id="jumlah" required
+                            <input type="number" name="jumlah" id="jumlah" required min="1" step="1"
                                 class="border-none p-0 focus:outline-none focus:ring-0"
-                                oninput="capitalizeFirstLetter(this)">
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" >
                         </div>
                     </div>
                     <button type="submit"
