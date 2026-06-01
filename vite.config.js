@@ -1,18 +1,18 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 export default defineConfig({
     server: {
         host: '0.0.0.0',
         port: 5173,
     },
 
-    plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-    ],
+    plugins: [laravel({
+        input: ['resources/css/app.css', 'resources/js/app.js'],
+        refresh: true,
+    }), cloudflare()],
 
     base: process.env.VITE_APP_URL ? process.env.VITE_APP_URL : '/'
 });

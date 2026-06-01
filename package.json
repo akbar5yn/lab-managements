@@ -1,25 +1,29 @@
 {
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "autoprefixer": "^10.4.20",
-        "axios": "^1.7.8",
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.0",
-        "postcss": "^8.4.47",
-        "tailwindcss": "^3.4.14",
-        "vite": "^6.0.5"
-    },
-    "dependencies": {
-        "@tailwindcss/forms": "^0.5.9",
-        "alpinejs": "^3.15.11",
-        "dotenv": "^16.4.7",
-        "flatpickr": "^4.6.13",
-        "html5-qrcode": "^2.3.8",
-        "sweetalert2": "^11.14.4"
-    }
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "deploy": "npm run build && wrangler deploy",
+    "preview": "npm run build && wrangler dev"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.39.0",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.8",
+    "concurrently": "^9.0.1",
+    "laravel-vite-plugin": "^1.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^6.1.0",
+    "wrangler": "^4.95.0"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "alpinejs": "^3.15.11",
+    "dotenv": "^16.4.7",
+    "flatpickr": "^4.6.13",
+    "html5-qrcode": "^2.3.8",
+    "sweetalert2": "^11.14.4"
+  }
 }
