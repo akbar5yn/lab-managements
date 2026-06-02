@@ -72,17 +72,42 @@ class RiwayatTransaksiAlatController extends Controller
         ]);
 
         try {
-            $riwayat = RiwayatTransaksiAlat::createRiwayatTransaksiAlat($validate);
 
-            // Update Status di Transaksi Peminjaman
-            $transaksi = TransaksiPeminjamanAlat::where('no_transaksi', $validate['no_transaksi'])->first();
-            if ($transaksi) {
-                $transaksi->update(['status' => 'dikembalikan']);
-            }
+            DB::transaction(function () use ($validate) {
 
-            return redirect()->route('riwayat.peminjaman.alat')->with('success', "Verifikasi pengembalian berhasil di buat. Anda dapat mengecek transaksi di dalam halaman riwayat");
+                RiwayatTransaksiAlat::createRiwayatTransaksiAlat($validate);
+
+                $transaksi = TransaksiPeminjamanAlat::with('relasiUnit')
+                    ->where('no_transaksi', $validate['no_transaksi'])
+                    ->firstOrFail();
+
+                $transaksi->update([
+                    'status' => 'dikembalikan'
+                ]);
+
+                if ($transaksi->relasiUnit) {
+                    $transaksi->relasiUnit->update([
+                        'kondisi' => $validate['kondisi_alat'],
+                        'status'  => 'tersedia'
+                    ]);
+                }
+            });
+
+            return redirect()
+                ->route('riwayat.peminjaman.alat')
+                ->with(
+                    'success',
+                    'Verifikasi pengembalian berhasil dibuat. Anda dapat mengecek transaksi di halaman riwayat.'
+                );
+
         } catch (\Exception $e) {
-            return redirect()->route('riwayat.peminjaman.alat')->with('error', 'Terjadi kesalahan saat melakukan verifikasi pengembalian: ' . $e->getMessage());
+
+            return redirect()
+                ->route('riwayat.peminjaman.alat')
+                ->with(
+                    'error',
+                    'Terjadi kesalahan saat melakukan verifikasi pengembalian: ' . $e->getMessage()
+                );
         }
     }
 }
