@@ -89,7 +89,6 @@ class RiwayatTransaksiAlatController extends Controller
                 if ($transaksi->relasiUnit) {
                     $transaksi->relasiUnit->update([
                         'kondisi' => $validate['kondisi_alat'],
-                        'status'  => 'tersedia'
                     ]);
                 }
             });
