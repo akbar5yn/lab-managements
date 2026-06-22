@@ -19,3 +19,9 @@ yarn-error.log
 /.vscode
 /.zed
 Lab-Management From Vcode.session.sql
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
